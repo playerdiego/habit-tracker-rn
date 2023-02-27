@@ -1,6 +1,8 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import React from 'react';
 import { global } from '../styles/global';
+import { useFonts } from 'expo-font';
+import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 
 interface CustomButtonProps {
     text: String,
@@ -10,10 +12,16 @@ interface CustomButtonProps {
 
 export default function CustomButton({outline = false, text, onPressed}: CustomButtonProps) {
 
+  const [fontLoaded] = useFonts({
+    Roboto_400Regular
+  });
+
     const colors = {
         default: outline ? '#fff' : '#000',
         hover: outline ? '#cdcdcd' : '#111'
     };
+
+    if(!fontLoaded) return null;
 
   return (
     <Pressable
@@ -24,7 +32,7 @@ export default function CustomButton({outline = false, text, onPressed}: CustomB
             styles.button,
         ]}
         onPress={() => onPressed()}>
-        <Text style={{...styles.buttonText, ...global.text, color: outline ? '#000' : '#fff'}}>{text}</Text>
+        <Text style={{...styles.buttonText, color: outline ? '#000' : '#fff'}}>{text}</Text>
     </Pressable>
   )
 }
@@ -37,7 +45,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 32,
         borderRadius: 4,
-        marginHorizontal: 2
+        marginHorizontal: 2,
       },
       buttonText: {
         fontSize: 12,
@@ -45,7 +53,8 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         letterSpacing: 0.25,
         color: '#fff',
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        fontFamily: 'Roboto_400Regular',
       },
       outlineButton: {
         borderColor: '#000',

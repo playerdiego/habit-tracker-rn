@@ -7,5 +7,8 @@ export const global = StyleSheet.create({
     title: {
         fontFamily: 'Comfortaa_400Regular',
         fontSize: 30
+    },
+    container: {
+        padding: 10
     }
 });

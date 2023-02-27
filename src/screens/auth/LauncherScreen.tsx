@@ -6,6 +6,8 @@ import { useFonts, Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
 import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 import { useNavigation } from '@react-navigation/native';
 import CustomButton from '../../components/CustomButton';
+import Title from '../../components/Title';
+import { AuthNavigationProps } from '../../navigation/AuthNavigation';
 
 export default function LauncherScreen() {
 
@@ -14,7 +16,7 @@ export default function LauncherScreen() {
     Roboto_400Regular
   });
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<AuthNavigationProps>();
 
   if(!fontLoaded) return null;
 
@@ -24,15 +26,15 @@ export default function LauncherScreen() {
       <View style={styles.banner}>
         <ImageBackground source={require('../../assets/bg_landing.jpg')} resizeMode='cover' style={styles.image} >
           <View style={styles.titleContainer}>
-            <Text style={global.title}>Habits Tracker</Text>
+            <Title>Habits Tracker</Title>
           </View>
         </ImageBackground>
       </View>
 
       <View style={styles.buttons}>
 
-        <CustomButton onPressed={() => navigation.navigate('Login')} text='Iniciar Sesión' outline={true} />
-        <CustomButton onPressed={() => navigation.navigate('Register')} text='Crear Cuenta' />
+        <CustomButton onPressed={() => navigation.navigate('login')} text='Iniciar Sesión' outline={true} />
+        <CustomButton onPressed={() => navigation.navigate('register')} text='Crear Cuenta' />
 
       </View>
 

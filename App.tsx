@@ -8,7 +8,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Navigation />
-      <StatusBar />
+      <StatusBar translucent={true} />
     </NavigationContainer>
   );
 }
