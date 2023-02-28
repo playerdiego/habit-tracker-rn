@@ -6,9 +6,15 @@ export const global = StyleSheet.create({
     },
     title: {
         fontFamily: 'Comfortaa_400Regular',
-        fontSize: 30
     },
     container: {
-        padding: 10
+        padding: 20
+    },
+    input: {
+        borderWidth: 2,
+        borderColor: '#000',
+        padding: 8,
+        borderRadius: 4,
+        marginVertical: 8
     }
 });

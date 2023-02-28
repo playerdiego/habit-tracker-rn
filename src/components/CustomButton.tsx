@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import React from 'react';
 import { global } from '../styles/global';
 import { useFonts } from 'expo-font';
@@ -8,9 +8,10 @@ interface CustomButtonProps {
     text: String,
     onPressed: Function,
     outline?: Boolean,
+    style?: Object
 }
 
-export default function CustomButton({outline = false, text, onPressed}: CustomButtonProps) {
+export default function CustomButton({outline = false, text, onPressed, style = {}}: CustomButtonProps) {
 
   const [fontLoaded] = useFonts({
     Roboto_400Regular
@@ -30,6 +31,7 @@ export default function CustomButton({outline = false, text, onPressed}: CustomB
             backgroundColor: pressed ? colors.hover : colors.default},
             outline && styles.outlineButton,
             styles.button,
+            style
         ]}
         onPress={() => onPressed()}>
         <Text style={{...styles.buttonText, color: outline ? '#000' : '#fff'}}>{text}</Text>
@@ -39,7 +41,6 @@ export default function CustomButton({outline = false, text, onPressed}: CustomB
 
 const styles = StyleSheet.create({
     button: {
-        width: '45%',
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 12,

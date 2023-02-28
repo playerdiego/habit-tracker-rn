@@ -33,8 +33,8 @@ export default function LauncherScreen() {
 
       <View style={styles.buttons}>
 
-        <CustomButton onPressed={() => navigation.navigate('login')} text='Iniciar Sesión' outline={true} />
-        <CustomButton onPressed={() => navigation.navigate('register')} text='Crear Cuenta' />
+        <CustomButton style={{width: '45%'}} onPressed={() => navigation.navigate('login')} text='Iniciar Sesión' outline={true} />
+        <CustomButton style={{width: '45%'}} onPressed={() => navigation.navigate('register')} text='Crear Cuenta' />
 
       </View>
 
