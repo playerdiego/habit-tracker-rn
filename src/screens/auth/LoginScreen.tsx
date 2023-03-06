@@ -37,7 +37,7 @@ export default function LoginScreen() {
       <ScrollView>
         <View style={global.container}>
 
-          <Title>Iniciar Sesión</Title>
+          <Title>Login</Title>
 
             <Formik initialValues={initialValues} onSubmit={onLogin} validationSchema={validationSchema}>
 
@@ -74,20 +74,20 @@ export default function LoginScreen() {
           <View style={{marginTop: 30}}>
             <Pressable onPress={() => navigate('recover')}>
               
-              <Title size='sm' align='center' icon='key'>¿Olvidaste tu contraseña? Recuprar cuenta</Title>
+              <Title size='sm' align='center' icon='key'>Did you forgot your password? Recover Account</Title>
             </Pressable>
           </View>
 
           <View style={{marginVertical: 30}}>
             <Pressable onPress={() => navigate('register')}>
-              <Title size='sm' align='center' icon='user'>¿No tienes una cuenta? Crea una aquí</Title>
+              <Title size='sm' align='center' icon='user'>Don´t you have an account? Create one here</Title>
             </Pressable>
           </View>
 
           <Divider />
 
           <View style={{marginTop: 30, alignItems: 'center'}}>
-            <Title size='sm' align='center'>O puede iniciar sesión con:</Title>
+            <Title size='sm' align='center'>Or you can login with:</Title>
             <TouchableOpacity>
               <Icon name='google' size={40} style={{marginVertical: 20}} />
             </TouchableOpacity>
