@@ -31,7 +31,7 @@ export default function Title({children, size = 'lg', align = 'left', icon}: Tit
             <Text style={{
                 ...global.title,
                 fontSize: size === 'sm' ? 13 :  
-                        size === 'md' ? 22 :  
+                        size === 'md' ? 26 :  
                         size === 'lg' ? 32 :  
                         size === 'xl' ? 40 : 30,
                 textAlign: align === 'center' ? 'center':

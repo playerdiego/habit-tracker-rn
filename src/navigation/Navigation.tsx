@@ -8,16 +8,16 @@ import type { CompositeNavigationProp } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
-// type NavigationProps = CompositeNavigationProp<
-//   StackNavigationProp<StackParamList>
-// >;
-
 export default function Navigation() {
 
-  const auth = false;
+  const auth = true;
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        contentStyle: { backgroundColor: '#fff' },
+      }}
+    >
       {
         auth ? 
         <Stack.Screen name='Dashboard' component={HomeNavigation} options={{headerShown: false}} /> :

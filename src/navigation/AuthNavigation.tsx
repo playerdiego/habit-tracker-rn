@@ -26,7 +26,8 @@ export default function AuthNavigation() {
 
   return (
     <Stack.Navigator 
-      initialRouteName='launcher' 
+      initialRouteName='launcher'
+      
       screenOptions={{
         contentStyle: { backgroundColor: '#fff' },
         headerLeft: ({canGoBack}) =>
