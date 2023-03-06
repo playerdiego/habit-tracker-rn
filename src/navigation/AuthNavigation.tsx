@@ -37,7 +37,7 @@ export default function AuthNavigation() {
       }}>
         <Stack.Screen name='login' component={LoginScreen} options={{headerShadowVisible: false, headerTitle: ''}} />
         <Stack.Screen name='register' component={RegisterScreen} options={{headerShadowVisible: false, headerTitle: ''}} />
-        <Stack.Screen name='recover' component={RecoverScreen} options={{headerShown: true}} />
+        <Stack.Screen name='recover' component={RecoverScreen} options={{headerShadowVisible: false, headerTitle: ''}} />
         <Stack.Screen name='launcher' component={LauncherScreen} options={{headerShown: false}} /> 
     </Stack.Navigator>
   )
