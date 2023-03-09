@@ -30,7 +30,7 @@ export default function StreakAlert() {
         <Text style={styles.streakText}>Has cumplido con: Entrenamiento 84 días en total</Text>
       </View>
 
-      <CustomButton onPressed={() => navigate('streak')} text='Ver todo' style={styles.button} />
+      <CustomButton onPressed={() => navigate('streak')} text='More' style={styles.button} />
 
     </View>
   )

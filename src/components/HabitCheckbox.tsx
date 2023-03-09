@@ -13,6 +13,7 @@ export default function HabitCheckbox({title, description, completed}: Habit) {
             iconStyle={{borderRadius: 4}}
             fillColor='#000' 
             size={50}
+            isChecked={completed}
         />
 
         <View>

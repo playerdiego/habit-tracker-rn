@@ -6,6 +6,7 @@ import { global } from '../../styles/global';
 import StreakAlert from '../../components/StreakAlert';
 import { Habit } from '../../interfaces/habit.interface';
 import HabitCheckbox from '../../components/HabitCheckbox';
+import Divider from '../../components/Divider';
 
 const habits: Habit[] = [
   {
@@ -37,17 +38,32 @@ const habits: Habit[] = [
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView>
+    <SafeAreaView edges={['top']}>
       <ScrollView style={global.container}>
         <Title size='md'>Good Morning! Diego</Title>
 
         <View style={{marginTop: 25, marginBottom: 15}}>
-          <Text style={global.boldTitle}>Tus hábitos de hoy - Te faltan 4</Text>
+          <Text style={global.boldTitle}>Today´s Habits - 3 left</Text>
 
           {
             habits.map(habit => (
               !habit.completed &&
-              <HabitCheckbox title={habit.title} description={habit.description} completed={habit.completed}  />
+              <HabitCheckbox key={habit.title} title={habit.title} description={habit.description} completed={habit.completed}  />
+            ))
+          }
+
+
+        </View>
+
+        <Divider />
+
+        <View style={{marginTop: 25, marginBottom: 15}}>
+          <Text style={global.boldTitle}>Completed Habits: 2</Text>
+
+          {
+            habits.map(habit => (
+              habit.completed &&
+              <HabitCheckbox key={habit.title} title={habit.title} description={habit.description} completed={habit.completed}  />
             ))
           }
 
@@ -55,8 +71,7 @@ export default function HomeScreen() {
         </View>
 
 
-
-        <StreakAlert></StreakAlert>
+        <View style={{marginBottom: 30}}><StreakAlert></StreakAlert></View>
       </ScrollView>
     </SafeAreaView>
   )

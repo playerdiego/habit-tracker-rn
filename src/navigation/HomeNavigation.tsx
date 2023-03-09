@@ -31,6 +31,7 @@ export default function HomeNavigation() {
         options={{
           headerShown: false,
           title: 'Home',
+          tabBarActiveTintColor: '#000',
           tabBarIcon: ({color, size}) => (
             <Icon name='home' color={color} size={size} />
           )
@@ -55,6 +56,7 @@ export default function HomeNavigation() {
         options={{
           headerShown: false,
           title: 'Streaks',
+          tabBarActiveTintColor: '#000',
           tabBarIcon: ({color, size}) => (
             <Icon name='fire' color={color} size={size} />
           )
@@ -67,6 +69,7 @@ export default function HomeNavigation() {
         options={{
           headerShown: false,
           title: 'Account',
+          tabBarActiveTintColor: '#000',
           tabBarIcon: ({color, size}) => (
             <Icon name='user' color={color} size={size} />
           )
