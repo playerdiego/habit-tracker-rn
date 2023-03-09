@@ -16,5 +16,13 @@ export const global = StyleSheet.create({
         padding: 8,
         borderRadius: 4,
         marginVertical: 8
+    },
+    boldTitle: {
+        textTransform: 'uppercase',
+        fontWeight: '700',
+        fontSize: 12
+    },
+    checkbox: {
+        borderRadius: 4
     }
 });
