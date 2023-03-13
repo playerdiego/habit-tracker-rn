@@ -1,12 +1,14 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Title from '../../components/Title';
 import { global } from '../../styles/global';
-import StreakAlert from '../../components/StreakAlert';
+import StreakAlert from '../../components/Streak/StreakAlert';
 import { Habit } from '../../interfaces/habit.interface';
 import HabitCheckbox from '../../components/HabitCheckbox';
 import Divider from '../../components/Divider';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import ScrollContainer from '../../components/ScrollContainer';
 
 const habits: Habit[] = [
   {
@@ -38,11 +40,9 @@ const habits: Habit[] = [
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView edges={['top']}>
-      <ScrollView style={global.container}>
-        <Title size='md'>Good Morning! Diego</Title>
+    <ScrollContainer title='Good Morning, Diego' titleSize='md'> 
 
-        <View style={{marginTop: 25, marginBottom: 15}}>
+        <View style={{marginBottom: 15}}>
           <Text style={global.boldTitle}>Today´s Habits - 3 left</Text>
 
           {
@@ -72,8 +72,15 @@ export default function HomeScreen() {
 
 
         <View style={{marginBottom: 30}}><StreakAlert></StreakAlert></View>
-      </ScrollView>
-    </SafeAreaView>
+
+    </ScrollContainer>
   )
 }
+
+const styles = StyleSheet.create({
+  addHabitButton: {
+    position: 'absolute',
+    backgroundColor: 'red'
+  }
+});
 

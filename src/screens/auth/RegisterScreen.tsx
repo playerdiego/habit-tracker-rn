@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { AuthNavigationProps } from '../../navigation/AuthNavigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Divider from '../../components/Divider';
+import ScrollContainer from '../../components/ScrollContainer';
 
 export default function RegisterScreen() {
 
@@ -41,10 +42,7 @@ export default function RegisterScreen() {
   }
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <View style={global.container}>
-          <Title>Create Account</Title>
+    <ScrollContainer title='Create Account'>
 
           <Formik initialValues={initialValues} onSubmit={onRegister} validationSchema={validationSchema}>
 
@@ -120,8 +118,6 @@ export default function RegisterScreen() {
             </TouchableOpacity>
           </View>
 
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    </ScrollContainer>
   )
 }

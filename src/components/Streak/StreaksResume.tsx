@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function AccountScren() {
+export default function StreaksResume() {
   return (
     <View>
-      <Text>AccountScren</Text>
+      <Text>StreaksResume</Text>
     </View>
   )
 }

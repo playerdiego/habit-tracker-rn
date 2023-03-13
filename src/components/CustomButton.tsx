@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
       },
       outlineButton: {
         borderColor: '#000',
-        borderWidth: 1
+        borderWidth: 2
       }
 })

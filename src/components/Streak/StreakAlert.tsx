@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet, Pressable, TouchableOpacity, Button } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import CustomButton from './CustomButton';
+import CustomButton from '../CustomButton';
 import { useNavigation } from '@react-navigation/native';
-import { HomeNavigationProps } from '../navigation/HomeNavigation';
-import Divider from './Divider';
+import { HomeNavigationProps } from '../../navigation/HomeNavigation';
+import Divider from '../Divider';
 
 export default function StreakAlert() {
 

@@ -11,6 +11,7 @@ import Divider from '../../components/Divider';
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import ScrollContainer from '../../components/ScrollContainer';
 
 export default function LoginScreen() {
 
@@ -33,69 +34,60 @@ export default function LoginScreen() {
   }
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <View style={global.container}>
+    <ScrollContainer title='Login'>
+      <Formik initialValues={initialValues} onSubmit={onLogin} validationSchema={validationSchema}>
 
-          <Title>Login</Title>
+      {({handleChange, handleBlur, handleSubmit, values, errors, touched, }) => (
+        <View style={{marginTop: 20}}>
+          <TextInput 
+            placeholder='Email' 
+            keyboardType='email-address' 
+            style={global.input} 
+            cursorColor='#222' 
+            onChangeText={handleChange('email')}
+            onBlur={handleBlur('email')}
+            value={values.email}
+          />
+          {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
 
-            <Formik initialValues={initialValues} onSubmit={onLogin} validationSchema={validationSchema}>
+          <TextInput 
+            placeholder='password' 
+            secureTextEntry={true} 
+            style={global.input} 
+            cursorColor='#222'
+            onChangeText={handleChange('password')}
+            onBlur={handleBlur('password')}
+            value={values.password}
+          />
+          {(errors.password && touched.password) && (<Text style={{color: 'red'}}>{errors.password}</Text>)}
 
-            {({handleChange, handleBlur, handleSubmit, values, errors, touched, }) => (
-              <View style={{marginTop: 20}}>
-                <TextInput 
-                  placeholder='Email' 
-                  keyboardType='email-address' 
-                  style={global.input} 
-                  cursorColor='#222' 
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  value={values.email}
-                />
-                {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
-
-                <TextInput 
-                  placeholder='password' 
-                  secureTextEntry={true} 
-                  style={global.input} 
-                  cursorColor='#222'
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  value={values.password}
-                />
-                {(errors.password && touched.password) && (<Text style={{color: 'red'}}>{errors.password}</Text>)}
-
-                <CustomButton text='Iniciar Sesión' onPressed={handleSubmit} style={{marginTop: 8}} />
-              </View>
-            )}
-
-            </Formik>
-
-          <View style={{marginTop: 30}}>
-            <Pressable onPress={() => navigate('recover')}>
-              
-              <Title size='sm' align='center' icon='key'>Did you forgot your password? Recover Account</Title>
-            </Pressable>
-          </View>
-
-          <View style={{marginVertical: 30}}>
-            <Pressable onPress={() => navigate('register')}>
-              <Title size='sm' align='center' icon='user'>Don´t you have an account? Create one here</Title>
-            </Pressable>
-          </View>
-
-          <Divider />
-
-          <View style={{marginTop: 30, alignItems: 'center'}}>
-            <Title size='sm' align='center'>Or you can login with:</Title>
-            <TouchableOpacity>
-              <Icon name='google' size={40} style={{marginVertical: 20}} />
-            </TouchableOpacity>
-          </View>
-
+          <CustomButton text='Login' onPressed={handleSubmit} style={{marginTop: 8}} />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      )}
+
+      </Formik>
+
+      <View style={{marginTop: 30}}>
+        <Pressable onPress={() => navigate('recover')}>
+          <Title size='sm' align='center' icon='key'>Did you forgot your password? Recover Account</Title>
+        </Pressable>
+      </View>
+
+      <View style={{marginVertical: 30}}>
+        <Pressable onPress={() => navigate('register')}>
+          <Title size='sm' align='center' icon='user'>Don´t you have an account? Create one here</Title>
+        </Pressable>
+      </View>
+
+      <Divider />
+
+      <View style={{marginTop: 30, alignItems: 'center'}}>
+        <Title size='sm' align='center'>Or you can login with:</Title>
+        <TouchableOpacity>
+          <Icon name='google' size={40} style={{marginVertical: 20}} />
+        </TouchableOpacity>
+      </View>
+    </ScrollContainer>
   )
 
 }

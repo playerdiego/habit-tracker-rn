@@ -4,8 +4,9 @@ import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-naviga
 import HomeScreen from '../screens/home/HomeScreen';
 import CalendarScreen from '../screens/home/CalendarScreen';
 import StreakScreen from '../screens/home/StreakScreen';
-import AccountScren from '../screens/home/AccountScren';
+import AccountScren from '../screens/home/Account/AccountScreen';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import AccountNavigation from './AccountNavigation';
 
 type HomeTabParaList = {
   home: undefined,
@@ -65,7 +66,7 @@ export default function HomeNavigation() {
 
       <Tabs.Screen 
         name='account' 
-        component={AccountScren} 
+        component={AccountNavigation} 
         options={{
           headerShown: false,
           title: 'Account',
