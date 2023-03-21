@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, ImageBackground, Button, Pressable, ScrollView, Touchable, Alert } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { global } from '../../styles/global';
+import { global, globalColors } from '../../styles/global';
 import { useFonts, Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
 import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 import { useNavigation } from '@react-navigation/native';
@@ -53,11 +53,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   titleContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: globalColors.background,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 20,
-    shadowColor: "#000",
+    shadowColor: globalColors.primary,
     shadowOffset: {
       width: 0,
       height: 2,

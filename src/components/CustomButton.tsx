@@ -1,6 +1,6 @@
 import { View, Text, Pressable, StyleSheet, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import React from 'react';
-import { global } from '../styles/global';
+import { global, globalColors } from '../styles/global';
 import { useFonts } from 'expo-font';
 import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 
@@ -18,8 +18,8 @@ export default function CustomButton({outline = false, text, onPressed, style = 
   });
 
     const colors = {
-        default: outline ? '#fff' : '#000',
-        hover: outline ? '#cdcdcd' : '#111'
+        default: outline ? globalColors.secondary : globalColors.primary,
+        hover: outline ? globalColors.gray : globalColors.primary
     };
 
     if(!fontLoaded) return null;
@@ -34,7 +34,7 @@ export default function CustomButton({outline = false, text, onPressed, style = 
             style
         ]}
         onPress={() => onPressed()}>
-        <Text style={{...styles.buttonText, color: outline ? '#000' : '#fff'}}>{text}</Text>
+        <Text style={{...styles.buttonText, color: outline ? globalColors.primary : globalColors.secondary}}>{text}</Text>
     </Pressable>
   )
 }
@@ -53,12 +53,12 @@ const styles = StyleSheet.create({
         lineHeight: 21,
         fontWeight: '600',
         letterSpacing: 0.25,
-        color: '#fff',
+        color: globalColors.secondary,
         textTransform: 'uppercase',
         fontFamily: 'Roboto_400Regular',
       },
       outlineButton: {
-        borderColor: '#000',
+        borderColor: globalColors.primary,
         borderWidth: 2
       }
 })

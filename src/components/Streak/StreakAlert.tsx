@@ -5,6 +5,7 @@ import CustomButton from '../CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProps } from '../../navigation/HomeNavigation';
 import Divider from '../Divider';
+import { globalColors } from '../../styles/global';
 
 export default function StreakAlert() {
 
@@ -38,7 +39,7 @@ export default function StreakAlert() {
 
 const styles = StyleSheet.create({
   streakAlertContainer: {
-    borderColor:'#000',
+    borderColor:globalColors.primary,
     borderWidth: 2,
     borderRadius: 4,
     marginVertical: 20,

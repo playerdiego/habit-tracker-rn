@@ -1,5 +1,15 @@
 import { StyleSheet } from "react-native";
 
+export const globalColors = {
+    primary: '#000',
+    secondary: '#fff',
+    background: '#fff',
+    red: '#AF2413',
+    green: '#57F287',
+    yellow: '#FFEB00',
+    gray: '#cdcdcd'
+}
+
 export const global = StyleSheet.create({
     text: {
         fontFamily: 'Roboto_400Regular',
@@ -12,7 +22,7 @@ export const global = StyleSheet.create({
     },
     input: {
         borderWidth: 2,
-        borderColor: '#000',
+        borderColor: globalColors.primary,
         padding: 8,
         borderRadius: 4,
         marginVertical: 8

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { Habit } from '../interfaces/habit.interface';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { global } from '../styles/global';
+import { global, globalColors } from '../styles/global';
 
 interface HabitCheckboxProps {
     habit: Habit,
@@ -17,8 +17,8 @@ export default function HabitCheckbox({habit: {completed, title, description}, s
         <BouncyCheckbox 
             innerIconStyle={{borderRadius: 4, borderWidth: 2}} 
             iconStyle={{borderRadius: 4}}
-            unfillColor={history ? '#cdcdcd' : '#fff'}
-            fillColor={history && !completed ? '#cdcdcd' : '#000'}
+            unfillColor={history ? globalColors.gray : globalColors.secondary}
+            fillColor={history && !completed ? globalColors.gray : globalColors.primary}
             size={
                 size === 'sm' ? 25 :
                 size === 'md' ? 40 :
@@ -29,7 +29,7 @@ export default function HabitCheckbox({habit: {completed, title, description}, s
         />
 
         <View>
-            <Text style={{...styles.title, fontSize: 16, color: history && !completed ? '#555' : '#000'}}>{title}</Text>
+            <Text style={{...styles.title, fontSize: 16, color: history && !completed ? '#555' : globalColors.primary}}>{title}</Text>
         </View>  
     </View>
   )

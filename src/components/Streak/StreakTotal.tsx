@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import Title from '../Title'
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { global } from '../../styles/global';
+import { global, globalColors } from '../../styles/global';
 
 const totals = [
   {
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginVertical: 20,
     borderWidth: 1,
-    borderColor: '#000'
+    borderColor: globalColors.primary
   },
   totalItem: {
     flexGrow: 1,
@@ -73,6 +73,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 80,
     borderWidth: 1,
-    borderColor: '#000'
+    borderColor: globalColors.primary
   }
 });

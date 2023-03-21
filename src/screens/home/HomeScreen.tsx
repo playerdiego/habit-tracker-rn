@@ -77,10 +77,3 @@ export default function HomeScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  addHabitButton: {
-    position: 'absolute',
-    backgroundColor: 'red'
-  }
-});
-

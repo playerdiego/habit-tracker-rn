@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { global } from '../../../styles/global';
+import { global, globalColors } from '../../../styles/global';
 import Title from '../../../components/Title';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
@@ -57,7 +57,7 @@ export default function EditAccountScreen() {
                             <TextInput 
                                 placeholder='Username'  
                                 style={global.input}  
-                                cursorColor='#222' 
+                                cursorColor={globalColors.gray} 
                                 onChangeText={handleChange('username')}
                                 onBlur={handleBlur('username')}
                                 value={values.username}
@@ -67,7 +67,7 @@ export default function EditAccountScreen() {
                             <TextInput 
                                 placeholder='Email'  
                                 style={global.input}  
-                                cursorColor='#222' 
+                                cursorColor={globalColors.gray} 
                                 keyboardType='email-address'
                                 onChangeText={handleChange('email')}
                                 onBlur={handleBlur('email')}
@@ -78,7 +78,7 @@ export default function EditAccountScreen() {
                             <TextInput 
                                 placeholder='Motivational Phrase'  
                                 style={global.input}  
-                                cursorColor='#222' 
+                                cursorColor={globalColors.gray} 
                                 onChangeText={handleChange('phrase')}
                                 onBlur={handleBlur('phrase')}
                                 value={values.phrase}

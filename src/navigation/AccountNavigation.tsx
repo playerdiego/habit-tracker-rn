@@ -6,6 +6,7 @@ import EditAccountScreen from '../screens/home/Account/EditAccountScreen';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import ChangePasswordScreen from '../screens/home/Account/ChangePasswordScreen';
+import { globalColors } from '../styles/global';
 
 type AccountStackParamList = {
   data: undefined,
@@ -22,7 +23,7 @@ export default function AccountNavigation() {
     <Stack.Navigator 
       initialRouteName='data'
       screenOptions={{
-        cardStyle: {backgroundColor: '#fff'}
+        cardStyle: {backgroundColor: globalColors.background}
       }}
     >
         <Stack.Screen name='data' component={AccountScren} options={{headerShown: false}} />

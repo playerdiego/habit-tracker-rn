@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, TextInput, Pressable, TouchableOpacity } from 'react-native';
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { global } from '../../styles/global';
+import { global, globalColors } from '../../styles/global';
 import Title from '../../components/Title';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -56,7 +56,7 @@ export default function RegisterScreen() {
                   value={values.username}
                   onChangeText={handleChange('username')}
                   onBlur={handleBlur('username')}
-                  cursorColor='#222'
+                  cursorColor={globalColors.gray}
                 />
                 {(errors.username && touched.username) && (<Text style={{color: 'red'}}>{errors.username}</Text>)}
 
@@ -66,7 +66,7 @@ export default function RegisterScreen() {
                   value={values.email}
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
-                  cursorColor='#222'
+                  cursorColor={globalColors.gray}
                 />
                 {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
 
@@ -76,7 +76,7 @@ export default function RegisterScreen() {
                   value={values.email}
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
-                  cursorColor='#222'
+                  cursorColor={globalColors.gray}
                 />
                 {(errors.password && touched.password) && (<Text style={{color: 'red'}}>{errors.password}</Text>)}
 
@@ -86,7 +86,7 @@ export default function RegisterScreen() {
                   value={values.email}
                   onChangeText={handleChange('passwordCfm')}
                   onBlur={handleBlur('passwordCfm')}
-                  cursorColor='#222'
+                  cursorColor={globalColors.gray}
                 />
                 {(errors.passwordCfm && touched.passwordCfm) && (<Text style={{color: 'red'}}>{errors.passwordCfm}</Text>)}
 

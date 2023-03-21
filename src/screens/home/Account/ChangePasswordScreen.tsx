@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { global } from '../../../styles/global';
+import { global, globalColors } from '../../../styles/global';
 import Title from '../../../components/Title';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
@@ -58,7 +58,7 @@ export default function ChangePasswordScreen() {
                                 placeholder='Your current password'  
                                 style={global.input} 
                                 secureTextEntry={true} 
-                                cursorColor='#222' 
+                                cursorColor={globalColors.gray} 
                                 onChangeText={handleChange('currentPassword')}
                                 onBlur={handleBlur('currentPassword')}
                                 value={values.currentPassword}
@@ -69,7 +69,7 @@ export default function ChangePasswordScreen() {
                                 placeholder='New Password'  
                                 style={global.input} 
                                 secureTextEntry={true} 
-                                cursorColor='#222' 
+                                cursorColor={globalColors.gray} 
                                 onChangeText={handleChange('newPassword')}
                                 onBlur={handleBlur('newPassword')}
                                 value={values.newPassword}
@@ -80,7 +80,7 @@ export default function ChangePasswordScreen() {
                                 placeholder='Confirm New Password'  
                                 style={global.input} 
                                 secureTextEntry={true} 
-                                cursorColor='#222' 
+                                cursorColor={globalColors.gray} 
                                 onChangeText={handleChange('newPasswordCfm')}
                                 onBlur={handleBlur('newPasswordCfm')}
                                 value={values.newPasswordCfm}

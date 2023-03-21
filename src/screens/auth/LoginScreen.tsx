@@ -2,7 +2,7 @@ import { View, Text, ScrollView, TextInput, Pressable, StyleSheet, TouchableOpac
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ReactText from '../../components/ReactText';
-import { global } from '../../styles/global';
+import { global, globalColors } from '../../styles/global';
 import Title from '../../components/Title';
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
@@ -43,7 +43,7 @@ export default function LoginScreen() {
             placeholder='Email' 
             keyboardType='email-address' 
             style={global.input} 
-            cursorColor='#222' 
+            cursorColor={globalColors.gray} 
             onChangeText={handleChange('email')}
             onBlur={handleBlur('email')}
             value={values.email}
@@ -54,7 +54,7 @@ export default function LoginScreen() {
             placeholder='password' 
             secureTextEntry={true} 
             style={global.input} 
-            cursorColor='#222'
+            cursorColor={globalColors.gray}
             onChangeText={handleChange('password')}
             onBlur={handleBlur('password')}
             value={values.password}

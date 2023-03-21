@@ -7,6 +7,7 @@ import StreakScreen from '../screens/home/StreakScreen';
 import AccountScren from '../screens/home/Account/AccountScreen';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import AccountNavigation from './AccountNavigation';
+import { globalColors } from '../styles/global';
 
 type HomeTabParaList = {
   home: undefined,
@@ -23,7 +24,7 @@ export default function HomeNavigation() {
     <Tabs.Navigator
       initialRouteName='home'
       sceneContainerStyle={{
-        backgroundColor: '#fff'
+        backgroundColor: globalColors.background
       }}
     >
       <Tabs.Screen 
@@ -32,7 +33,7 @@ export default function HomeNavigation() {
         options={{
           headerShown: false,
           title: 'Home',
-          tabBarActiveTintColor: '#000',
+          tabBarActiveTintColor: globalColors.primary,
           tabBarIcon: ({color, size}) => (
             <Icon name='home' color={color} size={size} />
           )
@@ -57,7 +58,7 @@ export default function HomeNavigation() {
         options={{
           headerShown: false,
           title: 'Streaks',
-          tabBarActiveTintColor: '#000',
+          tabBarActiveTintColor: globalColors.primary,
           tabBarIcon: ({color, size}) => (
             <Icon name='fire' color={color} size={size} />
           )
@@ -70,7 +71,7 @@ export default function HomeNavigation() {
         options={{
           headerShown: false,
           title: 'Account',
-          tabBarActiveTintColor: '#000',
+          tabBarActiveTintColor: globalColors.primary,
           tabBarIcon: ({color, size}) => (
             <Icon name='user' color={color} size={size} />
           )

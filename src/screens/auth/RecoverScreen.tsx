@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, TextInput, Pressable, TouchableOpacity } from 'react-native';
 import React from 'react'
-import { global } from '../../styles/global';
+import { global, globalColors } from '../../styles/global';
 import Title from '../../components/Title';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -47,7 +47,7 @@ export default function RecoverScreen() {
                   value={values.email}
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
-                  cursorColor='#222'
+                  cursorColor={globalColors.gray}
                 />
                 {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
 

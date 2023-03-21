@@ -8,6 +8,7 @@ import LauncherScreen from '../screens/auth/LauncherScreen';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Icon from "react-native-vector-icons/FontAwesome5";
+import { globalColors } from '../styles/global';
 
 type AuthStackParamList = {
   login: undefined,
@@ -29,7 +30,7 @@ export default function AuthNavigation() {
       initialRouteName='launcher'
       
       screenOptions={{
-        contentStyle: { backgroundColor: '#fff' },
+        contentStyle: { backgroundColor: globalColors.background },
         headerLeft: ({canGoBack}) =>
           <TouchableOpacity>
             <Icon name='arrow-left' onPress={() => canGoBack ? goBack() : navigate('launcher')} />

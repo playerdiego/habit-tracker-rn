@@ -5,17 +5,18 @@ import AuthNavigation from './AuthNavigation';
 import HomeNavigation from './HomeNavigation';
 import { StackNavigationProp } from '@react-navigation/stack';
 import type { CompositeNavigationProp } from '@react-navigation/native';
+import { globalColors } from '../styles/global';
 
 const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
 
-  const auth = true;
+  const auth = false;
 
   return (
     <Stack.Navigator
       screenOptions={{
-        contentStyle: { backgroundColor: '#fff' },
+        contentStyle: { backgroundColor: globalColors.background },
       }}
     >
       {
