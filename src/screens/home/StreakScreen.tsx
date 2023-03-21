@@ -6,13 +6,15 @@ import ScrollContainer from '../../components/ScrollContainer';
 import StreakCalendar from '../../components/Streak/StreakCalendar';
 import StreakFeed from '../../components/Streak/StreakFeed';
 import StreaksResume from '../../components/Streak/StreaksResume';
+import StreakTotal from '../../components/Streak/StreakTotal';
 
 export default function StreakScreen() {
   return (
-    <ScrollContainer title='Streak'>
-      <StreakCalendar />
-      <StreakFeed />
+    <ScrollContainer title='Streaks'>
+      {/* <StreakCalendar /> */}
       <StreaksResume />
+      <StreakTotal />
+      <StreakFeed />
     </ScrollContainer>
   )
 }

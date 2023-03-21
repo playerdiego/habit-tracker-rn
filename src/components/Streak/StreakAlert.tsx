@@ -21,13 +21,13 @@ export default function StreakAlert() {
       </TouchableOpacity>
 
       <View style={{marginVertical: 20}}>
-        <Text style={styles.streakText}>Llevas 20 días cumpliendo al menos 3 hábitos</Text>
+        <Text style={styles.streakText}>You have completed your habits 20 days in a row</Text>
       </View>
 
       <Divider />
 
       <View style={{marginVertical: 20}}>
-        <Text style={styles.streakText}>Has cumplido con: Entrenamiento 84 días en total</Text>
+        <Text style={styles.streakText}>You have completed: Workout 25 in a row</Text>
       </View>
 
       <CustomButton onPressed={() => navigate('streak')} text='More' style={styles.button} />

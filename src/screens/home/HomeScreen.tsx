@@ -48,7 +48,7 @@ export default function HomeScreen() {
           {
             habits.map(habit => (
               !habit.completed &&
-              <HabitCheckbox key={habit.title} title={habit.title} description={habit.description} completed={habit.completed}  />
+              <HabitCheckbox key={habit.title} habit={habit}  />
             ))
           }
 
@@ -63,7 +63,7 @@ export default function HomeScreen() {
           {
             habits.map(habit => (
               habit.completed &&
-              <HabitCheckbox key={habit.title} title={habit.title} description={habit.description} completed={habit.completed}  />
+              <HabitCheckbox key={habit.title} habit={habit}  />
             ))
           }
 

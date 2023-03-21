@@ -99,20 +99,20 @@ export default function RegisterScreen() {
 
           <View style={{marginTop: 30}}>
               <Pressable onPress={() => navigate('recover')}>
-                <Title size='sm' align='center' icon='key'>Did you forgot your password? Recover Account</Title>
+                <Title size='xs' align='center' icon='key'>Did you forgot your password? Recover Account</Title>
               </Pressable>
           </View>
 
           <View style={{marginVertical: 30}}>
             <Pressable onPress={() => navigate('login')}>
-              <Title size='sm' align='center' icon='user'>Do you already have an account? Login here</Title>
+              <Title size='xs' align='center' icon='user'>Do you already have an account? Login here</Title>
             </Pressable>
           </View>
 
           <Divider />
 
           <View style={{marginTop: 30, alignItems: 'center'}}>
-            <Title size='sm' align='center'>Or you can create an account with:</Title>
+            <Title size='xs' align='center'>Or you can create an account with:</Title>
             <TouchableOpacity>
               <Icon name='google' size={40} style={{marginVertical: 20}} />
             </TouchableOpacity>

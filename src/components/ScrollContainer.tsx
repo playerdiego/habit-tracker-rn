@@ -12,7 +12,7 @@ interface ContainerProps {
 
 export default function ScrollContainer({children, title, titleSize = 'lg'}: ContainerProps) {
   return (
-    <SafeAreaView edges={['top']}>
+    <SafeAreaView edges={['top', 'left', 'right']}>
       <ScrollView style={{height: '100%'}}>
 
         <View style={global.container}>

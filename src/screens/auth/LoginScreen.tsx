@@ -69,20 +69,20 @@ export default function LoginScreen() {
 
       <View style={{marginTop: 30}}>
         <Pressable onPress={() => navigate('recover')}>
-          <Title size='sm' align='center' icon='key'>Did you forgot your password? Recover Account</Title>
+          <Title size='xs' align='center' icon='key'>Did you forgot your password? Recover Account</Title>
         </Pressable>
       </View>
 
       <View style={{marginVertical: 30}}>
         <Pressable onPress={() => navigate('register')}>
-          <Title size='sm' align='center' icon='user'>Don´t you have an account? Create one here</Title>
+          <Title size='xs' align='center' icon='user'>Don´t you have an account? Create one here</Title>
         </Pressable>
       </View>
 
       <Divider />
 
       <View style={{marginTop: 30, alignItems: 'center'}}>
-        <Title size='sm' align='center'>Or you can login with:</Title>
+        <Title size='xs' align='center'>Or you can login with:</Title>
         <TouchableOpacity>
           <Icon name='google' size={40} style={{marginVertical: 20}} />
         </TouchableOpacity>

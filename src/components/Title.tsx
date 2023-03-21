@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 interface TitleProps {
     children: string | JSX.Element,
-    size?: 'sm' | 'md' | 'lg' | 'xl',
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl',
     align?: 'center' | 'left' | 'right',
     icon?: string
 }
@@ -30,7 +30,8 @@ export default function Title({children, size = 'lg', align = 'left', icon}: Tit
             {icon && <Icon name={icon} solid style={{marginRight: 5, marginTop: 4}} />}
             <Text style={{
                 ...global.title,
-                fontSize: size === 'sm' ? 13 :  
+                fontSize: size === 'xs' ? 13 :  
+                        size === 'sm' ? 22 :  
                         size === 'md' ? 26 :  
                         size === 'lg' ? 32 :  
                         size === 'xl' ? 40 : 30,
