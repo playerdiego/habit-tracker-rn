@@ -9,6 +9,7 @@ import HabitCheckbox from '../../components/HabitCheckbox';
 import Divider from '../../components/Divider';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ScrollContainer from '../../components/ScrollContainer';
+import { FloatingAction } from 'react-native-floating-action';
 
 const habits: Habit[] = [
   {
@@ -72,7 +73,7 @@ export default function HomeScreen() {
 
 
         <View style={{marginBottom: 30}}><StreakAlert></StreakAlert></View>
-
+        
     </ScrollContainer>
   )
 }

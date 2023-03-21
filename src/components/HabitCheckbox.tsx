@@ -29,7 +29,8 @@ export default function HabitCheckbox({habit: {completed, title, description}, s
         />
 
         <View>
-            <Text style={{...styles.title, fontSize: 16, color: history && !completed ? '#555' : globalColors.primary}}>{title}</Text>
+            <Text style={{...styles.title, fontSize: history ? 16 : 22, color: history && !completed ? '#555' : globalColors.primary}}>{title}</Text>
+            {!history && <Text>{description}</Text>}
         </View>  
     </View>
   )

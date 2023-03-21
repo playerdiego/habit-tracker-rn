@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
 
-  const auth = false;
+  const auth = true;
 
   return (
     <Stack.Navigator

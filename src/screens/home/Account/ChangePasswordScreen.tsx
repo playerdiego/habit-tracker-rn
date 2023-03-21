@@ -9,6 +9,7 @@ import { AccountNavigationProps } from '../../../navigation/AccountNavigation';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import CustomButton from '../../../components/CustomButton';
+import CustomBackButton from '../../../components/CustomBackButton';
 
 export default function ChangePasswordScreen() {
 
@@ -43,9 +44,8 @@ export default function ChangePasswordScreen() {
 
                 <View style={global.container}>
 
-                    <TouchableOpacity style={{marginBottom: 40}}>
-                        <Icon name='arrow-left' onPress={() => navigate('data')} />
-                    </TouchableOpacity>
+                    <CustomBackButton onPressed={() => {navigate('data')}} />
+
                     
                     <Title>Change Password</Title>
 

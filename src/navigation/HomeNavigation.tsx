@@ -2,16 +2,17 @@ import { View, Text } from 'react-native';
 import React from 'react';
 import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/home/HomeScreen';
-import CalendarScreen from '../screens/home/CalendarScreen';
 import StreakScreen from '../screens/home/StreakScreen';
 import AccountScren from '../screens/home/Account/AccountScreen';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import AccountNavigation from './AccountNavigation';
 import { globalColors } from '../styles/global';
+import { FloatingAction } from 'react-native-floating-action';
+import HabitsNavigation from './HabitsNavigation';
 
 type HomeTabParaList = {
   home: undefined,
-  calendar: undefined,
+  habits: undefined,
   streak: undefined,
   account: undefined,
 }
@@ -41,16 +42,19 @@ export default function HomeNavigation() {
         
       />
 
-      {/* <Tabs.Screen 
-        name='calendar' 
-        component={CalendarScreen}options={{
+      <Tabs.Screen 
+        name='habits' 
+        component={HabitsNavigation} 
+        options={{
           headerShown: false,
-          title: 'Calendar',
+          title: 'Habits Config',
+          tabBarActiveTintColor: globalColors.primary,
           tabBarIcon: ({color, size}) => (
-            <Icon name='calendar' color={color} size={size} />
+            <Icon name='th-list' color={color} size={size} />
           )
         }} 
-      /> */}
+      />
+
 
       <Tabs.Screen 
         name='streak' 
@@ -77,6 +81,7 @@ export default function HomeNavigation() {
           )
         }} 
       />
+
 
     </Tabs.Navigator>
   )
