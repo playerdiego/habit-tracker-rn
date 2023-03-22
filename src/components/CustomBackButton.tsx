@@ -8,8 +8,8 @@ interface CustomBackButton {
 
 export default function CustomBackButton({onPressed}: CustomBackButton) {
   return (
-    <TouchableOpacity style={{marginBottom: 40}}>
-        <Icon name='arrow-left' onPress={() => onPressed()} />
+    <TouchableOpacity style={{marginBottom: 40}} onPress={() => onPressed()}>
+        <Icon name='arrow-left' />
     </TouchableOpacity>
   )
 }

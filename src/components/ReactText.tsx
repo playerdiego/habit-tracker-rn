@@ -5,10 +5,11 @@ import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 import { global } from '../styles/global';
 
 interface ReactTextProps {
-    children: String
+    children: String,
+    style?: Object
 }
 
-export default function ReactText({children}: ReactTextProps) {
+export default function ReactText({children, style}: ReactTextProps) {
 
     const [fontLoaded] = useFonts({
         Roboto_400Regular
@@ -19,7 +20,7 @@ export default function ReactText({children}: ReactTextProps) {
 
   return (
     <View>
-      <Text style={global.text}>{children}</Text>
+      <Text style={{...style, ...global.text}}>{children}</Text>
     </View>
   )
 }

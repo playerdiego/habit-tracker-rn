@@ -38,8 +38,8 @@ export default function StreakTotal() {
 
       <View style={styles.totalsGrid}>
         {
-          totals.map(({icon, total}) => (
-            <Total total={total} icon={icon} key={icon} />
+          totals.map(({icon, total}, index) => (
+            <Total total={total} icon={icon} key={icon} index={index} />
           ))
         }
       </View>
@@ -48,9 +48,15 @@ export default function StreakTotal() {
   )
 }
 
-function Total({icon, total}: {icon: string, total: number}) {
+function Total({icon, total, index}: {icon: string, total: number, index: number}) {
   return (
-    <View style={styles.totalItem}>
+    <View style={{
+      borderTopLeftRadius: index === 0 ? 15 : 0,
+      borderTopRightRadius: index === 3 ? 15 : 0,
+      borderBottomLeftRadius: index === 4 ? 15 : 0,
+      borderBottomRightRadius: index === totals.length - 1 ? 15 : 0,
+      ...styles.totalItem
+    }}>
       <Icon name={icon} size={30} style={{marginBottom: 10}}></Icon>
       <Text style={global.boldTitle}>{total}</Text>
     </View>
@@ -64,7 +70,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginVertical: 20,
     borderWidth: 1,
-    borderColor: globalColors.primary
+    borderColor: globalColors.primary,
+    borderRadius: 20
   },
   totalItem: {
     flexGrow: 1,
@@ -73,6 +80,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 80,
     borderWidth: 1,
-    borderColor: globalColors.primary
+    borderColor: globalColors.primary,
   }
 });

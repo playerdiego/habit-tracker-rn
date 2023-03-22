@@ -47,7 +47,7 @@ export default function HomeNavigation() {
         component={HabitsNavigation} 
         options={{
           headerShown: false,
-          title: 'Habits Config',
+          title: 'Habits Setup',
           tabBarActiveTintColor: globalColors.primary,
           tabBarIcon: ({color, size}) => (
             <Icon name='th-list' color={color} size={size} />
