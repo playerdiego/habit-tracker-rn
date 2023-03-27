@@ -2,13 +2,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import Navigation from './src/navigation/Navigation';
-import { global } from './src/styles/global';
+import { AuthProvider } from './src/context/AuthContext';
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Navigation />
-      <StatusBar translucent={true} />
+      <AuthProvider>
+        <Navigation />
+        <StatusBar translucent={true} />
+      </AuthProvider>
     </NavigationContainer>
   );
 }

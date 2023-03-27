@@ -1,44 +1,49 @@
-import { View, Text, ScrollView, TextInput, Pressable, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Pressable, TouchableOpacity } from 'react-native';
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context';
+
+import * as Yup from 'yup';
+import { Formik } from 'formik';
+import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 import { global, globalColors } from '../../styles/global';
 import Title from '../../components/Title';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 import CustomButton from '../../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
 import { AuthNavigationProps } from '../../navigation/AuthNavigation';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import Divider from '../../components/Divider';
 import ScrollContainer from '../../components/ScrollContainer';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function RegisterScreen() {
+
+  const {registerWithEmail} = useContext(AuthContext);
 
   const {navigate} = useNavigation<AuthNavigationProps>()
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required("Username is required"),
+    name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid Email").required("Email is required"),
     password: Yup.string().required("Password is required").min(6, 'Password Min length: 6 characters'),
-    passwordCfm: Yup.string().required('Password confirm is required').min(6, 'Password Min length: 6 characters'),
+    passwordCfm: Yup.string().required('Password confirm is required').oneOf([Yup.ref('password')], 'Passwords doesn´t match'),
   })
 
   type FormData = {
-    username: string,
+    name: string,
     email: string,
     password: string,
     passwordCfm: string
   }
 
   const initialValues: FormData = {
-    username: '',
-    email: '',
-    password: '',
-    passwordCfm: ''
+    name: 'Diego',
+    email: 'diego@diego.com',
+    password: '123456',
+    passwordCfm: '123456'
   }
 
-  const onRegister = (values: FormData) => {
-
+  const onRegister = ({name, email, password, passwordCfm}: FormData) => {
+    registerWithEmail(name, email, password);
   }
 
   return (
@@ -52,13 +57,13 @@ export default function RegisterScreen() {
 
                 <TextInput
                   style={global.input}
-                  placeholder='Create an username'
-                  value={values.username}
-                  onChangeText={handleChange('username')}
-                  onBlur={handleBlur('username')}
+                  placeholder='Your name'
+                  value={values.name}
+                  onChangeText={handleChange('name')}
+                  onBlur={handleBlur('name')}
                   cursorColor={globalColors.gray}
                 />
-                {(errors.username && touched.username) && (<Text style={{color: 'red'}}>{errors.username}</Text>)}
+                {(errors.name && touched.name) && (<Text style={{color: 'red'}}>{errors.name}</Text>)}
 
                 <TextInput
                   style={global.input}
@@ -72,8 +77,9 @@ export default function RegisterScreen() {
 
                 <TextInput
                   style={global.input}
+                  secureTextEntry={true}
                   placeholder='Password'
-                  value={values.email}
+                  value={values.password}
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
                   cursorColor={globalColors.gray}
@@ -82,8 +88,9 @@ export default function RegisterScreen() {
 
                 <TextInput
                   style={global.input}
+                  secureTextEntry={true}
                   placeholder='Repeat your password'
-                  value={values.email}
+                  value={values.passwordCfm}
                   onChangeText={handleChange('passwordCfm')}
                   onBlur={handleBlur('passwordCfm')}
                   cursorColor={globalColors.gray}

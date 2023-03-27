@@ -10,6 +10,9 @@ import Divider from '../../components/Divider';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ScrollContainer from '../../components/ScrollContainer';
 import { FloatingAction } from 'react-native-floating-action';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import ValidateEmailAlert from '../../components/validateEmailAlert';
 
 const habits: Habit[] = [
   {
@@ -40,10 +43,16 @@ const habits: Habit[] = [
 ];
 
 export default function HomeScreen() {
+
+  const {user} = useContext(AuthContext);
+
   return (
-    <ScrollContainer title='Good Morning, Diego' titleSize='md'> 
+    <ScrollContainer title={'Good Morning, ' + user?.displayName} titleSize='md'> 
 
         <View style={{marginBottom: 15}}>
+
+          {!user?.emailVerified && <ValidateEmailAlert />}
+
           <Text style={global.boldTitle}>Today´s Habits - 3 left</Text>
 
           {

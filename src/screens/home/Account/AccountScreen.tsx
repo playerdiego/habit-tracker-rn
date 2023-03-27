@@ -8,14 +8,14 @@ import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProps } from '../../../navigation/HomeNavigation';
 import { AccountNavigationProps } from '../../../navigation/AccountNavigation';
 import ScrollContainer from '../../../components/ScrollContainer';
+import { useContext } from 'react';
+import { AuthContext } from '../../../context/AuthContext';
 
 export default function AccountScreen() {
 
   const {navigate} = useNavigation<AccountNavigationProps>();
-  
-  const onLogout = () => {
 
-  }
+  const {user, logout} = useContext(AuthContext);
 
   return (
     <ScrollContainer title='Account'>
@@ -23,14 +23,13 @@ export default function AccountScreen() {
       <View style={styles.dataContainer}>
 
         <Image 
-          source={{uri: 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}}
+          source={{uri: user?.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}}
           style={styles.avatar}
         />
 
-        <Title size='md'>PlayerDiego</Title>
+        <Title size='md'>{user?.displayName!}</Title>
 
-        <Text style={{marginVertical: 15,...global.boldTitle}}>Frase Motivadora</Text>
-        <Text style={{marginBottom: 15,...global.boldTitle}}>info@app.com</Text>
+        <Text style={{marginVertical: 15,...global.boldTitle}}>{user?.email}</Text>
 
         <View style={{width: '100%', marginTop: 50}}>
           <CustomButton 
@@ -46,7 +45,7 @@ export default function AccountScreen() {
           />
 
           <CustomButton 
-            onPressed={() => onLogout()} 
+            onPressed={() => logout()} 
             text='Logout' outline={true} 
             style={{width: '100%'}}
           />

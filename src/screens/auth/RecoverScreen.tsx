@@ -2,7 +2,7 @@ import { View, Text, ScrollView, TextInput, Pressable, TouchableOpacity } from '
 import React from 'react'
 import { global, globalColors } from '../../styles/global';
 import Title from '../../components/Title';
-import { Formik } from 'formik';
+import { Formik, FormikState } from 'formik';
 import * as Yup from 'yup';
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
@@ -10,10 +10,14 @@ import { AuthNavigationProps } from '../../navigation/AuthNavigation';
 import Divider from '../../components/Divider';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function RecoverScreen() {
 
   const {navigate} = useNavigation<AuthNavigationProps>();
+
+  const {recoverAccount} = useContext(AuthContext);
 
   type FormData = {
     email: ''
@@ -25,8 +29,9 @@ export default function RecoverScreen() {
     email: Yup.string().required("Email is required").email("Invalid Email")
   })
 
-  const onRecover = (values: FormData) => {
-
+  const onRecover = (email: string, resetForm: (nextState?: Partial<FormikState<FormData>> | undefined) => void) => {
+    recoverAccount(email);
+    resetForm();
   }
 
   return (
@@ -35,7 +40,7 @@ export default function RecoverScreen() {
         <View style={global.container}>
           <Title>Recover Account</Title>
 
-          <Formik initialValues={initialValues} onSubmit={onRecover} validationSchema={validationSchema}>
+          <Formik initialValues={initialValues} onSubmit={({email}, {resetForm}) => onRecover(email, resetForm)} validationSchema={validationSchema}>
 
             {({handleSubmit, handleChange, handleBlur, values, errors, touched}) =>  (
 

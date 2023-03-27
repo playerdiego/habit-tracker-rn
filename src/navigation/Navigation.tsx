@@ -6,12 +6,20 @@ import HomeNavigation from './HomeNavigation';
 import { StackNavigationProp } from '@react-navigation/stack';
 import type { CompositeNavigationProp } from '@react-navigation/native';
 import { globalColors } from '../styles/global';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 
 const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
 
-  const auth = true;
+  const [user, setUser] = useState<User | null>(null);
+
+  const auth = getAuth();
+  onAuthStateChanged(auth, (userAuth) => {
+    setUser(userAuth);
+  });
 
   return (
     <Stack.Navigator
@@ -20,7 +28,7 @@ export default function Navigation() {
       }}
     >
       {
-        auth ? 
+        user ? 
         <Stack.Screen name='Dashboard' component={HomeNavigation} options={{headerShown: false}} /> :
         <Stack.Screen name='Auth' component={AuthNavigation} options={{headerShown: false}} />
       }

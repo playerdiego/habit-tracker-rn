@@ -12,10 +12,14 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import ScrollContainer from '../../components/ScrollContainer';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function LoginScreen() {
 
   const {navigate} = useNavigation<AuthNavigationProps>();
+
+  const {loginWithEmail} = useContext(AuthContext);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Invalid Email").required('Email is required'),
@@ -27,10 +31,10 @@ export default function LoginScreen() {
     password: string
   }
 
-  const initialValues: FormData = { email: '', password: ''};
+  const initialValues: FormData = { email: 'diego@diego.com', password: '123456'};
 
-  const onLogin = (values: FormData) => {
-    
+  const onLogin = async ({email, password}: FormData) => {
+    await loginWithEmail(email, password);
   }
 
   return (
