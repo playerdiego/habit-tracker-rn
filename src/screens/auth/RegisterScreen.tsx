@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Pressable, TouchableOpacity, Image } from 'react-native';
 import React from 'react'
 
 import * as Yup from 'yup';
@@ -12,14 +12,15 @@ import CustomButton from '../../components/CustomButton';
 import { AuthNavigationProps } from '../../navigation/AuthNavigation';
 import Divider from '../../components/Divider';
 import ScrollContainer from '../../components/ScrollContainer';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function RegisterScreen() {
 
   const {registerWithEmail} = useContext(AuthContext);
 
-  const {navigate} = useNavigation<AuthNavigationProps>()
+  const {navigate, goBack} = useNavigation<AuthNavigationProps>()
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
@@ -42,18 +43,43 @@ export default function RegisterScreen() {
     passwordCfm: '123456'
   }
 
-  const onRegister = ({name, email, password, passwordCfm}: FormData) => {
-    registerWithEmail(name, email, password);
+  const onRegister = ({name, email, password}: FormData) => {
+    registerWithEmail(name, email, password, profilePic!);
+  }
+
+  const [profilePic, setProfilePic] = useState<null | ImagePicker.ImagePickerResult>(null);
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+      base64: true
+    });
+
+    if(!result.canceled) {
+      setProfilePic(result);
+    }
   }
 
   return (
-    <ScrollContainer title='Create Account'>
+    <ScrollContainer title='Create Account' goBack={() => goBack()}>
+
+
+          <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+            <Image 
+              source={{uri: profilePic?.assets![0].uri || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}} 
+              style={{height: 120, width: 120, borderRadius: 100}}
+            />
+            <CustomButton text='Upload Picture' onPressed={pickImage} outline={true} />
+          </View>
 
           <Formik initialValues={initialValues} onSubmit={onRegister} validationSchema={validationSchema}>
 
             {({handleSubmit, handleChange, handleBlur, values, errors, touched}) =>  (
 
-              <View style={{marginTop: 20}}>
+              <View style={{marginTop: 10}}>
 
                 <TextInput
                   style={global.input}

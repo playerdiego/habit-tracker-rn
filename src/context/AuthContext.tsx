@@ -2,16 +2,19 @@ import { createContext, useState } from "react";
 import React from 'react';
 
 import {initializeApp} from 'firebase/app'
+import {getDownloadURL, getStorage, ref, uploadBytes, uploadString} from 'firebase/storage';
 import {getAuth, createUserWithEmailAndPassword, UserCredential, User, signOut, signInWithEmailAndPassword, updateCurrentUser, updateProfile, sendPasswordResetEmail, sendEmailVerification} from 'firebase/auth';
 import { firebaseConfig } from "../../firebase-config";
+import * as ImagePicker from 'expo-image-picker';
 
 interface AuthContextProps {
   user: User | undefined,
-  registerWithEmail: (name: string, email: string, password: string) => UserCredential | any,
+  registerWithEmail: (name: string, email: string, password: string, profilePic: ImagePicker.ImagePickerResult) => UserCredential | any,
   loginWithEmail: (email: string, password: string) => UserCredential | any,
   logout: () => void,
   recoverAccount: (email:string) => void,
   reSendValidationEmail: () => void,
+  updateAccount: (name: string, profilePic: ImagePicker.ImagePickerResult) => Promise<void>,
 }
 
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -20,17 +23,15 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
   
   const app = initializeApp(firebaseConfig);
   const auth = getAuth();
+  const storage = getStorage();
 
   const [user, setUser] = useState<User>();
 
 
-  const registerWithEmail = (name: string, email: string, password: string): UserCredential | any => {
+  const registerWithEmail = (name: string, email: string, password: string, profilePic: ImagePicker.ImagePickerResult): UserCredential | any => {
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        updateProfile(userCredential.user, {...userCredential.user, displayName: name});
-        setUser({...userCredential.user, displayName: name});
-        console.log({...userCredential.user, displayName: name});
+      .then(async (userCredential) => {
 
         sendEmailVerification(userCredential.user)
           .then(() => alert('Verification email sent, check your inbox'))
@@ -38,6 +39,8 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
             alert(error);
             console.error(error);
           });
+
+        await updateAccount(name, profilePic);
 
         return userCredential;
       })
@@ -93,6 +96,33 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
       })
   }
 
+  const updateAccount = async (name: string, profilePic: ImagePicker.ImagePickerResult) => {
+
+    const profilePicUrl = await uploadFile(profilePic, auth.currentUser!.uid);
+
+    const finalUser: User = {
+      ...auth.currentUser!, 
+      displayName: name,
+      photoURL: profilePicUrl!
+    }
+
+    updateProfile(auth.currentUser!, finalUser);
+    
+    setUser(finalUser);
+
+  }
+
+  const uploadFile = (profilePic: ImagePicker.ImagePickerResult, uid: string) => {
+
+    const fileRef = ref(storage, uid);
+
+    return fetch(profilePic.assets![0].uri)
+      .then(response => response.blob())
+      .then(blobFile => uploadBytes(fileRef, blobFile))
+      .then(result => getDownloadURL(result.ref))
+    
+  }
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -100,7 +130,8 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
       loginWithEmail,
       logout,
       recoverAccount,
-      reSendValidationEmail
+      reSendValidationEmail,
+      updateAccount
     }}>
         {children}
     </AuthContext.Provider>

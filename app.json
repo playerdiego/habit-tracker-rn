@@ -1,5 +1,13 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Habit tracker acceso to your photos to let you choose a profile picture."
+        }
+      ]
+    ],
     "name": "habits-tracker",
     "slug": "habits-tracker",
     "version": "1.0.0",

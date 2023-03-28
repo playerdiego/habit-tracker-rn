@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
-import React from 'react'
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { global, globalColors } from '../../../styles/global';
 import Title from '../../../components/Title';
@@ -10,92 +10,98 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import CustomButton from '../../../components/CustomButton';
 import CustomBackButton from '../../../components/CustomBackButton';
+import { useContext } from 'react';
+import { AuthContext } from '../../../context/AuthContext';
+import ScrollContainer from '../../../components/ScrollContainer';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function EditAccountScreen() {
 
     const {navigate} = useNavigation<AccountNavigationProps>();
 
+    const {user, updateAccount} = useContext(AuthContext);
+
     const validationSchema = Yup.object().shape({
-        currentPassword: Yup.string().required('Your current password is required'),
-        newPassword: Yup.string().required('New Password is required'),
-        newPasswordCfm: Yup.string().required('Confirm New Password is required'),
+        name: Yup.string().required('Your name is required'),
+        email: Yup.string().email('Invalid Email').required('Email is required'),
       });
 
     type FormData = {
-        username: string,
+        name: string,
         email: string,
-        phrase: string
     }
 
     const initialValues: FormData = {
-        username: '',
-        email: '',
-        phrase: ''
+        name: user?.displayName!,
+        email: user?.email!,
     }
 
-    const onSaveChanges = () => {
+    const onSaveChanges = ({name, email}: FormData) => {
+        updateAccount(name, profilePic!)
+            .then(() => {
+                alert('Account Updated');
+                navigate('data');
+            })
+    }
 
+    const [profilePic, setProfilePic] = useState<null | ImagePicker.ImagePickerResult>(null);
+
+    const pickImage = async () => {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+        base64: true
+      });
+  
+      if(!result.canceled) {
+        setProfilePic(result);
+      }
     }
 
     return (
-        <SafeAreaView edges={['top']}>
-            <ScrollView style={{height: '100%'}}>
+        <ScrollContainer title='Edit Profile' goBack={() => navigate('data')}>
+            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+                <Image 
+                source={{uri: profilePic?.assets![0].uri || user?.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}} 
+                style={{height: 120, width: 120, borderRadius: 100}}
+                />
+                <CustomButton text='Upload Picture' onPressed={pickImage} outline={true} />
+            </View>
+
+            <Formik initialValues={initialValues} onSubmit={onSaveChanges} validationSchema={validationSchema}>
 
 
-                <View style={global.container}>
+            {({handleChange, handleBlur, handleSubmit, values, errors, touched, }) => (
+            <View style={{marginTop: 20}}>
 
-                    <CustomBackButton onPressed={() => {navigate('data')}} />
+                <TextInput 
+                    placeholder='Your Name'  
+                    style={global.input}  
+                    cursorColor={globalColors.gray} 
+                    onChangeText={handleChange('name')}
+                    onBlur={handleBlur('name')}
+                    value={values.name}
+                />
+                {(errors.name && touched.name) && (<Text style={{color: 'red'}}>{errors.name}</Text>)}
 
-                    
-                    <Title>Edit Account</Title>
+                <TextInput 
+                    placeholder='Email'  
+                    style={global.input}  
+                    cursorColor={globalColors.gray} 
+                    keyboardType='email-address'
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    value={values.email}
+                />
+                {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
 
-                    <Formik initialValues={initialValues} onSubmit={onSaveChanges} validationSchema={validationSchema}>
+                <CustomButton text='Save Changes' onPressed={handleSubmit} style={{marginTop: 8}} />
+            </View>
+            )}
 
-                        {({handleChange, handleBlur, handleSubmit, values, errors, touched, }) => (
-                        <View style={{marginTop: 20}}>
-
-                            <TextInput 
-                                placeholder='Username'  
-                                style={global.input}  
-                                cursorColor={globalColors.gray} 
-                                onChangeText={handleChange('username')}
-                                onBlur={handleBlur('username')}
-                                value={values.username}
-                            />
-                            {(errors.username && touched.username) && (<Text style={{color: 'red'}}>{errors.username}</Text>)}
-
-                            <TextInput 
-                                placeholder='Email'  
-                                style={global.input}  
-                                cursorColor={globalColors.gray} 
-                                keyboardType='email-address'
-                                onChangeText={handleChange('email')}
-                                onBlur={handleBlur('email')}
-                                value={values.email}
-                            />
-                            {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
-
-                            <TextInput 
-                                placeholder='Motivational Phrase'  
-                                style={global.input}  
-                                cursorColor={globalColors.gray} 
-                                onChangeText={handleChange('phrase')}
-                                onBlur={handleBlur('phrase')}
-                                value={values.phrase}
-                            />
-                            {(errors.phrase && touched.phrase) && (<Text style={{color: 'red'}}>{errors.phrase}</Text>)}
-
-
-                            
-
-                            <CustomButton text='Save Changes' onPressed={handleSubmit} style={{marginTop: 8}} />
-                        </View>
-                        )}
-
-                        </Formik>
-
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+            </Formik>
+        </ScrollContainer>
     )
 }

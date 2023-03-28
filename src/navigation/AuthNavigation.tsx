@@ -35,11 +35,10 @@ export default function AuthNavigation() {
           <TouchableOpacity>
             <Icon name='arrow-left' onPress={() => canGoBack ? goBack() : navigate('launcher')} />
           </TouchableOpacity>
-      
       }}>
-        <Stack.Screen name='login' component={LoginScreen} options={{headerShadowVisible: false, headerTitle: ''}} />
-        <Stack.Screen name='register' component={RegisterScreen} options={{headerShadowVisible: false, headerTitle: ''}} />
-        <Stack.Screen name='recover' component={RecoverScreen} options={{headerShadowVisible: false, headerTitle: ''}} />
+        <Stack.Screen name='login' component={LoginScreen} options={{headerShown: false}} />
+        <Stack.Screen name='register' component={RegisterScreen} options={{headerShown: false}} />
+        <Stack.Screen name='recover' component={RecoverScreen} options={{headerShown: false}} />
         <Stack.Screen name='launcher' component={LauncherScreen} options={{headerShown: false}} /> 
     </Stack.Navigator>
   )

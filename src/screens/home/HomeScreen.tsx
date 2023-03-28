@@ -12,7 +12,7 @@ import ScrollContainer from '../../components/ScrollContainer';
 import { FloatingAction } from 'react-native-floating-action';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import ValidateEmailAlert from '../../components/validateEmailAlert';
+import ValidateEmailAlert from '../../components/ValidateEmailAlert';
 
 const habits: Habit[] = [
   {

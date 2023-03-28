@@ -61,7 +61,8 @@ const styles = StyleSheet.create({
   avatar: {
     width: 170,
     height: 170,
-    marginBottom: 30
+    marginBottom: 30,
+    borderRadius: 100
   },
   dataContainer: {
     textAlign: 'center',

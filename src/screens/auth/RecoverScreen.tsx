@@ -12,10 +12,11 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import ScrollContainer from '../../components/ScrollContainer';
 
 export default function RecoverScreen() {
 
-  const {navigate} = useNavigation<AuthNavigationProps>();
+  const {goBack} = useNavigation<AuthNavigationProps>();
 
   const {recoverAccount} = useContext(AuthContext);
 
@@ -35,36 +36,31 @@ export default function RecoverScreen() {
   }
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <View style={global.container}>
-          <Title>Recover Account</Title>
+    <ScrollContainer title='Recover Account' goBack={() => goBack()}>
 
-          <Formik initialValues={initialValues} onSubmit={({email}, {resetForm}) => onRecover(email, resetForm)} validationSchema={validationSchema}>
+      <Formik initialValues={initialValues} onSubmit={({email}, {resetForm}) => onRecover(email, resetForm)} validationSchema={validationSchema}>
 
-            {({handleSubmit, handleChange, handleBlur, values, errors, touched}) =>  (
+      {({handleSubmit, handleChange, handleBlur, values, errors, touched}) =>  (
 
-              <View style={{marginTop: 20}}>
+        <View style={{marginTop: 20}}>
 
-                <TextInput
-                  style={global.input}
-                  placeholder='Type your email'
-                  value={values.email}
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  cursorColor={globalColors.gray}
-                />
-                {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
+          <TextInput
+            style={global.input}
+            placeholder='Type your email'
+            value={values.email}
+            onChangeText={handleChange('email')}
+            onBlur={handleBlur('email')}
+            cursorColor={globalColors.gray}
+          />
+          {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
 
-                <CustomButton text='Recover Account' onPressed={handleSubmit} style={{marginTop: 8}}/>
-              </View>
-
-            )}
-
-          </Formik>
-
+          <CustomButton text='Recover Account' onPressed={handleSubmit} style={{marginTop: 8}}/>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+
+      )}
+
+      </Formik>
+
+    </ScrollContainer>
   )
 }

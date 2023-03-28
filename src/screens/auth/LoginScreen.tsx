@@ -17,7 +17,7 @@ import { AuthContext } from '../../context/AuthContext';
 
 export default function LoginScreen() {
 
-  const {navigate} = useNavigation<AuthNavigationProps>();
+  const {navigate, goBack} = useNavigation<AuthNavigationProps>();
 
   const {loginWithEmail} = useContext(AuthContext);
 
@@ -38,7 +38,7 @@ export default function LoginScreen() {
   }
 
   return (
-    <ScrollContainer title='Login'>
+    <ScrollContainer title='Login' goBack={() => goBack()}>
       <Formik initialValues={initialValues} onSubmit={onLogin} validationSchema={validationSchema}>
 
       {({handleChange, handleBlur, handleSubmit, values, errors, touched, }) => (
