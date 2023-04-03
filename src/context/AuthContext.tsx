@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 import React from 'react';
 import {initializeApp} from 'firebase/app'
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage';
-import {getAuth, createUserWithEmailAndPassword, UserCredential, User, signOut, signInWithEmailAndPassword, updateCurrentUser, updateProfile, sendPasswordResetEmail, sendEmailVerification, updateEmail} from 'firebase/auth';
+import {getAuth, createUserWithEmailAndPassword, UserCredential, User, signOut, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, sendEmailVerification, updateEmail, reauthenticateWithCredential, updatePassword, AuthCredential, EmailAuthProvider} from 'firebase/auth';
 import { firebaseConfig } from "../../firebase-config";
 import * as ImagePicker from 'expo-image-picker';
 
@@ -15,6 +15,7 @@ interface AuthContextProps {
   recoverAccount: (email:string) => void,
   reSendValidationEmail: () => void,
   updateAccount: (name: string, email: string, profilePic: ImagePicker.ImagePickerResult) => Promise<void>,
+  changePassword: (newPassword: string, password: string) => Promise<void>, 
 }
 
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -51,7 +52,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
   }
 
   
-  const loginWithEmail = (email: string, password: string): UserCredential | any => {
+  const loginWithEmail = (email: string, password: string): Promise<UserCredential> | any => {
     
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -135,6 +136,19 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
     
   }
 
+  const changePassword = (newPassword: string, password: string) => {
+
+    const credential = EmailAuthProvider.credential(auth.currentUser?.email!, password);
+    
+    return reauthenticateWithCredential(auth.currentUser!, credential)
+      .then(userCredential => updatePassword(userCredential.user, newPassword))
+      .catch(error => {
+        console.log(error);
+        alert(error);
+      }) 
+
+  }
+
   return (
     <AuthContext.Provider value={{
       user,
@@ -143,7 +157,8 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
       logout,
       recoverAccount,
       reSendValidationEmail,
-      updateAccount
+      updateAccount,
+      changePassword
     }}>
         {children}
     </AuthContext.Provider>

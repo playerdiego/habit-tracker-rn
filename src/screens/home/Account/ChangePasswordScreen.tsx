@@ -10,15 +10,19 @@ import { global, globalColors } from '../../../styles/global';
 import Title from '../../../components/Title';
 import CustomButton from '../../../components/CustomButton';
 import CustomBackButton from '../../../components/CustomBackButton';
+import { useContext } from 'react';
+import { AuthContext } from '../../../context/AuthContext';
 
 export default function ChangePasswordScreen() {
+
+    const {changePassword} = useContext(AuthContext);
 
     const {navigate} = useNavigation<AccountNavigationProps>();
 
     const validationSchema = Yup.object().shape({
         currentPassword: Yup.string().required('Your current password is required'),
         newPassword: Yup.string().required('New Password is required'),
-        newPasswordCfm: Yup.string().required('Confirm New Password is required'),
+        newPasswordCfm: Yup.string().required('Confirm New Password is required').oneOf([Yup.ref('newPassword')], 'Passwords doesn´t match'),
       });
 
     type FormData = {
@@ -28,13 +32,17 @@ export default function ChangePasswordScreen() {
     }
 
     const initialValues: FormData = {
-        currentPassword: '',
-        newPassword: '',
-        newPasswordCfm: ''
+        currentPassword: '123456',
+        newPassword: '654321',
+        newPasswordCfm: '654321'
     }
 
-    const onChangePassword = () => {
-
+    const onChangePassword = ({newPassword, currentPassword}: FormData) => {
+        changePassword(newPassword, currentPassword)
+            .then(() => {
+                alert('Account Updated');
+                navigate('data');
+            })
     }
 
     return (
