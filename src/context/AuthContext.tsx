@@ -1,5 +1,4 @@
-import { createContext, useState } from "react";
-import React from 'react';
+import React, { createContext, useState } from 'react';
 import {initializeApp} from 'firebase/app'
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage';
 import {getAuth, createUserWithEmailAndPassword, UserCredential, User, signOut, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, sendEmailVerification, updateEmail, reauthenticateWithCredential, updatePassword, AuthCredential, EmailAuthProvider} from 'firebase/auth';
