@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
-import { Habit } from '../interfaces/habit.interface';
+import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { global, globalColors } from '../styles/global';
+
+import { Habit } from '../interfaces/habit.interface';
+import { globalColors } from '../styles/global';
 
 interface HabitCheckboxProps {
     habit: Habit,

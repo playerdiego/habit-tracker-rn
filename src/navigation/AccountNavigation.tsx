@@ -1,10 +1,8 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React from 'react'
+import React from 'react';
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+
 import AccountScren from '../screens/home/Account/AccountScreen';
 import EditAccountScreen from '../screens/home/Account/EditAccountScreen';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useNavigation } from '@react-navigation/native';
 import ChangePasswordScreen from '../screens/home/Account/ChangePasswordScreen';
 import { globalColors } from '../styles/global';
 

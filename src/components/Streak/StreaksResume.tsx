@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+
 import Divider from '../Divider';
 import Title from '../Title';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { Habit } from '../../interfaces/habit.interface';
 
 interface Streak {
   habit: string,

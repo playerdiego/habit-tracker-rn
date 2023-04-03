@@ -1,6 +1,6 @@
-import { View, Text, Pressable, StyleSheet, ViewStyle, TextStyle, ImageStyle, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { global, globalColors } from '../styles/global';
+import { globalColors } from '../styles/global';
 import { useFonts } from 'expo-font';
 import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 

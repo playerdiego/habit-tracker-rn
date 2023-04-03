@@ -1,18 +1,16 @@
-import { View, Text, ScrollView, TextInput, Pressable, StyleSheet, TouchableOpacity } from 'react-native';
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context';
-import ReactText from '../../components/ReactText';
-import { global, globalColors } from '../../styles/global';
-import Title from '../../components/Title';
-import CustomButton from '../../components/CustomButton';
+import { View, Text, TextInput, Pressable, TouchableOpacity } from 'react-native';
+import React, { useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { AuthNavigationProps } from '../../navigation/AuthNavigation';
-import Divider from '../../components/Divider';
 import Icon from "react-native-vector-icons/FontAwesome5";
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+
 import ScrollContainer from '../../components/ScrollContainer';
-import { useContext } from 'react';
+import { global, globalColors } from '../../styles/global';
+import Divider from '../../components/Divider';
+import Title from '../../components/Title';
+import CustomButton from '../../components/CustomButton';
 import { AuthContext } from '../../context/AuthContext';
 
 export default function LoginScreen() {

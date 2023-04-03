@@ -1,24 +1,22 @@
-import { View, Text } from 'react-native';
 import React from 'react';
 import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 import HomeScreen from '../screens/home/HomeScreen';
 import StreakScreen from '../screens/home/StreakScreen';
-import AccountScren from '../screens/home/Account/AccountScreen';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import AccountNavigation from './AccountNavigation';
 import { globalColors } from '../styles/global';
-import { FloatingAction } from 'react-native-floating-action';
 import HabitsNavigation from './HabitsNavigation';
 
-type HomeTabParaList = {
+type HomeTabParamList = {
   home: undefined,
   habits: undefined,
   streak: undefined,
   account: undefined,
 }
 
-const Tabs = createBottomTabNavigator<HomeTabParaList>();
-export type HomeNavigationProps = BottomTabNavigationProp<HomeTabParaList>;
+const Tabs = createBottomTabNavigator<HomeTabParamList>();
+export type HomeNavigationProps = BottomTabNavigationProp<HomeTabParamList>;
 
 export default function HomeNavigation() {
   return (

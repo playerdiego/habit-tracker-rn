@@ -1,13 +1,13 @@
-import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
-import React from 'react'
+import { View, Text, ScrollView, TextInput } from 'react-native';
+import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { global, globalColors } from '../../../styles/global';
-import Title from '../../../components/Title';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
-import { AccountNavigationProps } from '../../../navigation/AccountNavigation';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+
+import { AccountNavigationProps } from '../../../navigation/AccountNavigation';
+import { global, globalColors } from '../../../styles/global';
+import Title from '../../../components/Title';
 import CustomButton from '../../../components/CustomButton';
 import CustomBackButton from '../../../components/CustomBackButton';
 

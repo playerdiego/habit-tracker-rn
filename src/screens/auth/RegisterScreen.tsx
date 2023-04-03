@@ -1,10 +1,10 @@
 import { View, Text, TextInput, Pressable, TouchableOpacity, Image } from 'react-native';
-import React from 'react'
-
+import React, { useContext, useState } from 'react'
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import * as ImagePicker from 'expo-image-picker';
 
 import { global, globalColors } from '../../styles/global';
 import Title from '../../components/Title';
@@ -12,9 +12,7 @@ import CustomButton from '../../components/CustomButton';
 import { AuthNavigationProps } from '../../navigation/AuthNavigation';
 import Divider from '../../components/Divider';
 import ScrollContainer from '../../components/ScrollContainer';
-import { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
-import * as ImagePicker from 'expo-image-picker';
 
 export default function RegisterScreen() {
 

@@ -1,8 +1,9 @@
-import { View, Text, StyleSheet, Pressable, TouchableOpacity, Button } from 'react-native';
 import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import CustomButton from '../CustomButton';
 import { useNavigation } from '@react-navigation/native';
+
+import CustomButton from '../CustomButton';
 import { HomeNavigationProps } from '../../navigation/HomeNavigation';
 import Divider from '../Divider';
 import { globalColors } from '../../styles/global';

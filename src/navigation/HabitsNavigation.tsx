@@ -1,11 +1,9 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import React from 'react';
 import { StackNavigationProp, createStackNavigator } from '@react-navigation/stack';
+
 import HabitsScreen from '../screens/home/Habits/HabitsScreen';
 import AddHabitScreen from '../screens/home/Habits/AddHabitScreen';
 import { globalColors } from '../styles/global';
-import { Habit } from '../interfaces/habit.interface';
 
 type HabitsStackParamList = {
     setup: undefined,

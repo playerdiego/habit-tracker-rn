@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React, { Component } from 'react'
-import { global } from '../styles/global'
+import { View, Text } from 'react-native'
+import React from 'react'
 import { useFonts } from 'expo-font';
 import { Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+
+import { global } from '../styles/global'
 
 interface TitleProps {
     children: string | JSX.Element,

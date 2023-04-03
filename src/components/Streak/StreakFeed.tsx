@@ -1,7 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
-import ScrollContainer from '../ScrollContainer';
-import Divider from '../Divider';
+import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+
 import Title from '../Title';
 import { Habit } from '../../interfaces/habit.interface';
 import { global } from '../../styles/global';

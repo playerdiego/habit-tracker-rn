@@ -1,11 +1,11 @@
 import { createContext, useState } from "react";
 import React from 'react';
-
 import {initializeApp} from 'firebase/app'
-import {getDownloadURL, getStorage, ref, uploadBytes, uploadString} from 'firebase/storage';
+import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage';
 import {getAuth, createUserWithEmailAndPassword, UserCredential, User, signOut, signInWithEmailAndPassword, updateCurrentUser, updateProfile, sendPasswordResetEmail, sendEmailVerification} from 'firebase/auth';
 import { firebaseConfig } from "../../firebase-config";
 import * as ImagePicker from 'expo-image-picker';
+
 
 interface AuthContextProps {
   user: User | undefined,

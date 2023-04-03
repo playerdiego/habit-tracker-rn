@@ -1,12 +1,13 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text } from 'react-native';
+import React from 'react';
 import { useFonts } from 'expo-font';
 import { Roboto_400Regular } from '@expo-google-fonts/roboto';
+
 import { global } from '../styles/global';
 
 interface ReactTextProps {
     children: String,
-    style?: Object
+    style?: {}
 }
 
 export default function ReactText({children, style}: ReactTextProps) {

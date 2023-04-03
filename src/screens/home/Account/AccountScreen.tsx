@@ -1,14 +1,12 @@
 import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
-import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useContext } from 'react'
 import { global } from '../../../styles/global';
+import { useNavigation } from '@react-navigation/native';
+
 import Title from '../../../components/Title';
 import CustomButton from '../../../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
-import { HomeNavigationProps } from '../../../navigation/HomeNavigation';
 import { AccountNavigationProps } from '../../../navigation/AccountNavigation';
 import ScrollContainer from '../../../components/ScrollContainer';
-import { useContext } from 'react';
 import { AuthContext } from '../../../context/AuthContext';
 
 export default function AccountScreen() {

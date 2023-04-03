@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
-import Title from '../Title'
+import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
 import {Calendar} from 'react-native-calendars';
 import { useFonts } from 'expo-font';
 import { Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+
+import Title from '../Title'
 import { global, globalColors } from '../../styles/global';
 import { Habit } from '../../interfaces/habit.interface';
 import HabitCheckbox from '../HabitCheckbox';

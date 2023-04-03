@@ -1,17 +1,13 @@
-import { View, Text, ScrollView, TextInput, Pressable, TouchableOpacity } from 'react-native';
-import React from 'react'
-import { global, globalColors } from '../../styles/global';
-import Title from '../../components/Title';
+import { View, Text, TextInput } from 'react-native';
+import React, { useContext } from 'react';
 import { Formik, FormikState } from 'formik';
 import * as Yup from 'yup';
-import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+
 import { AuthNavigationProps } from '../../navigation/AuthNavigation';
-import Divider from '../../components/Divider';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useContext } from 'react';
+import { global, globalColors } from '../../styles/global';
 import { AuthContext } from '../../context/AuthContext';
+import CustomButton from '../../components/CustomButton';
 import ScrollContainer from '../../components/ScrollContainer';
 
 export default function RecoverScreen() {

@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, ImageBackground, Button, Pressable, ScrollView, Touchable, Alert } from 'react-native'
-import React from 'react'
+import { View, StyleSheet, ImageBackground} from 'react-native';
+import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { global, globalColors } from '../../styles/global';
 import { useFonts, Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
 import { Roboto_400Regular } from '@expo-google-fonts/roboto';
 import { useNavigation } from '@react-navigation/native';
+
+import { globalColors } from '../../styles/global';
 import CustomButton from '../../components/CustomButton';
 import Title from '../../components/Title';
 import { AuthNavigationProps } from '../../navigation/AuthNavigation';

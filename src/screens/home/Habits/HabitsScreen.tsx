@@ -1,12 +1,13 @@
-import { View, Text, StyleSheet, TouchableOpacity, Touchable } from 'react-native';
-import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 import ScrollContainer from '../../../components/ScrollContainer'
 import CustomButton from '../../../components/CustomButton';
-import { useNavigation } from '@react-navigation/native';
 import { HabitsNavigationProps } from '../../../navigation/HabitsNavigation';
 import Title from '../../../components/Title';
 import { Habit } from '../../../interfaces/habit.interface';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 
 
 const habits: Habit[] = [

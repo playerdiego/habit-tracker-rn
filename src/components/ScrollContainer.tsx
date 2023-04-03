@@ -1,6 +1,7 @@
-import { View, Text, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import React, { ReactElement } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { global } from '../styles/global';
 import Title from './Title';
 import CustomBackButton from './CustomBackButton';

@@ -1,19 +1,18 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
-import ScrollContainer from '../../../components/ScrollContainer'
-import CustomBackButton from '../../../components/CustomBackButton'
-import { HabitsNavigationProps } from '../../../navigation/HabitsNavigation';
+import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { global, globalColors } from '../../../styles/global';
-import CustomButton from '../../../components/CustomButton';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { Roboto_400Regular, useFonts } from '@expo-google-fonts/roboto';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
+
+import ScrollContainer from '../../../components/ScrollContainer';
+import { HabitsNavigationProps } from '../../../navigation/HabitsNavigation';
+import { global, globalColors } from '../../../styles/global';
+import CustomButton from '../../../components/CustomButton';
 import { TextInput } from 'react-native-gesture-handler';
 import ReactText from '../../../components/ReactText';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import HabitCheckbox from '../../../components/HabitCheckbox';
-import { Roboto_400Regular, useFonts } from '@expo-google-fonts/roboto';
 
 export default function AddHabitScreen() {
 

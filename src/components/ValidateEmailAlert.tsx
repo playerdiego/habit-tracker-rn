@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
-import { useContext } from 'react';
+import { View, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { globalColors } from '../styles/global';
-import ReactText from './ReactText';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+
+import ReactText from './ReactText';
+import { globalColors } from '../styles/global';
 import CustomButton from './CustomButton';
 
 export default function ValidateEmailAlert() {

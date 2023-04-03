@@ -1,13 +1,14 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import React from 'react';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+import Icon from "react-native-vector-icons/FontAwesome5";
+
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 import RecoverScreen from '../screens/auth/RecoverScreen';
 import LauncherScreen from '../screens/auth/LauncherScreen';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import Icon from "react-native-vector-icons/FontAwesome5";
 import { globalColors } from '../styles/global';
 
 type AuthStackParamList = {

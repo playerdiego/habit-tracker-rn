@@ -1,19 +1,16 @@
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
+import { View, Text, TextInput, Image } from 'react-native';
 import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { global, globalColors } from '../../../styles/global';
-import Title from '../../../components/Title';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
-import { AccountNavigationProps } from '../../../navigation/AccountNavigation';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import * as ImagePicker from 'expo-image-picker';
+
+import { global, globalColors } from '../../../styles/global';
+import { AccountNavigationProps } from '../../../navigation/AccountNavigation';
 import CustomButton from '../../../components/CustomButton';
-import CustomBackButton from '../../../components/CustomBackButton';
 import { useContext } from 'react';
 import { AuthContext } from '../../../context/AuthContext';
 import ScrollContainer from '../../../components/ScrollContainer';
-import * as ImagePicker from 'expo-image-picker';
 
 export default function EditAccountScreen() {
 

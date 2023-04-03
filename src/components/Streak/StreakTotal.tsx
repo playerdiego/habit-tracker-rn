@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
-import Title from '../Title'
+import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+
+import Title from '../Title';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { global, globalColors } from '../../styles/global';
 
