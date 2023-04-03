@@ -1,19 +1,21 @@
 import { View, Text } from 'react-native';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { useFonts } from 'expo-font';
-import { Roboto_400Regular } from '@expo-google-fonts/roboto';
+import { Roboto_400Regular, Roboto_900Black } from '@expo-google-fonts/roboto';
 
 import { global } from '../styles/global';
 
 interface ReactTextProps {
-    children: String,
+    children: String | number | string[] | ReactElement | ReactElement[],
+    bold?: boolean,
     style?: {}
 }
 
-export default function ReactText({children, style}: ReactTextProps) {
+export default function ReactText({children, style, bold = false}: ReactTextProps) {
 
     const [fontLoaded] = useFonts({
-        Roboto_400Regular
+        Roboto_400Regular,
+        Roboto_900Black
     });
 
     if(!fontLoaded) return null;
@@ -21,7 +23,7 @@ export default function ReactText({children, style}: ReactTextProps) {
 
   return (
     <View>
-      <Text style={{...style, ...global.text}}>{children}</Text>
+      <Text style={{...style, ...global.text, fontFamily: bold ? 'Roboto_900Black' : 'Roboto_400Regular'}}>{children}</Text>
     </View>
   )
 }

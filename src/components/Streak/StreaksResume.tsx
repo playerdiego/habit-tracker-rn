@@ -4,6 +4,7 @@ import React from 'react';
 import Divider from '../Divider';
 import Title from '../Title';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import ReactText from '../ReactText';
 
 interface Streak {
   habit: string,
@@ -28,7 +29,7 @@ export default function StreaksResume() {
       <Title size='sm'>Resume</Title>
       <View style={styles.textWIcon}>
         <Icon name='check' style={styles.icon}></Icon>
-        <Text style={styles.streakText}>You have completed your habits 20 days in a row</Text>
+        <ReactText style={styles.streakText}>You have completed your habits 20 days in a row</ReactText>
       </View>
 
       {
@@ -38,7 +39,10 @@ export default function StreaksResume() {
 
             <View style={styles.textWIcon}>
               <Icon name='dumbbell' style={styles.icon}></Icon>
-              <Text style={styles.streakText}>You have completed: {streak.habit} {streak.streakCount} days in a row</Text>
+              <ReactText 
+                style={styles.streakText}>
+                  You have completed: {streak.habit + ' ' + streak.streakCount} days in a row
+              </ReactText>
             </View>
           </View>
         ))

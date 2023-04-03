@@ -8,6 +8,7 @@ import CustomButton from '../../../components/CustomButton';
 import { HabitsNavigationProps } from '../../../navigation/HabitsNavigation';
 import Title from '../../../components/Title';
 import { Habit } from '../../../interfaces/habit.interface';
+import ReactText from '../../../components/ReactText';
 
 
 const habits: Habit[] = [
@@ -86,8 +87,8 @@ function HabitItem({title, completed, description}: Habit) {
         <Icon name='dumbbell' size={30}></Icon>
 
         <View style={{marginLeft:20}}>
-          <Text style={styles.title}>{title}</Text>
-          {description && <Text>{description}</Text>}
+          <ReactText style={styles.title} bold={true}>{title}</ReactText>
+          {description && <ReactText>{description}</ReactText>}
         </View>
       </TouchableOpacity>
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { globalColors } from '../styles/global';
 import { useFonts } from 'expo-font';
 import { Roboto_400Regular } from '@expo-google-fonts/roboto';
+import ReactText from './ReactText';
 
 interface CustomButtonProps {
     text: String,
@@ -26,11 +27,11 @@ export default function CustomButton({outline = false, text, onPressed, style = 
           ...styles.button,
           backgroundColor: outline ? globalColors.secondary : globalColors.primary,
           borderColor: outline && globalColors.primary,
-          borderWidth: outline && 2,
+          borderWidth: outline ? 2 : 0,
           ...style
         }}
         onPress={() => onPressed()}>
-        <Text style={{...styles.buttonText, color: outline ? globalColors.primary : globalColors.secondary}}>{text}</Text>
+        <ReactText style={{...styles.buttonText, color: outline ? globalColors.primary : globalColors.secondary}}>{text}</ReactText>
     </TouchableOpacity>
   )
 }

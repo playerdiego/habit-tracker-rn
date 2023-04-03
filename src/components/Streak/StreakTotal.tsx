@@ -4,6 +4,7 @@ import React from 'react';
 import Title from '../Title';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { global, globalColors } from '../../styles/global';
+import ReactText from '../ReactText';
 
 const totals = [
   {
@@ -59,7 +60,7 @@ function Total({icon, total, index}: {icon: string, total: number, index: number
       ...styles.totalItem
     }}>
       <Icon name={icon} size={30} style={{marginBottom: 10}}></Icon>
-      <Text style={global.boldTitle}>{total}</Text>
+      <ReactText style={global.boldTitle}>{total}</ReactText>
     </View>
   )
 }

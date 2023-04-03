@@ -7,6 +7,7 @@ import CustomButton from '../CustomButton';
 import { HomeNavigationProps } from '../../navigation/HomeNavigation';
 import Divider from '../Divider';
 import { globalColors } from '../../styles/global';
+import ReactText from '../ReactText';
 
 export default function StreakAlert() {
 
@@ -23,16 +24,16 @@ export default function StreakAlert() {
       </TouchableOpacity>
 
       <View style={{marginVertical: 20}}>
-        <Text style={styles.streakText}>You have completed your habits 20 days in a row</Text>
+        <ReactText style={styles.streakText}>You have completed your habits 20 days in a row</ReactText>
       </View>
 
       <Divider />
 
       <View style={{marginVertical: 20}}>
-        <Text style={styles.streakText}>You have completed: Workout 25 in a row</Text>
+        <ReactText style={styles.streakText}>You have completed: Workout 25 in a row</ReactText>
       </View>
 
-      <CustomButton onPressed={() => navigate('streak')} text='More' style={styles.button} />
+      <CustomButton onPressed={() => navigate('streak')} text='More' style={{...styles.button, color: globalColors.primary}} />
 
     </View>
   )
@@ -69,6 +70,6 @@ const styles = StyleSheet.create({
   },
   streakText: {
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 16
   }
 });

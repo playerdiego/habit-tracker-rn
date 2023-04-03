@@ -4,6 +4,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import { Habit } from '../interfaces/habit.interface';
 import { globalColors } from '../styles/global';
+import ReactText from './ReactText';
 
 interface HabitCheckboxProps {
     habit: Habit,
@@ -30,8 +31,16 @@ export default function HabitCheckbox({habit: {completed, title, description}, s
         />
 
         <View>
-            <Text style={{...styles.title, fontSize: history ? 16 : 22, color: history && !completed ? '#555' : globalColors.primary}}>{title}</Text>
-            {!history && <Text>{description}</Text>}
+            <ReactText 
+                style={{
+                    ...styles.title, 
+                    fontSize: history ? 16 : 22, 
+                    color: history && !completed ? '#555' : globalColors.primary
+                }} 
+                bold={true}
+            >{title}</ReactText>
+
+            {!history && <ReactText>{description!}</ReactText>}
         </View>  
     </View>
   )

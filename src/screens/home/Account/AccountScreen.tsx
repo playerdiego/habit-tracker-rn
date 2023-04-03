@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import React, { useContext } from 'react'
-import { global } from '../../../styles/global';
+import { global, globalColors } from '../../../styles/global';
 import { useNavigation } from '@react-navigation/native';
 
 import Title from '../../../components/Title';
@@ -8,6 +8,7 @@ import CustomButton from '../../../components/CustomButton';
 import { AccountNavigationProps } from '../../../navigation/AccountNavigation';
 import ScrollContainer from '../../../components/ScrollContainer';
 import { AuthContext } from '../../../context/AuthContext';
+import ReactText from '../../../components/ReactText';
 
 export default function AccountScreen() {
 
@@ -25,9 +26,15 @@ export default function AccountScreen() {
           style={styles.avatar}
         />
 
+        {
+          !user?.photoURL &&
+          <ReactText style={{marginBottom: 10, color: globalColors.yellow}}>* Upload a profile picture</ReactText>
+        }
+
+
         <Title size='md'>{user?.displayName!}</Title>
 
-        <Text style={{marginVertical: 15,...global.boldTitle}}>{user?.email}</Text>
+        <ReactText style={{marginVertical: 15,...global.boldTitle}}>{user?.email!}</ReactText>
 
         <View style={{width: '100%', marginTop: 50}}>
           <CustomButton 

@@ -34,7 +34,7 @@ export default function EditAccountScreen() {
     }
 
     const onSaveChanges = ({name, email}: FormData) => {
-        updateAccount(name, profilePic!)
+        updateAccount(name, email, profilePic!)
             .then(() => {
                 alert('Account Updated');
                 navigate('data');
