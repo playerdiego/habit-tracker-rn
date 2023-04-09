@@ -9,38 +9,12 @@ import Divider from '../../components/Divider';
 import ScrollContainer from '../../components/ScrollContainer';
 import { AuthContext } from '../../context/AuthContext';
 import ValidateEmailAlert from '../../components/ValidateEmailAlert';
-
-const habits: Habit[] = [
-  {
-    title: 'Entrenar',
-    description: 'Entrenamiento de pecho',
-    completed: false
-  },
-  {
-    title: 'Estudiar',
-    description: 'Matemáticas',
-    completed: false
-  },
-  {
-    title: 'Leer',
-    description: 'Mistborn',
-    completed: false
-  },
-  {
-    title: 'Programar',
-    description: 'Aplicación',
-    completed: true
-  },
-  {
-    title: 'Meditar',
-    description: '10 min',
-    completed: true
-  },
-];
+import { HabitsContext } from '../../context/HabitsContext';
 
 export default function HomeScreen() {
 
   const {user} = useContext(AuthContext);
+  const {todayHabits} = useContext(HabitsContext);
 
   return (
     <ScrollContainer title={'Good Morning, ' + user?.displayName} titleSize='md'> 
@@ -49,12 +23,12 @@ export default function HomeScreen() {
 
           {!user?.emailVerified && <ValidateEmailAlert />}
 
-          <Text style={global.boldTitle}>Today´s Habits - 3 left</Text>
+          <Text style={global.boldTitle}>Today´s Habits - {todayHabits.filter(habit => !habit.completed).length} left</Text>
 
           {
-            habits.map(habit => (
+            todayHabits.map((habit, id) => (
               !habit.completed &&
-              <HabitCheckbox key={habit.title} habit={habit}  />
+              <HabitCheckbox key={id} habit={habit}  />
             ))
           }
 
@@ -64,10 +38,10 @@ export default function HomeScreen() {
         <Divider />
 
         <View style={{marginTop: 25, marginBottom: 15}}>
-          <Text style={global.boldTitle}>Completed Habits: 2</Text>
+          <Text style={global.boldTitle}>Completed Habits: {todayHabits.filter(habit => habit.completed).length}</Text>
 
           {
-            habits.map(habit => (
+            todayHabits.map(habit => (
               habit.completed &&
               <HabitCheckbox key={habit.title} habit={habit}  />
             ))

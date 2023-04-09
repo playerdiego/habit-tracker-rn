@@ -2,12 +2,12 @@ import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-import { Habit } from '../interfaces/habit.interface';
+import { Habit, TodayHabit } from '../interfaces/habit.interface';
 import { globalColors } from '../styles/global';
 import ReactText from './ReactText';
 
 interface HabitCheckboxProps {
-    habit: Habit,
+    habit: TodayHabit,
     size?: 'sm' | 'md' | 'lg',
     history?: boolean
 }

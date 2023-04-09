@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -9,40 +9,20 @@ import { HabitsNavigationProps } from '../../../navigation/HabitsNavigation';
 import Title from '../../../components/Title';
 import { Habit } from '../../../interfaces/habit.interface';
 import ReactText from '../../../components/ReactText';
+import { HabitsContext } from '../../../context/HabitsContext';
+import Divider from '../../../components/Divider';
 
+interface ActiveDay {
+  day: string;
+  value: boolean;
+}
 
-const habits: Habit[] = [
-  {
-    title: 'Entrenar',
-    description: 'Entrenamiento de pecho',
-    completed: false
-  },
-  {
-    title: 'Estudiar',
-    description: 'Matemáticas',
-    completed: false
-  },
-  {
-    title: 'Leer',
-    description: 'Mistborn',
-    completed: false
-  },
-  {
-    title: 'Programar',
-    description: 'Aplicación',
-    completed: true
-  },
-  {
-    title: 'Meditar',
-    description: '10 min',
-    completed: true
-  },
-];
 
 export default function HabitsScreen() {
 
   const {navigate} = useNavigation<HabitsNavigationProps>();
 
+  const {habits} = useContext(HabitsContext);
   return (
     <ScrollContainer title='Habits Setup' titleSize='md'>
 
@@ -53,8 +33,11 @@ export default function HabitsScreen() {
 
         <View style={{marginVertical: 20}}>
         {
-          habits.map(({completed, title, description}) => (
-            <HabitItem completed={completed} title={title} description={description}/>
+          habits.map(({title, description, icon, daysToShow}, i) => (
+            <View>
+              <HabitItem key={i} title={title} description={description} icon={icon} daysToShow={daysToShow} />
+              <Divider></Divider>
+            </View>
           ))
         }
         </View>
@@ -66,19 +49,24 @@ export default function HabitsScreen() {
   )
 }
 
-function HabitItem({title, completed, description}: Habit) {
+function HabitItem({title, description, daysToShow}: Habit) {
 
   const {navigate} = useNavigation<HabitsNavigationProps>();
 
   const onEdit = () => {
-    navigate('add', {
-      habit: {title, completed, description}
-    });
+    navigate('add');
   }
 
   const onDelete = () => {
 
   }
+
+  const activeDays: ActiveDay[] = []; // tipa la lista de días activos con la interfaz ActiveDay
+
+  // recorre el objeto daysToShow y añade los días activos a la lista
+  Object.keys(daysToShow).map((day, i) => {
+    activeDays.push({day, value: Object.values(daysToShow)[i]})
+  });
 
   return (
     <View style={styles.itemHabitContainer}>
@@ -89,6 +77,14 @@ function HabitItem({title, completed, description}: Habit) {
         <View style={{marginLeft:20}}>
           <ReactText style={styles.title} bold={true}>{title}</ReactText>
           {description && <ReactText>{description}</ReactText>}
+          <View style={styles.pillsContainer}>
+          {
+            activeDays.map((day, i) => (
+              day.value &&
+              <ReactText key={day.day} style={styles.pill}>{day.day}</ReactText>
+            ))
+          }
+          </View>
         </View>
       </TouchableOpacity>
 
@@ -113,7 +109,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold'
   },
   itemHabitContainer: {
-    marginVertical: 20,
+    marginVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
@@ -122,5 +118,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '15%',
     justifyContent: 'space-between'
+  },
+  pill: {
+    borderWidth: 2,
+    paddingHorizontal: 5,
+    marginVertical: 3,
+    borderRadius: 5,
+    textTransform: 'capitalize',
+    marginRight: 5
+  },
+  pillsContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    marginTop: 10,
+    flexWrap: 'wrap'
   }
 });

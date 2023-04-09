@@ -5,5 +5,6 @@ export const firebaseConfig = {
     projectId: "habits-tracker-playerdiego",
     storageBucket: "habits-tracker-playerdiego.appspot.com",
     messagingSenderId: "935043083561",
-    appId: "1:935043083561:web:1ea02b7ee8531ec6ecdb38"
+    appId: "1:935043083561:web:1ea02b7ee8531ec6ecdb38",
+    databaseURL: "https://habits-tracker-playerdiego-default-rtdb.firebaseio.com/",
 };

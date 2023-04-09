@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Formik } from 'formik';
@@ -13,27 +13,37 @@ import { global, globalColors } from '../../../styles/global';
 import CustomButton from '../../../components/CustomButton';
 import { TextInput } from 'react-native-gesture-handler';
 import ReactText from '../../../components/ReactText';
+import { HabitsContext } from '../../../context/HabitsContext';
 
 export default function AddHabitScreen() {
+
+  const {addHabit} = useContext(HabitsContext);
 
   const {navigate} = useNavigation<HabitsNavigationProps>();
 
   // FORMIK
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Habit name is required'),
+    title: Yup.string().required('Habit name is required'),
     description: Yup.string(),
   });
 
   type FormData = {
-    name: string,
+    title: string,
     description?: string
   }
 
-  const initialValues: FormData = { name: '', description: ''};
+  const initialValues: FormData = {title: '', description: ''};
 
-  const onAddHabit = (values: FormData) => {
-    console.log(days);
+  const onAddHabit = ({title, description}: FormData) => {
+
+    addHabit({
+      title,
+      description,
+      icon: 'book',
+      daysToShow: days,
+    });
+    navigate('setup');
   }
 
   // DAYS CHECKBOX
@@ -78,11 +88,11 @@ export default function AddHabitScreen() {
             placeholder='Habit Name' 
             style={global.input} 
             cursorColor={globalColors.gray} 
-            onChangeText={handleChange('name')}
-            onBlur={handleBlur('name')}
-            value={values.name}
+            onChangeText={handleChange('title')}
+            onBlur={handleBlur('title')}
+            value={values.title}
           />
-          {(errors.name && touched.name) && (<Text style={{color: 'red'}}>{errors.name}</Text>)}
+          {(errors.title && touched.title) && (<Text style={{color: 'red'}}>{errors.title}</Text>)}
 
           <TextInput 
             placeholder='Description' 
