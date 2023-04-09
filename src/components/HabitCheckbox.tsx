@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet } from 'react-native';
-import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useContext } from 'react';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 import { Habit, TodayHabit } from '../interfaces/habit.interface';
 import { globalColors } from '../styles/global';
 import ReactText from './ReactText';
+import { HabitsContext } from '../context/HabitsContext';
 
 interface HabitCheckboxProps {
     habit: TodayHabit,
@@ -12,7 +13,13 @@ interface HabitCheckboxProps {
     history?: boolean
 }
 
-export default function HabitCheckbox({habit: {completed, title, description}, size = 'lg', history = false}: HabitCheckboxProps) {
+export default function HabitCheckbox({habit: {completed, title, description, id}, size = 'lg', history = false}: HabitCheckboxProps) {
+
+    const {completeHabit} = useContext(HabitsContext);
+
+    const onComplete = () => {
+        completeHabit(id!);
+    }
 
   return (
     <View style={{flexDirection: 'row', marginVertical: 10}}>
@@ -28,9 +35,10 @@ export default function HabitCheckbox({habit: {completed, title, description}, s
             }
             isChecked={completed}
             disabled={history}
+            onPress={onComplete}
         />
-
-        <View>
+        
+        <TouchableOpacity style={{width: '100%'}} onPress={onComplete}>
             <ReactText 
                 style={{
                     ...styles.title, 
@@ -41,7 +49,7 @@ export default function HabitCheckbox({habit: {completed, title, description}, s
             >{title}</ReactText>
 
             {!history && <ReactText>{description!}</ReactText>}
-        </View>  
+        </TouchableOpacity>
     </View>
   )
 }

@@ -7,10 +7,18 @@ import { getAuth } from 'firebase/auth';
 import dayjs from 'dayjs';
 import { AuthContext } from './AuthContext';
 
+/* 
+TODO
+- Añadir funcionalidad para seleccionar ícono
+- Añadir edición de hábitos
+- Añadir eliminación de hábitos
+*/
+
 interface HabitsContextProps {
   habits: Habit[],
   todayHabits: TodayHabit[],
-  addHabit: (habit: Habit) => void
+  addHabit: (habit: Habit) => void,
+  completeHabit: (habitId: string) => void
 }
 
 export const HabitsContext = createContext<HabitsContextProps>({} as HabitsContextProps);
@@ -39,7 +47,8 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
       alert('Habit has been created');
 
       //Verifica si el hábito se debe cumplir el mismo día que fue creado
-      if(Object.keys(habit.daysToShow).includes(today.toLowerCase())) {
+      const days = Object.keys(habit.daysToShow).filter((dayToShow, i) => Object.values(habit.daysToShow)[i] && dayToShow);
+      if(days.includes(today.toLowerCase())) {
         //Si sí, añade ese hábito al historial de todayHabits y lo guarda en la DB con el id del hábito setup
         set(ref(db, 'users/' + currentUser?.uid + '/history/' + dayjs().format('DD-MM-YYYY') + '/' + todayHabits.length + '/'), {
           title: habit.title,
@@ -106,8 +115,9 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
       } else {
         //Recorre el setup de hábitos
         habits.map(({title, description, daysToShow, icon, id}) => {
-          //Recorre el objeto de días
-          if(Object.keys(daysToShow).includes(today.toLowerCase())) {
+          //Recorre el objeto de días y guarda en days solo los que son true
+          const days = Object.keys(daysToShow).filter((dayToShow, i) => Object.values(daysToShow)[i] && dayToShow);
+          if(days.includes(today.toLowerCase())) {
             tempTodayHabits.push({
               title,
               description,
@@ -122,6 +132,15 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
       }
     });
 
+  }
+
+  const completeHabit = (habitId: string) => {
+    // Recorre los hábitos diarios y modifica el estado completed si el id coincide
+    const updatedTodayHabits: TodayHabit[] = todayHabits.map(habit => habit.id === habitId ? {...habit, completed: !habit.completed} : habit); 
+    
+    //Setea los nuevos hábitos en el estado y actualiza en la DB
+    setTodayHabits(updatedTodayHabits);
+    set(todayRef, updatedTodayHabits);
   }
   
 
@@ -149,7 +168,8 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
     <HabitsContext.Provider value={{
       habits,
       todayHabits,
-      addHabit
+      addHabit,
+      completeHabit
     }}>
         {children}
     </HabitsContext.Provider>

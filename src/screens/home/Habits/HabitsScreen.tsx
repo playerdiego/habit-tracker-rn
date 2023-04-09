@@ -36,7 +36,7 @@ export default function HabitsScreen() {
           habits.map(({title, description, icon, daysToShow}, i) => (
             <View>
               <HabitItem key={i} title={title} description={description} icon={icon} daysToShow={daysToShow} />
-              <Divider></Divider>
+              <Divider key={i+10} />
             </View>
           ))
         }
