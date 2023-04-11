@@ -53,9 +53,9 @@ export default function HomeScreen() {
                 }
 
                 {
-                  todayHabits.map((habit, id) => (
+                  todayHabits.map((habit, i) => (
                     !habit.completed &&
-                    <HabitCheckbox key={id} habit={habit}  />
+                    <HabitCheckbox key={i} habit={habit}  />
                   ))
                 }
               </View>
@@ -72,9 +72,9 @@ export default function HomeScreen() {
                 }
 
                 {
-                  todayHabits.map(habit => (
+                  todayHabits.map((habit, i) => (
                     habit.completed &&
-                    <HabitCheckbox key={habit.title} habit={habit}  />
+                    <HabitCheckbox key={i} habit={habit}  />
                   ))
                 }
               </View>

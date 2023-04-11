@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React, { useContext, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -8,18 +8,22 @@ import { Roboto_400Regular, useFonts } from '@expo-google-fonts/roboto';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 import ScrollContainer from '../../../components/ScrollContainer';
-import { HabitsNavigationProps } from '../../../navigation/HabitsNavigation';
+import { HabitsNavigationProps, HabitsStackParamList } from '../../../navigation/HabitsNavigation';
 import { global, globalColors } from '../../../styles/global';
 import CustomButton from '../../../components/CustomButton';
 import { TextInput } from 'react-native-gesture-handler';
 import ReactText from '../../../components/ReactText';
 import { HabitsContext } from '../../../context/HabitsContext';
 
+interface DaysState { monday: boolean; tuesday: boolean; wednesday: boolean; thursday: boolean; friday: boolean; saturday: boolean; sunday: boolean; }
+
 export default function AddHabitScreen() {
 
-  const {addHabit} = useContext(HabitsContext);
-
+  const {addHabit, editHabit} = useContext(HabitsContext);
+  
   const {navigate} = useNavigation<HabitsNavigationProps>();
+  //Trae los parámetros si existen (En caso de edición)
+  const {params: habit} = useRoute<RouteProp<HabitsStackParamList, 'add'>>();
 
   // FORMIK
 
@@ -33,22 +37,30 @@ export default function AddHabitScreen() {
     description?: string
   }
 
-  const initialValues: FormData = {title: '', description: ''};
+  const initialValues: FormData = {title: habit?.title || '', description: habit?.description || ''};
 
-  const onAddHabit = ({title, description}: FormData) => {
+  const onAddOrEditHabit = ({title, description}: FormData) => {
 
-    addHabit({
+    const newHabit = {
       title,
       description,
       icon: 'book',
       daysToShow: days,
-    });
+    };
+
+    if(habit) {
+      editHabit({...newHabit, id: habit.id});
+      alert('Habit has been updated');
+    } else  {
+      addHabit(newHabit);
+      alert('Habit has been created');
+    } 
     navigate('setup');
   }
 
   // DAYS CHECKBOX
 
-  const [days, setDays] = useState({
+  const [days, setDays] = useState<DaysState>({
     monday: false, 
     tuesday: false,
     wednesday: false,
@@ -59,6 +71,22 @@ export default function AddHabitScreen() {
   });
 
   const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = days;
+
+  useEffect(() => {
+
+    if(habit) {
+      let updatedSelectedDays: DaysState = days;
+      Object.keys(habit.daysToShow).map((day, i) => {
+        if(Object.values(habit.daysToShow)[i]) {
+          updatedSelectedDays = {...updatedSelectedDays, [day]: true};
+        }
+      });
+      setDays(updatedSelectedDays);
+    }
+
+  }, [])
+  
+
 
   const onSelectDay = (day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday') => {
     setDays({...days, [day]: !days[day]});
@@ -71,7 +99,7 @@ export default function AddHabitScreen() {
   if(!fontLoaded) return null;
 
   return (
-    <ScrollContainer title='Add Habit' goBack={() => navigate('setup')}>
+    <ScrollContainer title={habit ? 'Edit Habit' : 'Add Habit'} goBack={() => navigate('setup')}>
 
       <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
         <View style={styles.iconContainer}>
@@ -80,7 +108,7 @@ export default function AddHabitScreen() {
         <CustomButton onPressed={() => {}} text='Choose icon' style={{height: 50, width: '60%'}} />
       </View>
 
-      <Formik initialValues={initialValues} onSubmit={onAddHabit} validationSchema={validationSchema}>
+      <Formik initialValues={initialValues} onSubmit={onAddOrEditHabit} validationSchema={validationSchema}>
 
       {({handleChange, handleBlur, handleSubmit, values, errors, touched, }) => (
         <View style={{marginTop: 20}}>
@@ -116,7 +144,7 @@ export default function AddHabitScreen() {
             <DayCheckBox day='Sunday' selected={sunday} onSelect={() => onSelectDay('sunday')} />
           </View>
 
-          <CustomButton text='Create Habit' onPressed={handleSubmit} style={{marginTop: 8}} />
+          <CustomButton text={habit ? 'Save Habit' : 'Create Habit'} onPressed={handleSubmit} style={{marginTop: 8}} />
         </View>
       )}
 

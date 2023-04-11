@@ -23,6 +23,7 @@ export default function HabitsScreen() {
   const {navigate} = useNavigation<HabitsNavigationProps>();
 
   const {habits} = useContext(HabitsContext);
+
   return (
     <ScrollContainer title='Habits Setup' titleSize='md'>
 
@@ -31,16 +32,25 @@ export default function HabitsScreen() {
       <View style={{marginVertical: 30}}>
         <Title size='sm'>Your habits</Title>
 
-        <View style={{marginVertical: 20}}>
         {
-          habits.map(({title, description, icon, daysToShow}, i) => (
-            <View>
-              <HabitItem key={i} title={title} description={description} icon={icon} daysToShow={daysToShow} />
-              <Divider key={i+10} />
-            </View>
-          ))
+          habits.length < 1 ?
+          <View style={{marginVertical: 40}}>
+            <Title size='sm' align='center'>There´s no habits! Create one</Title>
+          </View>
+          :
+          <View style={{marginVertical: 20}}>
+          {
+            habits.map((habit, i) => (
+              <View>
+                <HabitItem key={i} title={habit.title} description={habit.description} icon={habit.icon} daysToShow={habit.daysToShow} id={habit.id} />
+                <Divider key={i+10} />
+              </View>
+            ))
+          }
+          </View>
+
         }
-        </View>
+
 
 
       </View>
@@ -49,16 +59,19 @@ export default function HabitsScreen() {
   )
 }
 
-function HabitItem({title, description, daysToShow}: Habit) {
+function HabitItem(habit: Habit) {
+
+  const {title, description, daysToShow, id, icon} = habit;
 
   const {navigate} = useNavigation<HabitsNavigationProps>();
+  const {deleteHabit} = useContext(HabitsContext);
 
   const onEdit = () => {
-    navigate('add');
+    navigate('add', habit);
   }
 
   const onDelete = () => {
-
+    deleteHabit(habit);
   }
 
   const activeDays: ActiveDay[] = []; // tipa la lista de días activos con la interfaz ActiveDay

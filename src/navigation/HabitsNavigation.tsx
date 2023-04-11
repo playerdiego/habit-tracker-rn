@@ -4,10 +4,11 @@ import { StackNavigationProp, createStackNavigator } from '@react-navigation/sta
 import HabitsScreen from '../screens/home/Habits/HabitsScreen';
 import AddHabitScreen from '../screens/home/Habits/AddHabitScreen';
 import { globalColors } from '../styles/global';
+import { Habit } from '../interfaces/habit.interface';
 
-type HabitsStackParamList = {
+export type HabitsStackParamList = {
     setup: undefined,
-    add: undefined | {},
+    add: Habit | undefined,
 }
 
 const Stack = createStackNavigator<HabitsStackParamList>();
@@ -23,7 +24,7 @@ export default function HabitsNavigation() {
     >
 
         <Stack.Screen name='setup' component={HabitsScreen} options={{headerShown: false}} />
-        <Stack.Screen name='add' component={AddHabitScreen} options={{headerShown: false}} />
+        <Stack.Screen name='add' component={AddHabitScreen} options={{headerShown: false}}  />
 
     </Stack.Navigator>
   )

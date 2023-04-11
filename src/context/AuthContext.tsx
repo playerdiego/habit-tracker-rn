@@ -56,7 +56,6 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       setUser(userCredential.user);
-      console.log(userCredential.user);
       return userCredential;
     })
     .catch((error) => {

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Habit, TodayHabit } from '../interfaces/habit.interface';
 import { firebaseConfig } from '../../firebase-config';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, set, ref, push, get, DataSnapshot, onValue, remove } from "firebase/database";
+import { getDatabase, set, ref, push, get, DataSnapshot, update, remove } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import dayjs from 'dayjs';
 import { AuthContext } from './AuthContext';
@@ -10,14 +10,26 @@ import { AuthContext } from './AuthContext';
 /* 
 TODO
 - Añadir funcionalidad para seleccionar ícono
-- Añadir edición de hábitos
-- Añadir eliminación de hábitos
 */
+
+const getDays = (daysToShow: {
+  monday?: boolean | undefined;
+  tuesday?: boolean | undefined;
+  wednesday?: boolean | undefined;
+  thursday?: boolean | undefined;
+  friday?: boolean | undefined;
+  saturday?: boolean | undefined;
+  sunday?: boolean | undefined;
+}) => {
+  return Object.keys(daysToShow).filter((dayToShow, i) => Object.values(daysToShow)[i] && dayToShow);
+}
 
 interface HabitsContextProps {
   habits: Habit[],
   todayHabits: TodayHabit[],
   addHabit: (habit: Habit) => void,
+  deleteHabit: (habit: Habit) => void,
+  editHabit: (habit: Habit) => void,
   completeHabit: (habitId: string) => void
 }
 
@@ -35,7 +47,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
   const [todayHabits, setTodayHabits] = useState<TodayHabit[]>([]);
 
   // Obtener el nombre del día actual
-  const today = dayjs().format('dddd');
+  const today = dayjs().format('dddd').toLowerCase();
 
   //Referencia de la base de datos
   const todayRef = ref(db, 'users/' + currentUser?.uid + '/history/' + dayjs().format('DD-MM-YYYY'));
@@ -44,19 +56,23 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
     try {
       //Guarda el hábito y retorna la llave
       const habitKey = push(ref(db, 'users/' + currentUser?.uid + '/habits/'), habit).key;
-      alert('Habit has been created');
 
       //Verifica si el hábito se debe cumplir el mismo día que fue creado
-      const days = Object.keys(habit.daysToShow).filter((dayToShow, i) => Object.values(habit.daysToShow)[i] && dayToShow);
-      if(days.includes(today.toLowerCase())) {
+      const days = getDays(habit.daysToShow);
+      console.log(days, days.includes(today));
+      if(days.includes(today)) {
         //Si sí, añade ese hábito al historial de todayHabits y lo guarda en la DB con el id del hábito setup
-        set(ref(db, 'users/' + currentUser?.uid + '/history/' + dayjs().format('DD-MM-YYYY') + '/' + todayHabits.length + '/'), {
+        const newTodayHabit: TodayHabit = {
           title: habit.title,
           description: habit.description,
           icon: habit.icon,
           completed: false,
-          id: habitKey,
-        })
+          id: habitKey!,
+        }
+
+        set(ref(db, 'users/' + currentUser?.uid + '/history/' + dayjs().format('DD-MM-YYYY') + '/' + todayHabits.length + '/'), newTodayHabit);
+        console.log(newTodayHabit);
+        setTodayHabits([...todayHabits, newTodayHabit]);
       }
       
     } catch (error) {
@@ -66,6 +82,90 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
 
     setHabits([...habits, habit])
+  }
+
+  const deleteHabit = (habit: Habit) => {
+
+    const days = getDays(habit.daysToShow);
+
+    const updatedHabits: Habit[] = habits.filter(habitToFilter => habitToFilter.id !== habit.id);
+    setHabits(updatedHabits);
+
+    try {
+      remove(ref(db, 'users/' + currentUser?.uid + '/habits/' + habit.id));
+
+      //Identificar si el hábito eliminado está en el registro de hoy
+      if(days.includes(today)) {
+
+        console.log(todayHabits);
+
+        //Obtener el hábito que se va a eliminar
+        const todayHabitToDelete = todayHabits.filter(habitToFilter => habitToFilter.id === habit.id)[0];
+
+        //Eliminar el hábito de todayHabits, actualizar estado y DB
+        const updatedTodayHabits = todayHabits.filter(habitToFilter => habitToFilter.id !== todayHabitToDelete.id);
+        setTodayHabits(updatedTodayHabits);
+        set(todayRef, updatedTodayHabits);
+
+
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert(error);
+    }
+
+
+  }
+
+  const editHabit = (habit: Habit) => {
+
+    const {title, description, icon, daysToShow, id} = habit;
+
+    //Un array con los días que se debe mostrar
+    const days = getDays(habit.daysToShow);
+
+    const updatedHabits: Habit[] = habits.map(habitToFilter => habitToFilter.id === id ? habit : habitToFilter);
+
+    setHabits(updatedHabits);
+
+    try {
+
+      set(ref(db, 'users/' + currentUser?.uid + '/habits/' + id), {
+        title,
+        description, 
+        icon,
+        daysToShow
+      });
+
+      //Verifica si el día ese hábito está en el registro del día actual
+      let updatedTodayHabits: TodayHabit[] = [];
+      if(days.includes(today)) {
+
+        updatedTodayHabits = [
+          ...todayHabits,
+          {title,
+          description,
+          icon,
+          completed: false,
+          id}
+        ];
+
+        //Verfica si el id del hábito editado coincide y lo edita
+        
+        //Si no coincide con el día actual, lo elimina de los hábitos diarios
+      } else {
+        //Crea un nuevo array de todayHabits sin el hábito editado
+        updatedTodayHabits = todayHabits.filter(habitToDelete => habitToDelete.id !== id);
+      }
+      set(todayRef, updatedTodayHabits);
+      setTodayHabits(updatedTodayHabits);
+
+
+    } catch (error) {
+      console.error(error);
+    }
+
   }
 
   const getHabits = () => {
@@ -117,7 +217,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
         habits.map(({title, description, daysToShow, icon, id}) => {
           //Recorre el objeto de días y guarda en days solo los que son true
           const days = Object.keys(daysToShow).filter((dayToShow, i) => Object.values(daysToShow)[i] && dayToShow);
-          if(days.includes(today.toLowerCase())) {
+          if(days.includes(today)) {
             tempTodayHabits.push({
               title,
               description,
@@ -142,6 +242,8 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
     setTodayHabits(updatedTodayHabits);
     set(todayRef, updatedTodayHabits);
   }
+
+
   
 
   useEffect(() => {
@@ -159,7 +261,6 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
   useEffect(() => {
     //Cada vez que los hábitos cambien se crea o se obtiene el registro de hábiros del día correspondiente
     getOrCreateTodayHabits();
-
   }, [habits])
   
   
@@ -169,6 +270,8 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
       habits,
       todayHabits,
       addHabit,
+      deleteHabit,
+      editHabit,
       completeHabit
     }}>
         {children}
