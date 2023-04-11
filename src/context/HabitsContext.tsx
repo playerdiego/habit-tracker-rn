@@ -9,7 +9,6 @@ import { AuthContext } from './AuthContext';
 
 /* 
 TODO
-- Añadir funcionalidad para seleccionar ícono
 */
 
 const getDays = (daysToShow: {
@@ -135,14 +134,27 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
       let updatedTodayHabits: TodayHabit[] = [];
       if(days.includes(today)) {
 
-        updatedTodayHabits = [
-          ...todayHabits,
-          {title,
-          description,
-          icon,
-          completed: false,
-          id}
-        ];
+        // Verifica si el hábito ya está añadido en los todayHabits
+        const isHabitActive = todayHabits.find(todayHabit => todayHabit.id === habit.id);
+
+        //Si ya está añadido, lo edita
+        if (isHabitActive) {
+
+          updatedTodayHabits = todayHabits.map(todayHabit => todayHabit.id === habit.id ? 
+            {...todayHabit, title, description, icon} : todayHabit);
+
+        // Si no está añadido, lo añade
+        } else {
+          updatedTodayHabits = [
+            ...todayHabits,
+            {title,
+            description,
+            icon,
+            completed: false,
+            id}
+          ];
+        }
+
 
         //Verfica si el id del hábito editado coincide y lo edita
         

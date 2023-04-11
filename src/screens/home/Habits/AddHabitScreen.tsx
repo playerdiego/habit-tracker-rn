@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -11,9 +11,12 @@ import ScrollContainer from '../../../components/ScrollContainer';
 import { HabitsNavigationProps, HabitsStackParamList } from '../../../navigation/HabitsNavigation';
 import { global, globalColors } from '../../../styles/global';
 import CustomButton from '../../../components/CustomButton';
-import { TextInput } from 'react-native-gesture-handler';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import ReactText from '../../../components/ReactText';
 import { HabitsContext } from '../../../context/HabitsContext';
+import { FAIcons } from '../../../utils/FAicons';
+import Title from '../../../components/Title';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface DaysState { monday: boolean; tuesday: boolean; wednesday: boolean; thursday: boolean; friday: boolean; saturday: boolean; sunday: boolean; }
 
@@ -24,7 +27,6 @@ export default function AddHabitScreen() {
   const {navigate} = useNavigation<HabitsNavigationProps>();
   //Trae los parámetros si existen (En caso de edición)
   const {params: habit} = useRoute<RouteProp<HabitsStackParamList, 'add'>>();
-
   // FORMIK
 
   const validationSchema = Yup.object().shape({
@@ -44,7 +46,7 @@ export default function AddHabitScreen() {
     const newHabit = {
       title,
       description,
-      icon: 'book',
+      icon: iconSelected,
       daysToShow: days,
     };
 
@@ -72,6 +74,16 @@ export default function AddHabitScreen() {
 
   const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = days;
 
+  //Icons Modal
+
+  const [showModal, setShowModal] = useState(false);
+  const [iconSelected, setIconSelected] = useState('dumbbell');
+
+  const selectIcon = (icon: string) => {
+    setIconSelected(icon);
+    setShowModal(false);
+  }
+
   useEffect(() => {
 
     if(habit) {
@@ -82,6 +94,7 @@ export default function AddHabitScreen() {
         }
       });
       setDays(updatedSelectedDays);
+      setIconSelected(habit.icon);
     }
 
   }, [])
@@ -99,13 +112,37 @@ export default function AddHabitScreen() {
   if(!fontLoaded) return null;
 
   return (
-    <ScrollContainer title={habit ? 'Edit Habit' : 'Add Habit'} goBack={() => navigate('setup')}>
+    <ScrollContainer title={habit ? 'Edit Habit' : 'Adddd Habit'} goBack={() => navigate('setup')}>
 
       <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
         <View style={styles.iconContainer}>
-          <Icon name='dumbbell'  size={40}></Icon>
+          <Icon name={iconSelected} size={40}></Icon>
         </View>
-        <CustomButton onPressed={() => {}} text='Choose icon' style={{height: 50, width: '60%'}} />
+
+        <CustomButton onPressed={() => {setShowModal(true)}} text='Choose icon' style={{height: 50, width: '60%'}} />
+
+        <Modal
+          animationType='slide'
+          visible={showModal}
+          onRequestClose={() => {
+            setShowModal(false);
+          }}
+        >
+            <View style={{paddingTop: 60}}>
+              <ScrollContainer title='Choose Icon' goBack={() => {setShowModal(false)}}>
+                <View style={styles.iconsModalContainer}>
+                  {
+                    FAIcons.map(icon => (
+                      <TouchableOpacity onPress={() => selectIcon(icon)} style={styles.iconTouchable}>
+                        <Icon key={icon} name={icon} style={styles.icon} size={35} />
+                      </TouchableOpacity>
+                    ))
+                  }
+                </View>
+              </ScrollContainer>
+            </View>
+        </Modal>
+
       </View>
 
       <Formik initialValues={initialValues} onSubmit={onAddOrEditHabit} validationSchema={validationSchema}>
@@ -190,5 +227,21 @@ const styles = StyleSheet.create({
   checkbox: {
     width: '50%',
     marginVertical: 10
+  },
+  iconsModalContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1
+  },
+  iconTouchable: {
+    width: '20%', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1
+  },
+  icon: {
+    padding: 20,
   }
 })

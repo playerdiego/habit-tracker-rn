@@ -42,8 +42,8 @@ export default function HabitsScreen() {
           {
             habits.map((habit, i) => (
               <View>
-                <HabitItem key={i} title={habit.title} description={habit.description} icon={habit.icon} daysToShow={habit.daysToShow} id={habit.id} />
-                <Divider key={i+10} />
+                <HabitItem key={habit.id} title={habit.title} description={habit.description} icon={habit.icon} daysToShow={habit.daysToShow} id={habit.id} />
+                <Divider key={i} />
               </View>
             ))
           }
@@ -85,7 +85,7 @@ function HabitItem(habit: Habit) {
     <View style={styles.itemHabitContainer}>
 
       <TouchableOpacity onPress={() => onEdit()} style={{width: '60%', flexDirection: 'row'}}>
-        <Icon name='dumbbell' size={30}></Icon>
+        <Icon name={habit.icon} size={30} style={{width: 40}}></Icon>
 
         <View style={{marginLeft:20}}>
           <ReactText style={styles.title} bold={true}>{title}</ReactText>
