@@ -56,10 +56,10 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
     try {
       //Guarda el hábito y retorna la llave
       const habitKey = push(ref(db, 'users/' + currentUser?.uid + '/habits/'), habit).key;
+      setHabits([...habits, {...habit, id: habitKey!}]);
 
       //Verifica si el hábito se debe cumplir el mismo día que fue creado
       const days = getDays(habit.daysToShow);
-      console.log(days, days.includes(today));
       if(days.includes(today)) {
         //Si sí, añade ese hábito al historial de todayHabits y lo guarda en la DB con el id del hábito setup
         const newTodayHabit: TodayHabit = {
@@ -71,7 +71,6 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
         }
 
         set(ref(db, 'users/' + currentUser?.uid + '/history/' + dayjs().format('DD-MM-YYYY') + '/' + todayHabits.length + '/'), newTodayHabit);
-        console.log(newTodayHabit);
         setTodayHabits([...todayHabits, newTodayHabit]);
       }
       
@@ -81,29 +80,23 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
     }
 
 
-    setHabits([...habits, habit])
   }
 
   const deleteHabit = (habit: Habit) => {
 
     const days = getDays(habit.daysToShow);
 
-    const updatedHabits: Habit[] = habits.filter(habitToFilter => habitToFilter.id !== habit.id);
-    setHabits(updatedHabits);
-
     try {
       remove(ref(db, 'users/' + currentUser?.uid + '/habits/' + habit.id));
+
+      const updatedHabits: Habit[] = habits.filter(habitToFilter => habitToFilter.id !== habit.id);
+      setHabits(updatedHabits);
 
       //Identificar si el hábito eliminado está en el registro de hoy
       if(days.includes(today)) {
 
-        console.log(todayHabits);
-
-        //Obtener el hábito que se va a eliminar
-        const todayHabitToDelete = todayHabits.filter(habitToFilter => habitToFilter.id === habit.id)[0];
-
         //Eliminar el hábito de todayHabits, actualizar estado y DB
-        const updatedTodayHabits = todayHabits.filter(habitToFilter => habitToFilter.id !== todayHabitToDelete.id);
+        const updatedTodayHabits = todayHabits.filter(habitToFilter => habitToFilter.id !== habit.id);
         setTodayHabits(updatedTodayHabits);
         set(todayRef, updatedTodayHabits);
 
@@ -156,7 +149,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
         //Si no coincide con el día actual, lo elimina de los hábitos diarios
       } else {
         //Crea un nuevo array de todayHabits sin el hábito editado
-        updatedTodayHabits = todayHabits.filter(habitToDelete => habitToDelete.id !== id);
+        updatedTodayHabits = todayHabits.filter(habitToDelete => (habitToDelete.id !== id) && habitToDelete);
       }
       set(todayRef, updatedTodayHabits);
       setTodayHabits(updatedTodayHabits);
