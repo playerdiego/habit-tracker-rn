@@ -17,7 +17,6 @@ interface ActiveDay {
   value: boolean;
 }
 
-
 export default function HabitsScreen() {
 
   const {navigate} = useNavigation<HabitsNavigationProps>();
@@ -41,9 +40,9 @@ export default function HabitsScreen() {
           <View style={{marginVertical: 20}}>
           {
             habits.map((habit, i) => (
-              <View>
-                <HabitItem key={habit.id} title={habit.title} description={habit.description} icon={habit.icon} daysToShow={habit.daysToShow} id={habit.id} />
-                <Divider key={i} />
+              <View key={habit.id}>
+                <HabitItem title={habit.title} description={habit.description} icon={habit.icon} daysToShow={habit.daysToShow} id={habit.id} />
+                <Divider />
               </View>
             ))
           }

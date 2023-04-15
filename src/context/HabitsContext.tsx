@@ -9,6 +9,9 @@ import { AuthContext } from './AuthContext';
 
 /* 
 TODO
+- Lazyload para los íconos
+- Botones de confirmación en alertas
+- Optimizaciones de imágenes
 */
 
 const getDays = (daysToShow: {

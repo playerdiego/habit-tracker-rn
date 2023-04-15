@@ -15,8 +15,6 @@ import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import ReactText from '../../../components/ReactText';
 import { HabitsContext } from '../../../context/HabitsContext';
 import { FAIcons } from '../../../utils/FAicons';
-import Title from '../../../components/Title';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface DaysState { monday: boolean; tuesday: boolean; wednesday: boolean; thursday: boolean; friday: boolean; saturday: boolean; sunday: boolean; }
 
@@ -78,6 +76,7 @@ export default function AddHabitScreen() {
 
   const [showModal, setShowModal] = useState(false);
   const [iconSelected, setIconSelected] = useState('dumbbell');
+  const [icons, setIcons] = useState<string[]>([]);
 
   const selectIcon = (icon: string) => {
     setIconSelected(icon);
@@ -97,6 +96,8 @@ export default function AddHabitScreen() {
       setIconSelected(habit.icon);
     }
 
+    setIcons(FAIcons.slice(0, 50));
+
   }, [])
   
 
@@ -112,7 +113,7 @@ export default function AddHabitScreen() {
   if(!fontLoaded) return null;
 
   return (
-    <ScrollContainer title={habit ? 'Edit Habit' : 'Adddd Habit'} goBack={() => navigate('setup')}>
+    <ScrollContainer title={habit ? 'Edit Habit' : 'Add Habit'} goBack={() => navigate('setup')}>
 
       <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
         <View style={styles.iconContainer}>
@@ -132,8 +133,8 @@ export default function AddHabitScreen() {
               <ScrollContainer title='Choose Icon' goBack={() => {setShowModal(false)}}>
                 <View style={styles.iconsModalContainer}>
                   {
-                    FAIcons.map(icon => (
-                      <TouchableOpacity onPress={() => selectIcon(icon)} style={styles.iconTouchable}>
+                    icons.map((icon, i) => (
+                      <TouchableOpacity key={icon} onPress={() => selectIcon(icon)} style={styles.iconTouchable}>
                         <Icon key={icon} name={icon} style={styles.icon} size={35} />
                       </TouchableOpacity>
                     ))
