@@ -18,6 +18,7 @@ import { FAIcons } from '../../../utils/FAicons';
 import Title from '../../../components/Title';
 import CustomBackButton from '../../../components/CustomBackButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Habit } from '../../../interfaces/habit.interface';
 
 interface DaysState { monday: boolean; tuesday: boolean; wednesday: boolean; thursday: boolean; friday: boolean; saturday: boolean; sunday: boolean; }
 
@@ -51,15 +52,16 @@ export default function AddHabitScreen() {
 
   const onAddOrEditHabit = ({title, description}: FormData) => {
 
-    const newHabit = {
+    const newHabit: Habit = {
       title,
       description,
       icon: iconSelected,
       daysToShow: days,
+      total: 0
     };
 
     if(habit) {
-      editHabit({...newHabit, id: habit.id});
+      editHabit({...newHabit, id: habit.id, total: habit.total});
       alert('Habit has been updated');
     } else  {
       addHabit(newHabit);

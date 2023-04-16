@@ -11,7 +11,8 @@ export interface Habit {
         sunday?: boolean;
     },
     icon: string,
-    id?: string
+    id?: string,
+    total: number
 }
 
 export interface TodayHabit {
@@ -20,4 +21,9 @@ export interface TodayHabit {
     icon: string,
     completed: boolean,
     id?: string
+}
+
+export interface HistoryItem {
+    day: string,
+    data: TodayHabit[]
 }

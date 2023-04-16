@@ -1,90 +1,97 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {Calendar} from 'react-native-calendars';
 import { useFonts } from 'expo-font';
 import { Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
 
 import Title from '../Title'
 import { global, globalColors } from '../../styles/global';
-import { Habit } from '../../interfaces/habit.interface';
+import { Habit, HistoryItem, TodayHabit } from '../../interfaces/habit.interface';
 import HabitCheckbox from '../HabitCheckbox';
-
-interface HistoryItem {
-  date: string,
-  habits: Habit[]
-}
-
-const FeedHistory: HistoryItem[] = [
-  {
-    date: 'Tuesday 21/03/2023',
-    habits: [
-      {
-        title: 'Entrenar',
-        description: 'Entrenamiento de pecho',
-        completed: true
-      },
-      {
-        title: 'Estudiar',
-        description: 'Matemáticas',
-        completed: true
-      },
-      {
-        title: 'Leer',
-        description: 'Mistborn',
-        completed: true
-      },
-      {
-        title: 'Programar',
-        description: 'Aplicación',
-        completed: true
-      },
-      {
-        title: 'Meditar',
-        description: '10 min',
-        completed: false
-      },
-    ]
-  },
-  {
-    date: 'Monday 20/03/2023',
-    habits: [
-      {
-        title: 'Entrenar',
-        description: 'Entrenamiento de pecho',
-        completed: false
-      },
-      {
-        title: 'Estudiar',
-        description: 'Matemáticas',
-        completed: false
-      },
-      {
-        title: 'Leer',
-        description: 'Mistborn',
-        completed: false
-      },
-      {
-        title: 'Programar',
-        description: 'Aplicación',
-        completed: true
-      },
-      {
-        title: 'Meditar',
-        description: '10 min',
-        completed: true
-      },
-    ]
-  },
-  
-]
+import { HabitsContext } from '../../context/HabitsContext';
+import { DateData, MarkedDates } from 'react-native-calendars/src/types';
+import dayjs from 'dayjs';
+import ReactText from '../ReactText';
 
 export default function StreakCalendar() {
+
+  // * CONTEXT DATA
+  const {history, habits, todayHabits} = useContext(HabitsContext);
+
+  // * STATES
+  const [markedDates, setMarkedDates] = useState<MarkedDates>({});
+  const [selectedDay, setSelectedDay] = useState<HistoryItem | null>(null);
+
+  // * ON SELECT DAT
+  const onSelectDay = (selectedDate: string) => {
+    // Finds a the selected day
+    const selectedDayHistory = history.find(historyItem => historyItem.day === selectedDate);
+
+    // If the selected day has data, set it in selectedDay state
+    setSelectedDay(selectedDayHistory || null);
+
+    let updatedMarkedDays: MarkedDates = markedDates;
+
+    // Traverse each marked date, to set as "selected" (true) the selected day in the calendar
+    Object.keys(markedDates).map((date, i) => {
+        updatedMarkedDays[date] = date === selectedDate ? {...Object.values(markedDates)[i], selected: true} : {...Object.values(markedDates)[i], selected: false}
+    });
+
+    setMarkedDates(updatedMarkedDays);
+
+
+  }
+
+  // * UPDATE DATA FOR CALENDAR ON HABITS, TODAY HABITS OR HISTORY UPDATE
+  useEffect(() => {
+
+    let dates: MarkedDates = {};
+    let completedHabits = 0;
+    
+    // Traverse the history array
+    history.forEach((val) => {
+      // Traverse every habit in the day
+      val.data.map(dataItem => {
+        // If habit is completed, add 1 to completed habits
+        dataItem.completed && completedHabits++;
+      });
+      
+      // Get the percentage of completed habits of certain day
+      const percentageCompleted = completedHabits / val.data.length;
+
+      // Set the color based on the completed percentage
+      const color = 
+        percentageCompleted >= .80 ? globalColors.green :
+        percentageCompleted >= .50 ? globalColors.yellow :
+        percentageCompleted > 0 ? globalColors.red :
+        percentageCompleted === 0 ? globalColors.gray : globalColors.gray;
+
+      // Adds a marked day for every day in history  
+      dates[val.day] = {
+        marked: true,
+        dotColor: color,
+        selectedColor: globalColors.primary,
+        selected: selectedDay?.day === val.day
+      };
+      
+      // Sets completed habits to 0 once the treverse is done
+      completedHabits = 0;
+    });
+
+    // Sets the selected day to the current day
+    onSelectDay(dayjs().format('YYYY-MM-DD'));
+
+    // Sets the marked dates (data for the calendar)
+    setMarkedDates(dates);
+
+  }, [history, habits, todayHabits]);
+  
 
   const [fontLoaded] = useFonts({
       Comfortaa_400Regular,
   });
 
-if(!fontLoaded) return null;
+  if(!fontLoaded) return null;
 
   return (
     <View style={{marginVertical: 20}}>
@@ -100,11 +107,8 @@ if(!fontLoaded) return null;
           todayTextColor: '#000',
           todayButtonFontWeight: 'bold',
         }}
-        markedDates={{
-          '2023-03-20': {marked: true, dotColor: globalColors.red },
-          '2023-03-21': {marked: true, dotColor: globalColors.green },
-          '2023-03-15': {marked: true, dotColor: globalColors.gray },
-        }}
+        markedDates={markedDates}
+        onDayPress={(date: DateData) => onSelectDay(date.dateString)}
       />
 
       <View>
@@ -132,19 +136,26 @@ if(!fontLoaded) return null;
 
       </View>
 
-      <DayData date={FeedHistory[0].date} habits={FeedHistory[0].habits}  />
+      {
+        selectedDay ? 
+          <DayData date={selectedDay.day} habits={selectedDay.data}  /> :
+          <ReactText style={{...global.boldTitle, fontSize: 16, marginTop: 20}}>Select a day with habits history</ReactText>
+      }
+      
 
     </View>
   )
 }
 
-function DayData({date, habits}: HistoryItem) {
+function DayData({date, habits}: {date: string, habits: TodayHabit[]}) {
   return (
     <View style={{marginVertical: 20, marginLeft: 20}}>
-      <Text style={global.boldTitle}>{date}</Text>
+      <Text style={{...global.boldTitle, fontSize: 16}}>{dayjs(date).format('dddd DD-MM-YYYY')}</Text>
 
      <View style={styles.habitsGrid}>
       <View style={styles.habitsGridItem}>
+        <ReactText style={global.boldTitle}>Completed:</ReactText>
+
           {
             habits.map(habit => (
               habit.completed &&
@@ -155,6 +166,7 @@ function DayData({date, habits}: HistoryItem) {
           }
         </View>
         <View style={styles.habitsGridItem}>
+          <ReactText style={global.boldTitle}>Incompleted:</ReactText>
           {
             habits.map(habit => (
               !habit.completed &&
@@ -188,6 +200,7 @@ const styles = StyleSheet.create({
   },
   habitsGrid: {
     flexDirection: 'row',
+    marginVertical: 20
   },
   habitsGridItem: {
     width: '50%',

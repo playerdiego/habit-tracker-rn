@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import React, { useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -41,7 +41,7 @@ export default function HabitsScreen() {
           {
             habits.map((habit, i) => (
               <View key={habit.id}>
-                <HabitItem title={habit.title} description={habit.description} icon={habit.icon} daysToShow={habit.daysToShow} id={habit.id} />
+                <HabitItem total={habit.total} title={habit.title} description={habit.description} icon={habit.icon} daysToShow={habit.daysToShow} id={habit.id} />
                 <Divider />
               </View>
             ))
@@ -69,6 +69,20 @@ function HabitItem(habit: Habit) {
     navigate('add', habit);
   }
 
+  const showDeleteAlert = () => {
+    Alert.alert('¿Are you sure?', 'The habit will be deleted permanently', [
+      {
+        text: 'Cancel',
+        style: 'cancel'
+      },
+      {
+        text: 'Delete',
+        onPress: () => onDelete(),
+        style: 'destructive'
+      },
+    ], {cancelable: true});
+  }
+
   const onDelete = () => {
     deleteHabit(habit);
   }
@@ -93,7 +107,7 @@ function HabitItem(habit: Habit) {
           {
             activeDays.map((day, i) => (
               day.value &&
-              <ReactText key={day.day} style={styles.pill}>{day.day}</ReactText>
+              <ReactText key={day.day +  habit.id} style={styles.pill}>{day.day}</ReactText>
             ))
           }
           </View>
@@ -106,7 +120,7 @@ function HabitItem(habit: Habit) {
           <Icon name='edit' size={20}></Icon>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => onDelete()}>
+        <TouchableOpacity onPress={() => showDeleteAlert()}>
           <Icon name='trash' size={20}></Icon>
         </TouchableOpacity>
       </View>

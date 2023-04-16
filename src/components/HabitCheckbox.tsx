@@ -24,29 +24,32 @@ export default function HabitCheckbox({habit: {completed, title, description, id
 
   return (
     <View style={{flexDirection: 'row', marginVertical: 10}}>
-        <BouncyCheckbox 
-            innerIconStyle={{borderRadius: 4, borderWidth: 2}} 
-            iconStyle={{borderRadius: 4}}
-            unfillColor={history ? globalColors.gray : globalColors.secondary}
-            fillColor={history && !completed ? globalColors.gray : globalColors.primary}
-            size={
-                size === 'sm' ? 25 :
-                size === 'md' ? 40 :
-                size === 'lg' ? 50 : 50
-            }
-            isChecked={completed}
-            disabled={history}
-            onPress={onComplete}
-        />
+        {
+            !history &&
+            <BouncyCheckbox 
+                innerIconStyle={{borderRadius: 4, borderWidth: 2}} 
+                iconStyle={{borderRadius: 4}}
+                unfillColor={history ? globalColors.gray : globalColors.secondary}
+                fillColor={history && !completed ? globalColors.gray : globalColors.primary}
+                size={
+                    size === 'sm' ? 25 :
+                    size === 'md' ? 40 :
+                    size === 'lg' ? 50 : 50
+                }
+                isChecked={completed}
+                disabled={history}
+                onPress={onComplete}
+            />
+        }
         
-        <TouchableOpacity style={{width: '100%', flexDirection: 'row'}} onPress={onComplete}>
-            <Icon name={icon} style={{marginTop: 5, marginRight: 10}} size={20} />
+        <TouchableOpacity style={{width: '100%', flexDirection: 'row'}} onPress={onComplete} disabled={history}>
+            <Icon name={icon} style={{marginTop: 5, marginRight: 10}} size={history ? 15 : 20} color={history && !completed ? globalColors.gray : globalColors.primary} />
             <View>
             <ReactText 
                 style={{
                     ...styles.title, 
                     fontSize: history ? 16 : 22, 
-                    color: history && !completed ? '#555' : globalColors.primary
+                    color: history && !completed ? globalColors.gray : globalColors.primary
                 }} 
                 bold={true}
             >{title}</ReactText>
