@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, ActivityIndicator } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -11,10 +11,13 @@ import ScrollContainer from '../../../components/ScrollContainer';
 import { HabitsNavigationProps, HabitsStackParamList } from '../../../navigation/HabitsNavigation';
 import { global, globalColors } from '../../../styles/global';
 import CustomButton from '../../../components/CustomButton';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler';
 import ReactText from '../../../components/ReactText';
 import { HabitsContext } from '../../../context/HabitsContext';
 import { FAIcons } from '../../../utils/FAicons';
+import Title from '../../../components/Title';
+import CustomBackButton from '../../../components/CustomBackButton';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface DaysState { monday: boolean; tuesday: boolean; wednesday: boolean; thursday: boolean; friday: boolean; saturday: boolean; sunday: boolean; }
 
@@ -83,6 +86,10 @@ export default function AddHabitScreen() {
     setShowModal(false);
   }
 
+  const onLoadMoreIcons = () => {
+    setIcons([...icons, ...FAIcons.slice(icons.length, icons.length + 50)]);
+  }
+
   useEffect(() => {
 
     if(habit) {
@@ -96,7 +103,7 @@ export default function AddHabitScreen() {
       setIconSelected(habit.icon);
     }
 
-    setIcons(FAIcons.slice(0, 50));
+    setIcons(FAIcons.slice(0, 80));
 
   }, [])
   
@@ -111,7 +118,7 @@ export default function AddHabitScreen() {
   });
 
   if(!fontLoaded) return null;
-
+ 
   return (
     <ScrollContainer title={habit ? 'Edit Habit' : 'Add Habit'} goBack={() => navigate('setup')}>
 
@@ -129,19 +136,23 @@ export default function AddHabitScreen() {
             setShowModal(false);
           }}
         >
-            <View style={{paddingTop: 60}}>
-              <ScrollContainer title='Choose Icon' goBack={() => {setShowModal(false)}}>
-                <View style={styles.iconsModalContainer}>
-                  {
-                    icons.map((icon, i) => (
-                      <TouchableOpacity key={icon} onPress={() => selectIcon(icon)} style={styles.iconTouchable}>
-                        <Icon key={icon} name={icon} style={styles.icon} size={35} />
-                      </TouchableOpacity>
-                    ))
-                  }
-                </View>
-              </ScrollContainer>
-            </View>
+            <SafeAreaView style={{marginTop: 80, marginHorizontal: 20, marginBottom: 80}}>
+              <CustomBackButton onPressed={() => setShowModal(false)} />
+              <Title>Choose Icon</Title>
+                <FlatList
+                  style={styles.iconsModalContainer}
+                  contentContainerStyle={{flexGrow: 1, justifyContent: 'flex-start'}}
+                  data={icons}
+                  numColumns={5}
+                  onEndReached={() => onLoadMoreIcons()}
+                  ListFooterComponent={<ActivityIndicator />}
+                  renderItem={({item: icon}) => (
+                    <TouchableOpacity key={icon} onPress={() => selectIcon(icon)} style={styles.iconTouchable}>
+                      <Icon key={icon} name={icon} style={styles.icon} size={25} />
+                    </TouchableOpacity>
+                  )}
+                />
+            </SafeAreaView>
         </Modal>
 
       </View>
@@ -232,15 +243,13 @@ const styles = StyleSheet.create({
   iconsModalContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1
+    marginBottom: 20,
+    paddingBottom: 50
   },
   iconTouchable: {
     width: '20%', 
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1
   },
   icon: {
     padding: 20,
