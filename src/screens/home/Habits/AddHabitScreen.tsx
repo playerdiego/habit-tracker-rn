@@ -23,12 +23,17 @@ interface DaysState { monday: boolean; tuesday: boolean; wednesday: boolean; thu
 
 export default function AddHabitScreen() {
 
+  // * HOOKS
+
   const {addHabit, editHabit} = useContext(HabitsContext);
   
   const {navigate} = useNavigation<HabitsNavigationProps>();
   //Trae los parámetros si existen (En caso de edición)
   const {params: habit} = useRoute<RouteProp<HabitsStackParamList, 'add'>>();
   // FORMIK
+
+
+  // * FORM
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Habit name is required'),
@@ -41,6 +46,8 @@ export default function AddHabitScreen() {
   }
 
   const initialValues: FormData = {title: habit?.title || '', description: habit?.description || ''};
+
+  // * ADD HABIT
 
   const onAddOrEditHabit = ({title, description}: FormData) => {
 
@@ -61,7 +68,7 @@ export default function AddHabitScreen() {
     navigate('setup');
   }
 
-  // DAYS CHECKBOX
+  // * DAYS CHECKBOX
 
   const [days, setDays] = useState<DaysState>({
     monday: false, 
@@ -75,7 +82,11 @@ export default function AddHabitScreen() {
 
   const {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = days;
 
-  //Icons Modal
+  const onSelectDay = (day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday') => {
+    setDays({...days, [day]: !days[day]});
+  } 
+
+  // * ICONS MODAL
 
   const [showModal, setShowModal] = useState(false);
   const [iconSelected, setIconSelected] = useState('dumbbell');
@@ -89,6 +100,10 @@ export default function AddHabitScreen() {
   const onLoadMoreIcons = () => {
     setIcons([...icons, ...FAIcons.slice(icons.length, icons.length + 50)]);
   }
+
+  // * SET DATA FOR HABIT EDITING (IF EXISTS)
+
+  // * PRE-LOADING FIRST 80 ICONS
 
   useEffect(() => {
 
@@ -105,13 +120,9 @@ export default function AddHabitScreen() {
 
     setIcons(FAIcons.slice(0, 80));
 
-  }, [])
+  }, []);
   
-
-
-  const onSelectDay = (day: 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday') => {
-    setDays({...days, [day]: !days[day]});
-  } 
+  // * FONT LOADING AND VALIDATION
 
   const [fontLoaded] = useFonts({
       Roboto_400Regular
