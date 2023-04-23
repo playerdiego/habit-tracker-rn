@@ -6,7 +6,7 @@ import { Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
 
 import Title from '../Title'
 import { global, globalColors } from '../../styles/global';
-import { Habit, HistoryItem, TodayHabit } from '../../interfaces/habit.interface';
+import { HistoryItem, TodayHabit } from '../../interfaces/habit.interface';
 import HabitCheckbox from '../HabitCheckbox';
 import { HabitsContext } from '../../context/HabitsContext';
 import { DateData, MarkedDates } from 'react-native-calendars/src/types';
@@ -34,7 +34,7 @@ export default function StreakCalendar() {
 
     // Traverse each marked date, to set as "selected" (true) the selected day in the calendar
     Object.keys(markedDates).map((date, i) => {
-        updatedMarkedDays[date] = date === selectedDate ? {...Object.values(markedDates)[i], selected: true} : {...Object.values(markedDates)[i], selected: false}
+        updatedMarkedDays[date] = date === selectedDate ? {...Object.values(markedDates)[i], selected: true, marked: true} : {...Object.values(markedDates)[i], selected: false}
     });
 
     setMarkedDates(updatedMarkedDays);
@@ -66,25 +66,29 @@ export default function StreakCalendar() {
         percentageCompleted > 0 ? globalColors.red :
         percentageCompleted === 0 ? globalColors.gray : globalColors.gray;
 
+      
+      // Sets the selected day to the current day
+      onSelectDay(dayjs().format('YYYY-MM-DD'));
+
       // Adds a marked day for every day in history  
       dates[val.day] = {
         marked: true,
         dotColor: color,
         selectedColor: globalColors.primary,
-        selected: selectedDay?.day === val.day
+        selected: dayjs().format('YYYY-MM-DD') === val.day
       };
       
       // Sets completed habits to 0 once the treverse is done
       completedHabits = 0;
     });
 
-    // Sets the selected day to the current day
-    onSelectDay(dayjs().format('YYYY-MM-DD'));
+
 
     // Sets the marked dates (data for the calendar)
     setMarkedDates(dates);
 
   }, [history, habits, todayHabits]);
+
   
 
   const [fontLoaded] = useFonts({
@@ -160,7 +164,7 @@ function DayData({date, habits}: {date: string, habits: TodayHabit[]}) {
             habits.map(habit => (
               habit.completed &&
               <HabitCheckbox
-                key={habit.title}
+                key={habit.id}
                 habit={habit} size='sm' history={true}  />
             ))
           }
@@ -171,7 +175,7 @@ function DayData({date, habits}: {date: string, habits: TodayHabit[]}) {
             habits.map(habit => (
               !habit.completed &&
               <HabitCheckbox
-                key={habit.title}
+                key={habit.id}
                 habit={habit} size='sm' history={true}  />
             ))
           }

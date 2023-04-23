@@ -12,7 +12,8 @@ export interface Habit {
     },
     icon: string,
     id?: string,
-    total: number
+    total: number,
+    streak: number
 }
 
 export interface TodayHabit {
@@ -20,7 +21,16 @@ export interface TodayHabit {
     description?: string,
     icon: string,
     completed: boolean,
-    id?: string
+    id?: string,
+    daysToShow: {
+        monday?: boolean;
+        tuesday?: boolean;
+        wednesday?: boolean;
+        thursday?: boolean;
+        friday?: boolean;
+        saturday?: boolean;
+        sunday?: boolean;
+    },
 }
 
 export interface HistoryItem {

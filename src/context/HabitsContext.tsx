@@ -8,9 +8,11 @@ import dayjs from 'dayjs';
 import { AuthContext } from './AuthContext';
 
 /* 
-TODO
-- Optimizaciones de imágenes
-- Terminar streaks (rachas) (calendario y totals listos)
+TODO: Optimizaciones de imágenes
+TODO: Unhandled Promises
+TODO: Feedback de carga
+TODO: Valorar cambiar .then por async y await
+TODO: Mostrar texto cuando no hay rachas
 */
 
 // * FUNCTION TO GET THE DAYS TO SHOW OF ONE HABIT
@@ -25,6 +27,27 @@ const getDays = (daysToShow: {
   sunday?: boolean | undefined;
 }) => {
   return Object.keys(daysToShow).filter((dayToShow, i) => Object.values(daysToShow)[i] && dayToShow);
+}
+
+const daysToNumber = (day: string) => {
+  switch (day) {
+    case 'monday':
+      return 1
+    case 'tuesday':
+      return 2
+    case 'wednesday':
+      return 3
+    case 'thursday':
+      return 4
+    case 'friday':
+      return 5
+    case 'saturday':
+      return 6
+    case 'sunday':
+      return 7
+    default:
+      return 0
+  }
 }
 
 // * PROPS 
@@ -84,6 +107,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
           icon: habit.icon,
           completed: false,
           id: habitKey!,
+          daysToShow: habit.daysToShow
         }
 
         set(ref(db, 'users/' + currentUser?.uid + '/history/' + todayDate + '/' + todayHabits.length + '/'), newTodayHabit);
@@ -144,7 +168,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
   const editHabit = (habit: Habit) => {
 
-    const {title, description, icon, daysToShow, id, total} = habit;
+    const {title, description, icon, daysToShow, id, total, streak} = habit;
 
     //An array with the daysToShow
     const days = getDays(habit.daysToShow);
@@ -155,12 +179,13 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
     try {
 
-      set(ref(db, 'users/' + currentUser?.uid + '/habits/' + id), {
+      update(ref(db, 'users/' + currentUser?.uid + '/habits/' + id), {
         title,
         description, 
         icon,
         daysToShow,
-        total
+        total,
+        streak
       });
 
       //Checks if the habit daysToShow includes the current day
@@ -174,7 +199,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
         if (isHabitActive) {
 
           updatedTodayHabits = todayHabits.map(todayHabit => todayHabit.id === habit.id ? 
-            {...todayHabit, title, description, icon} : todayHabit);
+            {...todayHabit, title, description, icon, daysToShow} : todayHabit);
 
         // If it is not, add it
         } else {
@@ -184,6 +209,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
             description,
             icon,
             completed: false,
+            daysToShow,
             id}
           ];
         }
@@ -208,8 +234,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
   }
 
   // * GET HABITS 
-
-  const getHabits = () => {
+  const getHabits = async () => {
     //Get habits from DB
     get(ref(db, 'users/' + currentUser?.uid + '/habits/'))
       .then((value: DataSnapshot) => {
@@ -222,59 +247,124 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
           }
         }
         setHabits(habitsResult);
-      })
-  }
 
-  // * GET OR CREATE TODAY HABITS
+        return habitsResult;
 
-  const getOrCreateTodayHabits = () => {
-    
-    // Temporal array to save the today habits formated
-    let tempTodayHabits: TodayHabit[] = [];
+      }).then((habitsResult) => {
+        // * GET OR CREATE TODAY HABITS        
+        let tempTodayHabits: TodayHabit[] = [];
 
-    // Get today history 
-    get(todayRef).then(snapshot => {
-      //Check if it exists
-      if(snapshot.val()) {
-        //Traverse each item
-        for (const key in snapshot.val()) {
-          if (snapshot.val().hasOwnProperty(key)) {
-            //Get the habit data
-            const {title, description, icon, completed, id} = snapshot.val()[key];
+        // Get today history 
+        get(todayRef).then(snapshot => {
+          //Check if it exists
+          if(snapshot.val()) {
+            //Traverse each item
+            for (const key in snapshot.val()) {
+              if (snapshot.val().hasOwnProperty(key)) {
+                //Get the habit data
+                const {title, description, icon, completed, id, daysToShow} = snapshot.val()[key];
 
-            //Push in the temporal array
-            tempTodayHabits.push({
-              title,
-              description,
-              icon,
-              completed,
-              id,
+                //Push in the temporal array
+                tempTodayHabits.push({
+                  title,
+                  description,
+                  icon,
+                  completed,
+                  id,
+                  daysToShow
+                });
+              }
+            }
+            setTodayHabits(tempTodayHabits);
+
+            // If doesnt exists, create it based on the habits that correspond that day
+          } else {
+            //Traverse the habit setup
+            habitsResult.map(({title, description, daysToShow, icon, id}) => {
+              //Traverse the day object and save in "days" only the true values
+              const days = Object.keys(daysToShow).filter((dayToShow, i) => Object.values(daysToShow)[i] && dayToShow);
+              if(days.includes(today)) {
+                tempTodayHabits.push({
+                  title,
+                  description,
+                  icon,
+                  completed: false,
+                  id,
+                  daysToShow
+                });
+              }
             });
-          }
-        }
-        setTodayHabits(tempTodayHabits);
+            set(todayRef, tempTodayHabits).then();
+            setTodayHabits(tempTodayHabits);
+            const tempHistory = [...history, {day: todayDate, data: tempTodayHabits}];
+            setHistory(tempHistory);
 
-        // If doesnt exists, create it based on the habits that correspond that day
-      } else {
-        //Traverse the habit setup
-        habits.map(({title, description, daysToShow, icon, id}) => {
-          //Traverse the day object and save in "days" only the true values
-          const days = Object.keys(daysToShow).filter((dayToShow, i) => Object.values(daysToShow)[i] && dayToShow);
-          if(days.includes(today)) {
-            tempTodayHabits.push({
-              title,
-              description,
-              icon,
-              completed: false,
-              id,
+            // Traverse every todayHabit
+            tempTodayHabits.map(todayHabit => {
+            
+              // Set the dummy difference
+              let diff: number = 8;
+      
+              // Treverse every dayToShow in the todayHabit
+              Object.keys(todayHabit.daysToShow).map((day, i) => {
+                //Checks if has to be shown
+                if(Object.values(todayHabit.daysToShow)[i]) {
+      
+                  // Sets the difference between today and the day the habit had to be completed
+                  // Example: Today (Friday) (5) - Day (Wednesday) (3) = 2 
+                  let result = daysToNumber(today) - daysToNumber(day);
+
+                  //Add 7 if the number is negative to get the real difference
+                  // Example: Today (Monday) (1) - Day (Sunday) (7) = -6 + 7 = 1
+                  if(result < 0) {
+                    result+=7;
+                  }
+                  
+                  //Checks if the result is lesser than the current difference and if its different to 0, and then sets the difference as the result
+                  //This is to get the lesser value of the difference between the days
+                  //In other words, get the difference between today and the last day the habit had to be completed
+                  if(result < diff && result !== 0) {
+                    diff = result;
+                  }
+      
+                }
+              });
+            
+              //When the difference is setted, gets the history of the current day - the difference
+              //Example: Today 2023-04-25 - 2 = 2023-04-23
+
+              //Gets the habits of the last day
+              get(ref(db, 'users/' + currentUser?.uid + '/history/' + dayjs().subtract(diff, 'days').format('YYYY-MM-DD')))
+                .then(snapshot => {
+                  //If there´s no history for that day, break the streak
+                  if(!snapshot.exists()) {
+                    update(ref(db, 'users/' + currentUser?.uid + '/habits/' + todayHabit.id), {streak: 0})
+                      .then(() => {
+                        setHabits(habitsResult.map(habit => habit.id === todayHabit.id ? {...habit, streak: 0} : habit))
+                      });
+                  } else {
+                      //Then gets the habit to check
+                      const historyHabitToCheck: TodayHabit = snapshot.val().find((historyHabitItem: TodayHabit) => todayHabit.id === historyHabitItem.id)!;
+
+                      // Gets the streak of that habit
+                      const habitStreak: Habit = habitsResult.find(habit => habit.id === historyHabitToCheck.id)!;
+
+                      //Checks if there´s streak and add 1, else sets streak to 0
+                      update(ref(db, 'users/' + currentUser?.uid + '/habits/' + habitStreak.id), {
+                        streak: historyHabitToCheck.completed ? habitStreak.streak + 1 : 0
+                      }).then(() => {
+                        setHabits(habitsResult.map(habit => habit.id === habitStreak.id ? {...habitStreak, streak:historyHabitToCheck.completed ? habitStreak.streak + 1 : 0} : habit))
+                      });
+                  }
+
+                })
+        
             });
+
           }
+
         });
-        set(todayRef, tempTodayHabits);
-        setTodayHabits(tempTodayHabits);
-      }
-    });
-
+      })
   }
 
   // * COMPLETE HABIT 
@@ -294,11 +384,13 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
     });
 
     const habitToComplete = habits.find(habit => habit.id === habitId);
+
     const total = isHabitCompleted ? habitToComplete?.total! + 1 : habitToComplete?.total! - 1;
+    const streak = isHabitCompleted ? habitToComplete?.streak! + 1 : habitToComplete?.streak! - 1;
 
-    update(ref(db, 'users/' + currentUser?.uid + '/habits/' + habitId), {total});
+    update(ref(db, 'users/' + currentUser?.uid + '/habits/' + habitId), {total, streak});
 
-    const updatedHabits: Habit[] = habits.map(habit => habit.id === habitId ? {...habit, total} : habit);
+    const updatedHabits: Habit[] = habits.map(habit => habit.id === habitId ? {...habit, total, streak} : habit);
     setHabits(updatedHabits);
 
     
@@ -346,16 +438,16 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
   useEffect(() => {
     //Every time an user login, get his habits
-    getHabits();
-    getOrCreateTodayHabits();
+      getHistory();
+      getHabits();
 
     //If the user logout, delete habits, and history of the state
     if(!user) {
       setTodayHabits([]);
       setHabits([]);
+      setHistory([]);
     }
 
-    getHistory();
 
   }, [user]);
   

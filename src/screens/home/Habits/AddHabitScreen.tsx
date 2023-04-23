@@ -33,7 +33,6 @@ export default function AddHabitScreen() {
   const {params: habit} = useRoute<RouteProp<HabitsStackParamList, 'add'>>();
   // FORMIK
 
-
   // * FORM
 
   const validationSchema = Yup.object().shape({
@@ -57,11 +56,12 @@ export default function AddHabitScreen() {
       description,
       icon: iconSelected,
       daysToShow: days,
-      total: 0
+      total: 0,
+      streak: 0
     };
 
     if(habit) {
-      editHabit({...newHabit, id: habit.id, total: habit.total});
+      editHabit({...newHabit, id: habit.id, total: habit.total, streak: habit.streak});
       alert('Habit has been updated');
     } else  {
       addHabit(newHabit);

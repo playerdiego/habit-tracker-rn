@@ -17,8 +17,8 @@ export default function StreakTotal() {
 
       <View style={styles.totalsGrid}>
         {
-          habits.map(({icon, total}, index) => (
-            <Total total={total} icon={icon} key={icon} index={index} />
+          habits.map(({icon, id, total}, index) => (
+            <Total total={total} icon={icon} key={id} index={index} />
           ))
         }
       </View>

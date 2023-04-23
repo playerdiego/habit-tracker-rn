@@ -41,7 +41,7 @@ export default function HabitsScreen() {
           {
             habits.map((habit, i) => (
               <View key={habit.id}>
-                <HabitItem total={habit.total} title={habit.title} description={habit.description} icon={habit.icon} daysToShow={habit.daysToShow} id={habit.id} />
+                <HabitItem total={habit.total} title={habit.title} description={habit.description} icon={habit.icon} daysToShow={habit.daysToShow} streak={habit.streak} id={habit.id} />
                 <Divider />
               </View>
             ))

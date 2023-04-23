@@ -1,47 +1,32 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import Divider from '../Divider';
 import Title from '../Title';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ReactText from '../ReactText';
-
-interface Streak {
-  habit: string,
-  streakCount: number,
-}
-
-const streaks: Streak[] = [
-  {
-    habit: 'Entrenar',
-    streakCount: 20
-  },
-  {
-    habit: 'Leer',
-    streakCount: 22
-  },
-]
+import { HabitsContext } from '../../context/HabitsContext';
 
 export default function StreaksResume() {
+
+  const {habits} = useContext(HabitsContext);
+
   return (
     <View style={{marginTop: 20}}>
 
       <Title size='sm'>Resume</Title>
-      <View style={styles.textWIcon}>
-        <Icon name='check' style={styles.icon}></Icon>
-        <ReactText style={styles.streakText}>You have completed your habits 20 days in a row</ReactText>
-      </View>
 
       {
-        streaks.map(streak => (
-          <View key={streak.habit}>
+        habits.map(habit => (
+          habit.streak > 0 &&
+          <View key={habit.id}>
             <Divider />
 
             <View style={styles.textWIcon}>
-              <Icon name='dumbbell' style={styles.icon}></Icon>
+              <Icon name={habit.icon} style={styles.icon}></Icon>
               <ReactText 
                 style={styles.streakText}>
-                  You have completed: {streak.habit + ' ' + streak.streakCount} days in a row
+                  You have completed: {habit.title + ' ' + habit.streak} days in a row
               </ReactText>
             </View>
           </View>
