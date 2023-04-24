@@ -1,9 +1,8 @@
 import { View, Text } from 'react-native';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { global } from '../../styles/global';
 import StreakAlert from '../../components/Streak/StreakAlert';
-import { Habit } from '../../interfaces/habit.interface';
 import HabitCheckbox from '../../components/HabitCheckbox';
 import Divider from '../../components/Divider';
 import ScrollContainer from '../../components/ScrollContainer';
@@ -21,10 +20,20 @@ export default function HomeScreen() {
   const {navigate} = useNavigation<HomeNavigationProps>();
 
   const {user} = useContext(AuthContext);
-  const {todayHabits} = useContext(HabitsContext);
+  const {todayHabits, habits} = useContext(HabitsContext);
 
   const completedHabitsLength = todayHabits.filter(habit => habit.completed).length;
   const incompletedHabitsLength = todayHabits.filter(habit => !habit.completed).length;
+
+  const [streaksExists, setStreaksExists] = useState(0);
+
+  useEffect(() => {
+    let tempStreakCount = 0;
+    habits.map(habit => {
+      tempStreakCount += habit.streak;
+    });
+    setStreaksExists(tempStreakCount);
+  }, [habits]);
 
   return (
     <ScrollContainer title={'Good Morning, ' + user?.displayName} titleSize='md'> 
@@ -85,8 +94,12 @@ export default function HomeScreen() {
           }
         </View>
 
-
-        <View style={{marginBottom: 30}}><StreakAlert></StreakAlert></View>
+          <View style={{marginBottom: 30}}>
+            {
+              streaksExists > 0 && 
+              <StreakAlert></StreakAlert>
+            }
+          </View>
 
     </ScrollContainer>
   )

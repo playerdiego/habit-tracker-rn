@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,8 @@ import { HomeNavigationProps } from '../../navigation/HomeNavigation';
 import Divider from '../Divider';
 import { globalColors } from '../../styles/global';
 import ReactText from '../ReactText';
+import { HabitsContext } from '../../context/HabitsContext';
+import StreaksResume from './StreaksResume';
 
 export default function StreakAlert() {
 
@@ -19,19 +21,11 @@ export default function StreakAlert() {
 
   return (
     <View style={styles.streakAlertContainer}>
-      <TouchableOpacity onPress={onClose} style={styles.close}>
+      {/* <TouchableOpacity onPress={onClose} style={styles.close}>
         <Icon name='times'></Icon>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
-      <View style={{marginVertical: 20}}>
-        <ReactText style={styles.streakText}>You have completed your habits 20 days in a row</ReactText>
-      </View>
-
-      <Divider />
-
-      <View style={{marginVertical: 20}}>
-        <ReactText style={styles.streakText}>You have completed: Workout 25 in a row</ReactText>
-      </View>
+      <StreaksResume />
 
       <CustomButton onPressed={() => navigate('streak')} text='More' style={{...styles.button, color: globalColors.primary}} />
 
@@ -46,7 +40,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginVertical: 20,
     position: 'relative',
-    paddingTop: 20,
+    paddingTop: 0,
     paddingBottom: 50,
     paddingLeft: 20,
     paddingRight: 40

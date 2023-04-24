@@ -27,7 +27,7 @@ export default function StreaksResume() {
               <Icon name={habit.icon} style={styles.icon}></Icon>
               <ReactText 
                 style={styles.streakText}>
-                  You have completed: {habit.title + ' ' + habit.streak} days in a row
+                  You have completed: {habit.title + habit.streak} {habit.streak === 1 ? 'day' : 'days'} in a row
               </ReactText>
             </View>
           </View>
