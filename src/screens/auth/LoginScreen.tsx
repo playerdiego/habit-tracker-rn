@@ -43,7 +43,6 @@ export default function LoginScreen() {
         <View style={{marginTop: 20}}>
           <TextInput 
             placeholder='Email' 
-            keyboardType='email-address' 
             style={global.input} 
             cursorColor={globalColors.gray} 
             onChangeText={handleChange('email')}

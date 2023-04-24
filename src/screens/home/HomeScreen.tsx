@@ -87,7 +87,7 @@ export default function HomeScreen() {
 
 
         <View style={{marginBottom: 30}}><StreakAlert></StreakAlert></View>
-        
+
     </ScrollContainer>
   )
 }

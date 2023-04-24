@@ -62,10 +62,8 @@ export default function AddHabitScreen() {
 
     if(habit) {
       editHabit({...newHabit, id: habit.id, total: habit.total, streak: habit.streak});
-      alert('Habit has been updated');
     } else  {
       addHabit(newHabit);
-      alert('Habit has been created');
     } 
     navigate('setup');
   }

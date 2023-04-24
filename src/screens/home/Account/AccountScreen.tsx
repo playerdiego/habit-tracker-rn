@@ -25,7 +25,7 @@ export default function AccountScreen() {
       {
         text: 'Logout',
         onPress: () => logout(),
-        style: 'destructive'
+        style: 'destructive',
       },
     ], {cancelable: true});
   }

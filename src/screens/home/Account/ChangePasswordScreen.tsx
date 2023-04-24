@@ -38,11 +38,7 @@ export default function ChangePasswordScreen() {
     }
 
     const onChangePassword = ({newPassword, currentPassword}: FormData) => {
-        changePassword(newPassword, currentPassword)
-            .then(() => {
-                alert('Account Updated');
-                navigate('data');
-            })
+        changePassword(newPassword, currentPassword);
     }
 
     return (

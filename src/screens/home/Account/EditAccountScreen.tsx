@@ -34,12 +34,8 @@ export default function EditAccountScreen() {
         email: user?.email!,
     }
 
-    const onSaveChanges = ({name, email}: FormData) => {
-        updateAccount(name, email, profilePic!)
-            .then(() => {
-                alert('Account Updated');
-                navigate('data');
-            })
+    const onSaveChanges = async ({name, email}: FormData) => {
+        await updateAccount(name, email, profilePic!);
     }
 
     const [profilePic, setProfilePic] = useState<null | ImagePicker.ImagePickerResult>(null);
@@ -80,13 +76,12 @@ export default function EditAccountScreen() {
                 {(errors.name && touched.name) && (<Text style={{color: 'red'}}>{errors.name}</Text>)}
 
                 <TextInput 
-                    placeholder='Email'  
-                    style={global.input}  
-                    cursorColor={globalColors.gray} 
-                    keyboardType='email-address'
+                    style={global.input}
+                    placeholder='Type your email'
+                    value={values.email}
                     onChangeText={handleChange('email')}
                     onBlur={handleBlur('email')}
-                    value={values.email}
+                    cursorColor={globalColors.gray}
                 />
                 {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
 

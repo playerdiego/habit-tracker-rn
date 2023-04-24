@@ -7,6 +7,7 @@ import StreakScreen from '../screens/home/StreakScreen';
 import AccountNavigation from './AccountNavigation';
 import { globalColors } from '../styles/global';
 import HabitsNavigation from './HabitsNavigation';
+import { Text } from 'react-native';
 
 type HomeTabParamList = {
   home: undefined,

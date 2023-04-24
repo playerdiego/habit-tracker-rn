@@ -1,9 +1,12 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import {initializeApp} from 'firebase/app'
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage';
 import {getAuth, createUserWithEmailAndPassword, UserCredential, User, signOut, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, sendEmailVerification, updateEmail, reauthenticateWithCredential, updatePassword, AuthCredential, EmailAuthProvider} from 'firebase/auth';
 import { firebaseConfig } from "../../firebase-config";
 import * as ImagePicker from 'expo-image-picker';
+import { UIContext } from './UIContext';
+import { useNavigation } from '@react-navigation/native';
+import { AccountNavigationProps } from '../navigation/AccountNavigation';
 
 
 interface AuthContextProps {
@@ -25,10 +28,16 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
   const auth = getAuth();
   const storage = getStorage();
 
+  const {navigate: navigateAccount} = useNavigation<AccountNavigationProps>();
+
+  const {setLoading} = useContext(UIContext);
+
   const [user, setUser] = useState<User | null>(null);
 
 
   const registerWithEmail = (name: string, email: string, password: string, profilePic?: ImagePicker.ImagePickerResult): UserCredential | any => {
+
+    setLoading('Creating account...')
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
@@ -48,10 +57,17 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
         alert(error);
         return error;
       })
+      .finally(() => {
+        setLoading(null);
+      })
+
+
   }
 
   
   const loginWithEmail = (email: string, password: string): Promise<UserCredential> | any => {
+
+    setLoading('Logging in...');
     
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -61,22 +77,31 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
     .catch((error) => {
       alert(error);
       return error;
+    })
+    .finally(() => {
+      setLoading(null);
     });
     
   }
   
   const logout = () => {
+    setLoading('Logging out...');
     signOut(auth)
       .then(() => {
-        setUser(null)
+        setUser(null);
       })
       .catch((error) => {
         alert(error);
         console.error(error);
       })
+      .finally(() => {
+        setLoading(null);
+      })
   }
 
   const recoverAccount = (email: string) => {
+
+    setLoading('Sending recover email...');
 
     sendPasswordResetEmail(auth, email)
       .then(() => {
@@ -86,19 +111,29 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
         alert(error);
         console.error(error);
       })
-
+      .finally(() => {
+        setLoading(null);
+      })
   }
 
   const reSendValidationEmail = () => {
+    setLoading('Sending validation email...');
     sendEmailVerification(auth.currentUser!)
-      .then(() => alert('Verification email sent, check your inbox ' + auth.currentUser?.email))
+      .then(() => {
+        alert('Verification email sent, check your inbox ' + auth.currentUser?.email);
+      })
       .catch(error => {
         alert(error);
         console.error(error);
       })
+      .finally(() => {
+        setLoading(null);
+      })
   }
 
-  const updateAccount = async (name: string, email?: string, profilePic?: ImagePicker.ImagePickerResult,) => {
+  const updateAccount = async (name: string, email: string, profilePic?: ImagePicker.ImagePickerResult,) => {
+
+    setLoading('Updating account info...')
 
     let profilePicUrl = null;
 
@@ -110,24 +145,36 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
         });
     }
 
-    const finalUser: User = {
-      ...auth.currentUser!, 
+    let finalUser: User = {
+      ...user!, 
       displayName: name,
       photoURL: profilePicUrl!
     }
 
-    updateProfile(auth.currentUser!, finalUser);
-    if(email && email !== auth.currentUser?.email) {
-      updateEmail(auth.currentUser!, email)
-        .catch(error => {
-          alert(error);
-          console.error(error);
-        })
-      reSendValidationEmail();
-    }
-    
-    setUser(finalUser);
-
+    updateProfile(auth.currentUser!, finalUser)
+      .then(() => {
+        if(email !== auth.currentUser?.email) {
+          setLoading('Updating email...')
+          updateEmail(auth.currentUser!, email)
+            .then(() => {
+              finalUser = {...finalUser, email}
+            })
+            .catch(error => {
+              alert(error);
+              console.error(error);
+            })
+          reSendValidationEmail();
+          setUser({...auth.currentUser!, email});
+        }
+      })
+      .finally(() => {
+        setLoading(null);
+        if(user) {
+          navigateAccount('data');
+        }
+      })
+      
+      setUser(auth.currentUser);
   }
 
   const uploadFile = (profilePic: ImagePicker.ImagePickerResult, uid: string) => {
@@ -147,14 +194,27 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
 
   const changePassword = (newPassword: string, password: string) => {
 
+    setLoading('Updating password...')
+
     const credential = EmailAuthProvider.credential(auth.currentUser?.email!, password);
     
     return reauthenticateWithCredential(auth.currentUser!, credential)
-      .then(userCredential => updatePassword(userCredential.user, newPassword))
+      .then(userCredential => {
+        updatePassword(userCredential.user, newPassword)
+          .then(() => {
+            if(user) {
+              navigateAccount('data');
+            }
+          })
+
+      })
       .catch(error => {
         console.log(error);
         alert(error);
-      }) 
+      })
+      .finally(() => {
+        setLoading(null);
+      })
 
   }
 
