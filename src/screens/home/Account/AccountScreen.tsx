@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Image, StyleSheet, Alert } from 'react-native';
 import React, { useContext } from 'react'
 import { global, globalColors } from '../../../styles/global';
 import { useNavigation } from '@react-navigation/native';
@@ -15,6 +15,20 @@ export default function AccountScreen() {
   const {navigate} = useNavigation<AccountNavigationProps>();
 
   const {user, logout} = useContext(AuthContext);
+
+  const showLogoutAlert = () => {
+    Alert.alert('Do you want to logout?', '', [
+      {
+        text: 'Cancel',
+        style: 'cancel'
+      },
+      {
+        text: 'Logout',
+        onPress: () => logout(),
+        style: 'destructive'
+      },
+    ], {cancelable: true});
+  }
 
   return (
     <ScrollContainer title='Account'>
@@ -50,7 +64,7 @@ export default function AccountScreen() {
           />
 
           <CustomButton 
-            onPressed={() => logout()} 
+            onPressed={() => showLogoutAlert()} 
             text='Logout' outline={true} 
             style={{width: '100%'}}
           />

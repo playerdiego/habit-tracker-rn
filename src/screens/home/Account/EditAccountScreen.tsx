@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Image } from 'react-native';
+import { View, Text, TextInput, Image, Alert } from 'react-native';
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';
@@ -11,6 +11,7 @@ import CustomButton from '../../../components/CustomButton';
 import { useContext } from 'react';
 import { AuthContext } from '../../../context/AuthContext';
 import ScrollContainer from '../../../components/ScrollContainer';
+import ImagePickerComponent from '../../../components/ImagePickerComponent';
 
 export default function EditAccountScreen() {
 
@@ -43,31 +44,26 @@ export default function EditAccountScreen() {
 
     const [profilePic, setProfilePic] = useState<null | ImagePicker.ImagePickerResult>(null);
 
-    const pickImage = async () => {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [1, 1],
-        quality: 1,
-        base64: true
-      });
-  
-      if(!result.canceled) {
-        setProfilePic(result);
-      }
+    const showConfirmEditAlert = ({name, email}: FormData) => {
+        Alert.alert('Are you sure?', 'Your profile will be updated', [
+            {   
+                text: 'Cancel',
+                style: 'cancel'
+            },
+            {
+                text: 'Confirm',
+                onPress: () => onSaveChanges({name, email}),
+                style: 'destructive'
+            },
+        ], {cancelable: true});
     }
 
     return (
         <ScrollContainer title='Edit Profile' goBack={() => navigate('data')}>
-            <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
-                <Image 
-                source={{uri: profilePic?.assets![0].uri || user?.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}} 
-                style={{height: 120, width: 120, borderRadius: 100}}
-                />
-                <CustomButton text='Upload Picture' onPressed={pickImage} outline={true} />
-            </View>
+            
+            <ImagePickerComponent profilePic={profilePic} setProfilePic={setProfilePic} />
 
-            <Formik initialValues={initialValues} onSubmit={onSaveChanges} validationSchema={validationSchema}>
+            <Formik initialValues={initialValues} onSubmit={showConfirmEditAlert} validationSchema={validationSchema}>
 
 
             {({handleChange, handleBlur, handleSubmit, values, errors, touched, }) => (

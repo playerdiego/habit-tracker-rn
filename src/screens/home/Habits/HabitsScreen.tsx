@@ -70,7 +70,7 @@ function HabitItem(habit: Habit) {
   }
 
   const showDeleteAlert = () => {
-    Alert.alert('¿Are you sure?', 'The habit will be deleted permanently', [
+    Alert.alert('Are you sure?', 'The habit will be deleted permanently', [
       {
         text: 'Cancel',
         style: 'cancel'

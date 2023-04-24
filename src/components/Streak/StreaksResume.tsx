@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 import Divider from '../Divider';
 import Title from '../Title';
@@ -14,13 +14,14 @@ export default function StreaksResume() {
   return (
     <View style={{marginTop: 20}}>
 
-      <Title size='sm'>Resume</Title>
+      <View style={{marginBottom: 20}}>
+        <Title size='sm'>Your Streaks</Title>
+      </View>
 
       {
         habits.map(habit => (
           habit.streak > 0 &&
           <View key={habit.id}>
-            <Divider />
 
             <View style={styles.textWIcon}>
               <Icon name={habit.icon} style={styles.icon}></Icon>
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   textWIcon: {
     flexDirection: 'row', 
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 10,
     marginRight: 25
   },
   icon: {

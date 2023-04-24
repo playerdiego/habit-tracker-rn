@@ -9,10 +9,9 @@ import { AuthContext } from './AuthContext';
 
 /* 
 TODO: Optimizaciones de imágenes
-TODO: Unhandled Promises
 TODO: Feedback de carga
+TODO: Alertas de confirmación
 TODO: Valorar cambiar .then por async y await
-TODO: Mostrar texto cuando no hay rachas
 */
 
 // * FUNCTION TO GET THE DAYS TO SHOW OF ONE HABIT
@@ -110,7 +109,11 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
           daysToShow: habit.daysToShow
         }
 
-        set(ref(db, 'users/' + currentUser?.uid + '/history/' + todayDate + '/' + todayHabits.length + '/'), newTodayHabit);
+        set(ref(db, 'users/' + currentUser?.uid + '/history/' + todayDate + '/' + todayHabits.length + '/'), newTodayHabit)
+          .catch(error => {
+            alert(error);
+            console.error(error);
+          })
         setTodayHabits([...todayHabits, newTodayHabit]);
 
         //Adds habit to the current dat history

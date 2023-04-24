@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 import ScrollContainer from '../../components/ScrollContainer';
 import StreakCalendar from '../../components/Streak/StreakCalendar';
@@ -15,7 +15,17 @@ import { HomeNavigationProps } from '../../navigation/HomeNavigation';
 export default function StreakScreen() {
 
   const {habits} = useContext(HabitsContext);
-  const {navigate} = useNavigation<HomeNavigationProps>()
+  const {navigate} = useNavigation<HomeNavigationProps>();
+
+  const [streaksExists, setStreaksExists] = useState(0);
+
+  useEffect(() => {
+    let tempStreakCount = 0;
+    habits.map(habit => {
+      tempStreakCount += habit.streak;
+    });
+    setStreaksExists(tempStreakCount);
+  }, [habits]);
 
   return (
     <ScrollContainer title='Streaks'>
@@ -28,7 +38,13 @@ export default function StreakScreen() {
         </View> :
 
         <View>
-          <StreaksResume />
+          {
+            streaksExists === 0 ?
+            <View style={{marginVertical: 20}}>
+              <Title size='xs'>You don´t have streks yet, start completeing habits!</Title>
+            </View>
+            : <StreaksResume />
+          }
     
           <Divider />
     

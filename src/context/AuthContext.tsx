@@ -7,7 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 
 
 interface AuthContextProps {
-  user: User | undefined,
+  user: User | null,
   registerWithEmail: (name: string, email: string, password: string, profilePic?: ImagePicker.ImagePickerResult) => UserCredential | any,
   loginWithEmail: (email: string, password: string) => UserCredential | any,
   logout: () => void,
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
   const auth = getAuth();
   const storage = getStorage();
 
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
 
 
   const registerWithEmail = (name: string, email: string, password: string, profilePic?: ImagePicker.ImagePickerResult): UserCredential | any => {
@@ -67,6 +67,9 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
   
   const logout = () => {
     signOut(auth)
+      .then(() => {
+        setUser(null)
+      })
       .catch((error) => {
         alert(error);
         console.error(error);
@@ -100,7 +103,11 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
     let profilePicUrl = null;
 
     if(profilePic) {
-      profilePicUrl = await uploadFile(profilePic, auth.currentUser!.uid);
+      profilePicUrl = await uploadFile(profilePic, auth.currentUser!.uid)
+        .catch(error => {
+          alert(error);
+          console.error(error);
+        });
     }
 
     const finalUser: User = {
@@ -111,7 +118,11 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
 
     updateProfile(auth.currentUser!, finalUser);
     if(email && email !== auth.currentUser?.email) {
-      updateEmail(auth.currentUser!, email);
+      updateEmail(auth.currentUser!, email)
+        .catch(error => {
+          alert(error);
+          console.error(error);
+        })
       reSendValidationEmail();
     }
     

@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, Pressable, TouchableOpacity, Image, Alert } from 'react-native';
 import React, { useContext, useState } from 'react'
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -13,6 +13,7 @@ import { AuthNavigationProps } from '../../navigation/AuthNavigation';
 import Divider from '../../components/Divider';
 import ScrollContainer from '../../components/ScrollContainer';
 import { AuthContext } from '../../context/AuthContext';
+import ImagePickerComponent from '../../components/ImagePickerComponent';
 
 export default function RegisterScreen() {
 
@@ -47,31 +48,10 @@ export default function RegisterScreen() {
 
   const [profilePic, setProfilePic] = useState<null | ImagePicker.ImagePickerResult>(null);
 
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-      base64: true
-    });
-
-    if(!result.canceled) {
-      setProfilePic(result);
-    }
-  }
-
   return (
     <ScrollContainer title='Create Account' goBack={() => goBack()}>
 
-
-          <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
-            <Image 
-              source={{uri: profilePic?.assets![0].uri || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}} 
-              style={{height: 120, width: 120, borderRadius: 100}}
-            />
-            <CustomButton text='Upload Picture' onPressed={pickImage} outline={true} />
-          </View>
+          <ImagePickerComponent profilePic={profilePic} setProfilePic={setProfilePic} />
 
           <Formik initialValues={initialValues} onSubmit={onRegister} validationSchema={validationSchema}>
 
