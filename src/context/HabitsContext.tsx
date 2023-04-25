@@ -10,7 +10,6 @@ import { UIContext } from './UIContext';
 
 /* 
 TODO: Optimizaciones de imágenes
-TODO: Solicitar contraseña cuando se va a cambiar el correo para reautenticas
 TODO: Valorar cambiar .then por async y await
 */
 

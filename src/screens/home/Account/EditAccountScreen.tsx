@@ -12,6 +12,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../../context/AuthContext';
 import ScrollContainer from '../../../components/ScrollContainer';
 import ImagePickerComponent from '../../../components/ImagePickerComponent';
+import Title from '../../../components/Title';
 
 export default function EditAccountScreen() {
 
@@ -27,20 +28,22 @@ export default function EditAccountScreen() {
     type FormData = {
         name: string,
         email: string,
+        password: ''
     }
 
     const initialValues: FormData = {
         name: user?.displayName!,
         email: user?.email!,
+        password: ''
     }
 
-    const onSaveChanges = async ({name, email}: FormData) => {
-        await updateAccount(name, email, profilePic!);
+    const onSaveChanges = async ({name, email, password}: FormData) => {
+        await updateAccount(name, email, password, profilePic!);
     }
 
     const [profilePic, setProfilePic] = useState<null | ImagePicker.ImagePickerResult>(null);
 
-    const showConfirmEditAlert = ({name, email}: FormData) => {
+    const showConfirmEditAlert = ({name, email, password}: FormData) => {
         Alert.alert('Are you sure?', 'Your profile will be updated', [
             {   
                 text: 'Cancel',
@@ -48,7 +51,7 @@ export default function EditAccountScreen() {
             },
             {
                 text: 'Confirm',
-                onPress: () => onSaveChanges({name, email}),
+                onPress: () => onSaveChanges({name, email, password}),
                 style: 'destructive'
             },
         ], {cancelable: true});
@@ -84,6 +87,18 @@ export default function EditAccountScreen() {
                     cursorColor={globalColors.gray}
                 />
                 {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
+
+                <Title size='xs'>For your security, type your password</Title>
+
+                <TextInput 
+                    placeholder='Your password' 
+                    secureTextEntry={true} 
+                    style={global.input} 
+                    cursorColor={globalColors.gray}
+                    onChangeText={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    value={values.password}
+                />
 
                 <CustomButton text='Save Changes' onPressed={handleSubmit} style={{marginTop: 8}} />
             </View>

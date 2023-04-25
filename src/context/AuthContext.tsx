@@ -15,8 +15,8 @@ interface AuthContextProps {
   loginWithEmail: (email: string, password: string) => UserCredential | any,
   logout: () => void,
   recoverAccount: (email:string) => void,
-  reSendValidationEmail: () => void,
-  updateAccount: (name: string, email: string, profilePic: ImagePicker.ImagePickerResult) => Promise<void>,
+  reSendValidationEmail: (email?: string) => void,
+  updateAccount: (name: string, email: string, password: string, profilePic: ImagePicker.ImagePickerResult) => Promise<void>,
   changePassword: (newPassword: string, password: string) => Promise<void>, 
 }
 
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
             console.error(error);
           });
 
-        await updateAccount(name, email, profilePic);
+        await updateAccount(name, email, password, profilePic);
 
         return userCredential;
       })
@@ -116,11 +116,11 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
       })
   }
 
-  const reSendValidationEmail = () => {
+  const reSendValidationEmail = (email: string = auth.currentUser?.email!) => {
     setLoading('Sending validation email...');
     sendEmailVerification(auth.currentUser!)
       .then(() => {
-        alert('Verification email sent, check your inbox ' + auth.currentUser?.email);
+        alert('Verification email sent, check your inbox ' + email);
       })
       .catch(error => {
         alert(error);
@@ -131,50 +131,66 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
       })
   }
 
-  const updateAccount = async (name: string, email: string, profilePic?: ImagePicker.ImagePickerResult,) => {
+  const updateAccount = async (name: string, email: string, password: string, profilePic?: ImagePicker.ImagePickerResult,) => {
 
     setLoading('Updating account info...')
 
-    let profilePicUrl = null;
+    const credential = EmailAuthProvider.credential(auth.currentUser?.email!, password);
+    
+    return reauthenticateWithCredential(auth.currentUser!, credential)
+      .then(async (userCredential) => {
 
-    if(profilePic) {
-      profilePicUrl = await uploadFile(profilePic, auth.currentUser!.uid)
-        .catch(error => {
-          alert(error);
-          console.error(error);
-        });
-    }
+        let profilePicUrl = null;
 
-    let finalUser: User = {
-      ...user!, 
-      displayName: name,
-      photoURL: profilePicUrl!
-    }
-
-    updateProfile(auth.currentUser!, finalUser)
-      .then(() => {
-        if(email !== auth.currentUser?.email) {
-          setLoading('Updating email...')
-          updateEmail(auth.currentUser!, email)
-            .then(() => {
-              finalUser = {...finalUser, email}
-            })
+        if(profilePic) {
+          profilePicUrl = await uploadFile(profilePic, auth.currentUser!.uid)
             .catch(error => {
               alert(error);
               console.error(error);
-            })
-          reSendValidationEmail();
-          setUser({...auth.currentUser!, email});
+            });
         }
+
+        let finalUser: User = {
+          ...user!, 
+          displayName: name,
+          photoURL: profilePicUrl!
+        }
+        
+        updateProfile(auth.currentUser!, finalUser)
+          .then(() => {
+            if(email !== auth.currentUser?.email) {
+              setLoading('Updating email...')
+              updateEmail(auth.currentUser!, email)
+                .then(() => {
+                  finalUser = {...finalUser, email}
+                })
+                .catch(error => {
+                  alert(error);
+                  console.error(error);
+                })
+              reSendValidationEmail(email);
+              setUser({...auth.currentUser!, email});
+            } else {
+              setUser(auth.currentUser);
+            }
+          })
+          .finally(() => {
+            if(user) {
+              navigateAccount('data');
+            }
+          })
+      
+
+      })
+      .catch(error => {
+        console.log(error);
+        alert(error);
       })
       .finally(() => {
         setLoading(null);
-        if(user) {
-          navigateAccount('data');
-        }
       })
-      
-      setUser(auth.currentUser);
+
+    
   }
 
   const uploadFile = (profilePic: ImagePicker.ImagePickerResult, uid: string) => {
