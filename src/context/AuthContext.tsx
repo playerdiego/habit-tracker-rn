@@ -7,6 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { UIContext } from './UIContext';
 import { useNavigation } from '@react-navigation/native';
 import { AccountNavigationProps } from '../navigation/AccountNavigation';
+import { SaveFormat, manipulateAsync } from 'expo-image-manipulator';
 
 
 interface AuthContextProps {
@@ -138,7 +139,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
     const credential = EmailAuthProvider.credential(auth.currentUser?.email!, password);
     
     return reauthenticateWithCredential(auth.currentUser!, credential)
-      .then(async (userCredential) => {
+      .then(async () => {
 
         let profilePicUrl = null;
 
@@ -193,11 +194,16 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
     
   }
 
-  const uploadFile = (profilePic: ImagePicker.ImagePickerResult, uid: string) => {
+  const uploadFile = async (profilePic: ImagePicker.ImagePickerResult, uid: string) => {
+
+    const resized = await manipulateAsync(profilePic!.assets![0].uri,
+      [{resize: {width: 500, height: 500},}],
+      {compress: 0.5, format: SaveFormat.WEBP}
+    );
 
     const fileRef = ref(storage, uid);
 
-    return fetch(profilePic.assets![0].uri)
+    return fetch(resized.uri)
       .then(response => response.blob())
       .then(blobFile => uploadBytes(fileRef, blobFile))
       .then(result => getDownloadURL(result.ref))

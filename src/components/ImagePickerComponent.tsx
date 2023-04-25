@@ -13,7 +13,7 @@ export default function ImagePickerComponent({profilePic, setProfilePic}:
     
 
     const pickImage = async (camera: boolean = false) => {
-        let result;
+        let result: ImagePicker.ImagePickerResult;
     
         if(camera) {
           result = await ImagePicker.launchCameraAsync({
@@ -21,7 +21,7 @@ export default function ImagePickerComponent({profilePic, setProfilePic}:
             allowsEditing: true,
             aspect: [1, 1],
             quality: 1,
-            base64: true
+            base64: true,
           })
         } else {
           result = await ImagePicker.launchImageLibraryAsync({

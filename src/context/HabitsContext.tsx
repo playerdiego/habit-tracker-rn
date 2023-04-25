@@ -9,7 +9,8 @@ import { AuthContext } from './AuthContext';
 import { UIContext } from './UIContext';
 
 /* 
-TODO: Optimizaciones de imágenes
+TODO: Agrandar tamaño de back button
+TODO: Social Login
 TODO: Valorar cambiar .then por async y await
 */
 
