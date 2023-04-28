@@ -1,14 +1,10 @@
-import React, {useContext, useEffect, useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import React, {useContext} from 'react';
+import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import CustomButton from '../CustomButton';
 import { HomeNavigationProps } from '../../navigation/HomeNavigation';
-import Divider from '../Divider';
 import { globalColors } from '../../styles/global';
-import ReactText from '../ReactText';
-import { HabitsContext } from '../../context/HabitsContext';
 import StreaksResume from './StreaksResume';
 import { UIContext } from '../../context/UIContext';
 

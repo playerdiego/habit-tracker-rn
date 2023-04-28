@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import { View, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
 
 import Title from '../Title';
 import Icon from 'react-native-vector-icons/FontAwesome5';

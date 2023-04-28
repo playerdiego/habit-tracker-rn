@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Habit, HistoryItem, TodayHabit } from '../interfaces/habit.interface';
-import { firebaseConfig } from '../../firebase-config';
 import { initializeApp } from 'firebase/app';
 import { getDatabase, set, ref, push, get, DataSnapshot, update, remove } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import dayjs from 'dayjs';
+
 import { AuthContext } from './AuthContext';
 import { UIContext } from './UIContext';
+import { Habit, HistoryItem, TodayHabit } from '../interfaces/habit.interface';
+import { firebaseConfig } from '../../firebase-config';
 
 // * FUNCTION TO GET THE DAYS TO SHOW OF ONE HABIT
 

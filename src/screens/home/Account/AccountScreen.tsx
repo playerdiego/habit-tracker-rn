@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, StyleSheet, Alert } from 'react-native';
+import { View, Image, StyleSheet, Alert } from 'react-native';
 import React, { useContext } from 'react'
 import { global, globalColors } from '../../../styles/global';
 import { useNavigation } from '@react-navigation/native';

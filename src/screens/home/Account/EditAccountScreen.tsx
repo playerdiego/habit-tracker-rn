@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Image, Alert } from 'react-native';
+import { View, Text, TextInput, Alert } from 'react-native';
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup';

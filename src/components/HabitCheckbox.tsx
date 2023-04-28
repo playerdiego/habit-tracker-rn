@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useContext } from 'react';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 

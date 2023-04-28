@@ -11,7 +11,7 @@ import ScrollContainer from '../../../components/ScrollContainer';
 import { HabitsNavigationProps, HabitsStackParamList } from '../../../navigation/HabitsNavigation';
 import { global, globalColors } from '../../../styles/global';
 import CustomButton from '../../../components/CustomButton';
-import { FlatList, ScrollView, TextInput } from 'react-native-gesture-handler';
+import { FlatList, TextInput } from 'react-native-gesture-handler';
 import ReactText from '../../../components/ReactText';
 import { HabitsContext } from '../../../context/HabitsContext';
 import { FAIcons } from '../../../utils/FAicons';

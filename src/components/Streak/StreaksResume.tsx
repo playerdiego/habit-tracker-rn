@@ -1,12 +1,9 @@
 import { View, Text, StyleSheet } from 'react-native';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 
-import Divider from '../Divider';
 import Title from '../Title';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import ReactText from '../ReactText';
 import { HabitsContext } from '../../context/HabitsContext';
-import i18n from 'i18n-js';
 import { UIContext } from '../../context/UIContext';
 
 export default function StreaksResume() {

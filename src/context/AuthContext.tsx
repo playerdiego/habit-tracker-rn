@@ -2,12 +2,13 @@ import React, { createContext, useContext, useState } from 'react';
 import {initializeApp} from 'firebase/app'
 import {getDownloadURL, getStorage, ref, uploadBytes} from 'firebase/storage';
 import {getAuth, createUserWithEmailAndPassword, UserCredential, User, signOut, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, sendEmailVerification, updateEmail, reauthenticateWithCredential, updatePassword, AuthCredential, EmailAuthProvider} from 'firebase/auth';
-import { firebaseConfig } from "../../firebase-config";
 import * as ImagePicker from 'expo-image-picker';
-import { UIContext } from './UIContext';
 import { useNavigation } from '@react-navigation/native';
-import { AccountNavigationProps } from '../navigation/AccountNavigation';
 import { SaveFormat, manipulateAsync } from 'expo-image-manipulator';
+
+import { UIContext } from './UIContext';
+import { AccountNavigationProps } from '../navigation/AccountNavigation';
+import { firebaseConfig } from "../../firebase-config";
 
 
 interface AuthContextProps {
