@@ -9,21 +9,23 @@ import { AccountNavigationProps } from '../../../navigation/AccountNavigation';
 import ScrollContainer from '../../../components/ScrollContainer';
 import { AuthContext } from '../../../context/AuthContext';
 import ReactText from '../../../components/ReactText';
+import { UIContext } from '../../../context/UIContext';
 
 export default function AccountScreen() {
 
   const {navigate} = useNavigation<AccountNavigationProps>();
+  const {i18n} = useContext(UIContext);
 
   const {user, logout} = useContext(AuthContext);
 
   const showLogoutAlert = () => {
-    Alert.alert('Do you want to logout?', '', [
+    Alert.alert(i18n.t('doYouLogout'), '', [
       {
-        text: 'Cancel',
+        text: i18n.t('cancel'),
         style: 'cancel'
       },
       {
-        text: 'Logout',
+        text: i18n.t('logout'),
         onPress: () => logout(),
         style: 'destructive',
       },
@@ -31,7 +33,7 @@ export default function AccountScreen() {
   }
 
   return (
-    <ScrollContainer title='Account'>
+    <ScrollContainer title={i18n.t('account')}>
 
       <View style={styles.dataContainer}>
 
@@ -42,7 +44,7 @@ export default function AccountScreen() {
 
         {
           !user?.photoURL &&
-          <ReactText style={{marginBottom: 10, color: globalColors.yellow}}>* Upload a profile picture</ReactText>
+          <ReactText style={{marginBottom: 10, color: globalColors.yellow}}>{i18n.t('uploadPictureAlert')}</ReactText>
         }
 
 
@@ -53,19 +55,19 @@ export default function AccountScreen() {
         <View style={{width: '100%', marginTop: 50}}>
           <CustomButton 
             onPressed={() => navigate('edit')}
-            text='Edit Profile'
+            text={i18n.t('editProfile')}
             style={{marginBottom: 20, width: '100%'}} 
           />
 
           <CustomButton 
             onPressed={() => navigate('password')}
-            text='Change Password'
+            text={i18n.t('changePassword')}
             style={{marginBottom: 20, width: '100%'}} 
           />
 
           <CustomButton 
             onPressed={() => showLogoutAlert()} 
-            text='Logout' outline={true} 
+            text={i18n.t('logout')} outline={true} 
             style={{width: '100%'}}
           />
         </View>

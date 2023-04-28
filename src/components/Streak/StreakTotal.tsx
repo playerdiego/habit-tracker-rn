@@ -6,14 +6,16 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { global, globalColors } from '../../styles/global';
 import ReactText from '../ReactText';
 import { HabitsContext } from '../../context/HabitsContext';
+import { UIContext } from '../../context/UIContext';
 
 export default function StreakTotal() {
 
   const {habits} = useContext(HabitsContext);
+  const {i18n} = useContext(UIContext);
 
   return (
     <View style={{marginTop: 20}}>
-      <Title size='sm'>Totals</Title>
+      <Title size='sm'>{i18n.t('totals')}</Title>
 
       <View style={styles.totalsGrid}>
         {
@@ -27,9 +29,7 @@ export default function StreakTotal() {
   )
 }
 
-function Total({icon, total, index}: {icon: string, total: number, index: number}) {
-
-  const {habits} = useContext(HabitsContext);
+function Total({icon, total}: {icon: string, total: number, index: number}) {
 
   return (
     <View style={{

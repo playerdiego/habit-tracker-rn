@@ -1,8 +1,9 @@
-import { View, Text, Alert, Image } from 'react-native';
+import { View, Text, Alert, Image, TouchableOpacity } from 'react-native';
 import React, { useContext, useEffect } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import CustomButton from './CustomButton';
 import { AuthContext } from '../context/AuthContext';
+import { UIContext } from '../context/UIContext';
 
 export default function ImagePickerComponent({profilePic, setProfilePic}: 
   {profilePic: null | ImagePicker.ImagePickerResult, 
@@ -10,6 +11,7 @@ export default function ImagePickerComponent({profilePic, setProfilePic}:
 }) {
 
     const {user} = useContext(AuthContext);
+    const {i18n} = useContext(UIContext);
     
 
     const pickImage = async (camera: boolean = false) => {
@@ -39,14 +41,14 @@ export default function ImagePickerComponent({profilePic, setProfilePic}:
       }
     
       const showPickImageAlert = () => {
-        Alert.alert('Open camera or select from media library?', '', [
+        Alert.alert(i18n.t('cameraOrMedia'), '', [
           {
-            text: 'Open Camera',
+            text: i18n.t('openCamera'),
             style: 'default',
             onPress: () => pickImage(true)
           },
           {
-            text: 'Open Media Library',
+            text: i18n.t('openMedia'),
             style: 'default',
             onPress: () => pickImage()
           },
@@ -55,11 +57,13 @@ export default function ImagePickerComponent({profilePic, setProfilePic}:
 
   return (
     <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
+      <TouchableOpacity onPress={showPickImageAlert}>
         <Image 
             source={{uri: profilePic?.assets![0].uri || user?.photoURL || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}} 
             style={{height: 120, width: 120, borderRadius: 100}}
         />
-        <CustomButton text='Upload Picture' onPressed={showPickImageAlert} outline={true} />
+      </TouchableOpacity>
+        <CustomButton text={i18n.t('uploadPicture')} onPressed={showPickImageAlert} outline={true} />
     </View>
   )
 }

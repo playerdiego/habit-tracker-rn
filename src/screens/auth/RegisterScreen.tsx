@@ -14,18 +14,21 @@ import Divider from '../../components/Divider';
 import ScrollContainer from '../../components/ScrollContainer';
 import { AuthContext } from '../../context/AuthContext';
 import ImagePickerComponent from '../../components/ImagePickerComponent';
+import { UIContext } from '../../context/UIContext';
 
 export default function RegisterScreen() {
 
   const {registerWithEmail} = useContext(AuthContext);
+  const {i18n} = useContext(UIContext);
 
   const {navigate, goBack} = useNavigation<AuthNavigationProps>()
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
-    email: Yup.string().email("Invalid Email").required("Email is required"),
-    password: Yup.string().required("Password is required").min(6, 'Password Min length: 6 characters'),
-    passwordCfm: Yup.string().required('Password confirm is required').oneOf([Yup.ref('password')], 'Passwords doesn´t match'),
+    name: Yup.string().required(i18n.t('nameRequired')),
+    email: Yup.string().email(i18n.t('invalidEmail')).required(i18n.t('emailRequired')),
+    password: Yup.string().required(i18n.t('passwordRequired')).min(6, i18n.t('passwordMin')),
+    passwordCfm: Yup.string().required(i18n.t('passwordCfmRequired'))
+      .oneOf([Yup.ref('password')], i18n.t('passwordsMatch')),
   })
 
   type FormData = {
@@ -36,10 +39,10 @@ export default function RegisterScreen() {
   }
 
   const initialValues: FormData = {
-    name: 'Diego',
-    email: 'diego@diego.com',
-    password: '123456',
-    passwordCfm: '123456'
+    name: '',
+    email: '',
+    password: '',
+    passwordCfm: ''
   }
 
   const onRegister = ({name, email, password}: FormData) => {
@@ -49,7 +52,7 @@ export default function RegisterScreen() {
   const [profilePic, setProfilePic] = useState<null | ImagePicker.ImagePickerResult>(null);
 
   return (
-    <ScrollContainer title='Create Account' goBack={() => goBack()}>
+    <ScrollContainer title={i18n.t('register')} goBack={() => goBack()}>
 
           <ImagePickerComponent profilePic={profilePic} setProfilePic={setProfilePic} />
 
@@ -61,7 +64,7 @@ export default function RegisterScreen() {
 
                 <TextInput
                   style={global.input}
-                  placeholder='Your name'
+                  placeholder={i18n.t('yourName')}
                   value={values.name}
                   onChangeText={handleChange('name')}
                   onBlur={handleBlur('name')}
@@ -71,7 +74,7 @@ export default function RegisterScreen() {
 
                 <TextInput
                   style={global.input}
-                  placeholder='Type your email'
+                  placeholder='Email'
                   value={values.email}
                   onChangeText={handleChange('email')}
                   onBlur={handleBlur('email')}
@@ -82,7 +85,7 @@ export default function RegisterScreen() {
                 <TextInput
                   style={global.input}
                   secureTextEntry={true}
-                  placeholder='Password'
+                  placeholder={i18n.t('password')}
                   value={values.password}
                   onChangeText={handleChange('password')}
                   onBlur={handleBlur('password')}
@@ -93,7 +96,7 @@ export default function RegisterScreen() {
                 <TextInput
                   style={global.input}
                   secureTextEntry={true}
-                  placeholder='Repeat your password'
+                  placeholder={i18n.t('repeatPassword')}
                   value={values.passwordCfm}
                   onChangeText={handleChange('passwordCfm')}
                   onBlur={handleBlur('passwordCfm')}
@@ -101,7 +104,7 @@ export default function RegisterScreen() {
                 />
                 {(errors.passwordCfm && touched.passwordCfm) && (<Text style={{color: 'red'}}>{errors.passwordCfm}</Text>)}
 
-                <CustomButton text='Create Account' onPressed={handleSubmit} style={{marginTop: 8}}/>
+                <CustomButton text={i18n.t('register')} onPressed={handleSubmit} style={{marginTop: 8}}/>
               </View>
 
             )}
@@ -110,24 +113,24 @@ export default function RegisterScreen() {
 
           <View style={{marginTop: 30}}>
               <Pressable onPress={() => navigate('recover')}>
-                <Title size='xs' align='center' icon='key'>Did you forgot your password? Recover Account</Title>
+                <Title size='xs' align='center' icon='key'>{i18n.t('passwordForgotten')}</Title>
               </Pressable>
           </View>
 
           <View style={{marginVertical: 30}}>
             <Pressable onPress={() => navigate('login')}>
-              <Title size='xs' align='center' icon='user'>Do you already have an account? Login here</Title>
+              <Title size='xs' align='center' icon='user'>{i18n.t('loginInstead')}</Title>
             </Pressable>
           </View>
 
-          <Divider />
+          {/* <Divider />
 
           <View style={{marginTop: 30, alignItems: 'center'}}>
             <Title size='xs' align='center'>Or you can create an account with:</Title>
             <TouchableOpacity>
               <Icon name='google' size={40} style={{marginVertical: 20}} />
             </TouchableOpacity>
-          </View>
+          </View> */}
 
     </ScrollContainer>
   )

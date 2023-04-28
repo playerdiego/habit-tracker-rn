@@ -10,14 +10,12 @@ import { globalColors } from '../../styles/global';
 import ReactText from '../ReactText';
 import { HabitsContext } from '../../context/HabitsContext';
 import StreaksResume from './StreaksResume';
+import { UIContext } from '../../context/UIContext';
 
 export default function StreakAlert() {
 
   const {navigate} = useNavigation<HomeNavigationProps>(); 
-
-  const onClose = () => {
-    alert('hola');
-  }
+  const {i18n} = useContext(UIContext);
 
   return (
     <View style={styles.streakAlertContainer}>
@@ -27,7 +25,7 @@ export default function StreakAlert() {
 
       <StreaksResume />
 
-      <CustomButton onPressed={() => navigate('streak')} text='More' style={{...styles.button, color: globalColors.primary}} />
+      <CustomButton onPressed={() => navigate('streak')} text={i18n.t('more')} style={{...styles.button, color: globalColors.primary}} />
 
     </View>
   )

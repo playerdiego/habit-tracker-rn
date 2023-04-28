@@ -9,10 +9,12 @@ import { global, globalColors } from '../../styles/global';
 import { AuthContext } from '../../context/AuthContext';
 import CustomButton from '../../components/CustomButton';
 import ScrollContainer from '../../components/ScrollContainer';
+import { UIContext } from '../../context/UIContext';
 
 export default function RecoverScreen() {
 
   const {goBack} = useNavigation<AuthNavigationProps>();
+  const {i18n} = useContext(UIContext);
 
   const {recoverAccount} = useContext(AuthContext);
 
@@ -23,7 +25,7 @@ export default function RecoverScreen() {
   const initialValues: FormData = {email: ''}
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required("Email is required").email("Invalid Email")
+    email: Yup.string().required(i18n.t('emailRequired')).email(i18n.t('invalidEmail'))
   })
 
   const onRecover = (email: string, resetForm: (nextState?: Partial<FormikState<FormData>> | undefined) => void) => {
@@ -32,7 +34,7 @@ export default function RecoverScreen() {
   }
 
   return (
-    <ScrollContainer title='Recover Account' goBack={() => goBack()}>
+    <ScrollContainer title={i18n.t('recoverAccount')} goBack={() => goBack()}>
 
       <Formik initialValues={initialValues} onSubmit={({email}, {resetForm}) => onRecover(email, resetForm)} validationSchema={validationSchema}>
 
@@ -42,7 +44,7 @@ export default function RecoverScreen() {
 
           <TextInput
             style={global.input}
-            placeholder='Type your email'
+            placeholder='Email'
             value={values.email}
             onChangeText={handleChange('email')}
             onBlur={handleBlur('email')}
@@ -50,7 +52,7 @@ export default function RecoverScreen() {
           />
           {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
 
-          <CustomButton text='Recover Account' onPressed={handleSubmit} style={{marginTop: 8}}/>
+          <CustomButton text={i18n.t('recoverAccount')} onPressed={handleSubmit} style={{marginTop: 8}}/>
         </View>
 
       )}

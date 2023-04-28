@@ -1,5 +1,5 @@
-import { View, StyleSheet, ImageBackground} from 'react-native';
-import React from 'react';
+import { View, StyleSheet, ImageBackground, Image, Text} from 'react-native';
+import React, {useContext} from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts, Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
 import { Roboto_400Regular } from '@expo-google-fonts/roboto';
@@ -7,17 +7,20 @@ import { useNavigation } from '@react-navigation/native';
 
 import { globalColors } from '../../styles/global';
 import CustomButton from '../../components/CustomButton';
-import Title from '../../components/Title';
 import { AuthNavigationProps } from '../../navigation/AuthNavigation';
+import { UIContext } from '../../context/UIContext';
 
 export default function LauncherScreen() {
+
+  const navigation = useNavigation<AuthNavigationProps>();
+  const {i18n} = useContext(UIContext);
 
   const [fontLoaded] = useFonts({
     Comfortaa_400Regular,
     Roboto_400Regular
   });
 
-  const navigation = useNavigation<AuthNavigationProps>();
+
 
   if(!fontLoaded) return null;
 
@@ -27,15 +30,16 @@ export default function LauncherScreen() {
       <View style={styles.banner}>
         <ImageBackground source={require('../../assets/bg_landing.jpg')} resizeMode='cover' style={styles.image} >
           <View style={styles.titleContainer}>
-            <Title>Habits Tracker</Title>
+            <Image style={styles.logo} source={require('../../assets/logo.png')} />
+            <Text style={styles.credits}>{i18n.t('madeBy')} Diego Sebastián</Text>
           </View>
         </ImageBackground>
       </View>
 
       <View style={styles.buttons}>
 
-        <CustomButton style={{width: '45%'}} onPressed={() => navigation.navigate('login')} text='Login' outline={true} />
-        <CustomButton style={{width: '45%'}} onPressed={() => navigation.navigate('register')} text='Create Account' />
+        <CustomButton style={{width: '45%'}} onPressed={() => navigation.navigate('login')} text={i18n.t('login')} outline={true} />
+        <CustomButton style={{width: '45%'}} onPressed={() => navigation.navigate('register')} text={i18n.t('register')} />
 
       </View>
 
@@ -75,4 +79,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     height: '10%'
   },
+  logo: {
+    width: 180,
+    height: 90
+  },
+  credits: {
+    fontFamily: 'Comfortaa_400Regular',
+    fontSize: 10,
+    textAlign: 'center'
+  }
 });

@@ -13,16 +13,18 @@ import { AuthContext } from '../../../context/AuthContext';
 import ScrollContainer from '../../../components/ScrollContainer';
 import ImagePickerComponent from '../../../components/ImagePickerComponent';
 import Title from '../../../components/Title';
+import { UIContext } from '../../../context/UIContext';
 
 export default function EditAccountScreen() {
 
     const {navigate} = useNavigation<AccountNavigationProps>();
+    const {i18n} = useContext(UIContext);
 
     const {user, updateAccount} = useContext(AuthContext);
 
     const validationSchema = Yup.object().shape({
-        name: Yup.string().required('Your name is required'),
-        email: Yup.string().email('Invalid Email').required('Email is required'),
+        name: Yup.string().required(i18n.t('nameRequired')),
+        email: Yup.string().email(i18n.t('invalidEmail')).required(i18n.t('emailRequired')),
       });
 
     type FormData = {
@@ -44,13 +46,13 @@ export default function EditAccountScreen() {
     const [profilePic, setProfilePic] = useState<null | ImagePicker.ImagePickerResult>(null);
 
     const showConfirmEditAlert = ({name, email, password}: FormData) => {
-        Alert.alert('Are you sure?', 'Your profile will be updated', [
+        Alert.alert(i18n.t('uSuer'), i18n.t('profileWillUpdated'), [
             {   
-                text: 'Cancel',
+                text: i18n.t('cancel'),
                 style: 'cancel'
             },
             {
-                text: 'Confirm',
+                text: i18n.t('confirm'),
                 onPress: () => onSaveChanges({name, email, password}),
                 style: 'destructive'
             },
@@ -58,7 +60,7 @@ export default function EditAccountScreen() {
     }
 
     return (
-        <ScrollContainer title='Edit Profile' goBack={() => navigate('data')}>
+        <ScrollContainer title={i18n.t('editProfile')} goBack={() => navigate('data')}>
             
             <ImagePickerComponent profilePic={profilePic} setProfilePic={setProfilePic} />
 
@@ -69,7 +71,7 @@ export default function EditAccountScreen() {
             <View style={{marginTop: 20}}>
 
                 <TextInput 
-                    placeholder='Your Name'  
+                    placeholder={i18n.t('yourName')}
                     style={global.input}  
                     cursorColor={globalColors.gray} 
                     onChangeText={handleChange('name')}
@@ -80,7 +82,7 @@ export default function EditAccountScreen() {
 
                 <TextInput 
                     style={global.input}
-                    placeholder='Type your email'
+                    placeholder='Email'
                     value={values.email}
                     onChangeText={handleChange('email')}
                     onBlur={handleBlur('email')}
@@ -88,10 +90,10 @@ export default function EditAccountScreen() {
                 />
                 {(errors.email && touched.email) && (<Text style={{color: 'red'}}>{errors.email}</Text>)}
 
-                <Title size='xs'>For your security, type your password</Title>
+                <Title size='xs'>{i18n.t('forYourSecurity')}</Title>
 
                 <TextInput 
-                    placeholder='Your password' 
+                    placeholder={i18n.t('password')} 
                     secureTextEntry={true} 
                     style={global.input} 
                     cursorColor={globalColors.gray}
@@ -100,7 +102,7 @@ export default function EditAccountScreen() {
                     value={values.password}
                 />
 
-                <CustomButton text='Save Changes' onPressed={handleSubmit} style={{marginTop: 8}} />
+                <CustomButton text={i18n.t('saveChanges')} onPressed={handleSubmit} style={{marginTop: 8}} />
             </View>
             )}
 

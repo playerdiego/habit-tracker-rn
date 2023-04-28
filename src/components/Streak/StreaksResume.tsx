@@ -6,16 +6,19 @@ import Title from '../Title';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ReactText from '../ReactText';
 import { HabitsContext } from '../../context/HabitsContext';
+import i18n from 'i18n-js';
+import { UIContext } from '../../context/UIContext';
 
 export default function StreaksResume() {
 
   const {habits} = useContext(HabitsContext);
+  const {i18n} = useContext(UIContext);
 
   return (
     <View style={{marginTop: 20}}>
 
       <View style={{marginBottom: 20}}>
-        <Title size='sm'>Your Streaks</Title>
+        <Title size='sm'>{i18n.t('yourStreaks')}</Title>
       </View>
 
       {
@@ -25,10 +28,10 @@ export default function StreaksResume() {
 
             <View style={styles.textWIcon}>
               <Icon name={habit.icon} style={styles.icon}></Icon>
-              <ReactText 
+              <Text 
                 style={styles.streakText}>
-                  You have completed: {habit.title + habit.streak} {habit.streak === 1 ? 'day' : 'days'} in a row
-              </ReactText>
+                  {i18n.t('youCompleted')}{habit.title + ' ' + habit.streak} {habit.streak === 1 ? i18n.t('day') : i18n.t('days')}{i18n.t('inARow')}
+              </Text>
             </View>
           </View>
         ))

@@ -16,7 +16,6 @@ export default function CustomBackButton({onPressed}: CustomBackButton) {
 
 const styles = StyleSheet.create({
   button: {
-    marginBottom: 40,
     width: 50,
     height: 50
   }

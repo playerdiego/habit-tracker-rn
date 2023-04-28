@@ -12,17 +12,19 @@ import CustomButton from '../../../components/CustomButton';
 import CustomBackButton from '../../../components/CustomBackButton';
 import { useContext } from 'react';
 import { AuthContext } from '../../../context/AuthContext';
+import { UIContext } from '../../../context/UIContext';
 
 export default function ChangePasswordScreen() {
 
     const {changePassword} = useContext(AuthContext);
+    const {i18n} = useContext(UIContext);
 
     const {navigate} = useNavigation<AccountNavigationProps>();
 
     const validationSchema = Yup.object().shape({
-        currentPassword: Yup.string().required('Your current password is required'),
-        newPassword: Yup.string().required('New Password is required'),
-        newPasswordCfm: Yup.string().required('Confirm New Password is required').oneOf([Yup.ref('newPassword')], 'Passwords doesn´t match'),
+        currentPassword: Yup.string().required(i18n.t('currentPasswordRequired')),
+        newPassword: Yup.string().required(i18n.t('newPasswordRequired')),
+        newPasswordCfm: Yup.string().required(i18n.t('passwordCfmRequired')).oneOf([Yup.ref('newPassword')], i18n.t('passwordsMatch')),
       });
 
     type FormData = {
@@ -32,9 +34,9 @@ export default function ChangePasswordScreen() {
     }
 
     const initialValues: FormData = {
-        currentPassword: '123456',
-        newPassword: '654321',
-        newPasswordCfm: '654321'
+        currentPassword: '',
+        newPassword: '',
+        newPasswordCfm: ''
     }
 
     const onChangePassword = ({newPassword, currentPassword}: FormData) => {
@@ -51,7 +53,7 @@ export default function ChangePasswordScreen() {
                     <CustomBackButton onPressed={() => {navigate('data')}} />
 
                     
-                    <Title>Change Password</Title>
+                    <Title>{i18n.t('changePassword')}</Title>
 
                     <Formik initialValues={initialValues} onSubmit={onChangePassword} validationSchema={validationSchema}>
 
@@ -59,7 +61,7 @@ export default function ChangePasswordScreen() {
                         <View style={{marginTop: 20}}>
 
                             <TextInput 
-                                placeholder='Your current password'  
+                                placeholder={i18n.t('currentPassword')}  
                                 style={global.input} 
                                 secureTextEntry={true} 
                                 cursorColor={globalColors.gray} 
@@ -70,7 +72,7 @@ export default function ChangePasswordScreen() {
                             {(errors.currentPassword && touched.currentPassword) && (<Text style={{color: 'red'}}>{errors.currentPassword}</Text>)}
 
                             <TextInput 
-                                placeholder='New Password'  
+                                placeholder={i18n.t('newPassword')}
                                 style={global.input} 
                                 secureTextEntry={true} 
                                 cursorColor={globalColors.gray} 
@@ -81,7 +83,7 @@ export default function ChangePasswordScreen() {
                             {(errors.newPassword && touched.newPassword) && (<Text style={{color: 'red'}}>{errors.newPassword}</Text>)}
 
                             <TextInput 
-                                placeholder='Confirm New Password'  
+                                placeholder={i18n.t('repeatPassword')} 
                                 style={global.input} 
                                 secureTextEntry={true} 
                                 cursorColor={globalColors.gray} 
@@ -93,7 +95,7 @@ export default function ChangePasswordScreen() {
 
                             
 
-                            <CustomButton text='Change Password' onPressed={handleSubmit} style={{marginTop: 8}} />
+                            <CustomButton text={i18n.t('changePassword')} onPressed={handleSubmit} style={{marginTop: 8}} />
                         </View>
                         )}
 

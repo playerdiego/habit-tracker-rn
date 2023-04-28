@@ -19,6 +19,7 @@ import Title from '../../../components/Title';
 import CustomBackButton from '../../../components/CustomBackButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Habit } from '../../../interfaces/habit.interface';
+import { UIContext } from '../../../context/UIContext';
 
 interface DaysState { monday: boolean; tuesday: boolean; wednesday: boolean; thursday: boolean; friday: boolean; saturday: boolean; sunday: boolean; }
 
@@ -27,6 +28,7 @@ export default function AddHabitScreen() {
   // * HOOKS
 
   const {addHabit, editHabit} = useContext(HabitsContext);
+  const {i18n} = useContext(UIContext);
   
   const {navigate} = useNavigation<HabitsNavigationProps>();
   //Trae los parámetros si existen (En caso de edición)
@@ -36,7 +38,7 @@ export default function AddHabitScreen() {
   // * FORM
 
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required('Habit name is required'),
+    title: Yup.string().required(i18n.t('habitNameRequired')),
     description: Yup.string(),
   });
 
@@ -131,14 +133,14 @@ export default function AddHabitScreen() {
   if(!fontLoaded) return null;
  
   return (
-    <ScrollContainer title={habit ? 'Edit Habit' : 'Add Habit'} goBack={() => navigate('setup')}>
+    <ScrollContainer title={habit ? i18n.t('editHabit') : i18n.t('addHabit')} goBack={() => navigate('setup')}>
 
       <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
         <View style={styles.iconContainer}>
           <Icon name={iconSelected} size={40}></Icon>
         </View>
 
-        <CustomButton onPressed={() => {setShowModal(true)}} text='Choose icon' style={{height: 50, width: '60%'}} />
+        <CustomButton onPressed={() => {setShowModal(true)}} text={i18n.t('chooseIcon')} style={{height: 50, width: '60%'}} />
 
         <Modal
           animationType='slide'
@@ -149,7 +151,7 @@ export default function AddHabitScreen() {
         >
             <SafeAreaView style={{marginTop: 80, marginHorizontal: 20, marginBottom: 80}}>
               <CustomBackButton onPressed={() => setShowModal(false)} />
-              <Title>Choose Icon</Title>
+              <Title>{i18n.t('chooseIcon')}</Title>
                 <FlatList
                   style={styles.iconsModalContainer}
                   contentContainerStyle={{flexGrow: 1, justifyContent: 'flex-start'}}
@@ -173,7 +175,7 @@ export default function AddHabitScreen() {
       {({handleChange, handleBlur, handleSubmit, values, errors, touched, }) => (
         <View style={{marginTop: 20}}>
           <TextInput 
-            placeholder='Habit Name' 
+            placeholder={i18n.t('habitName')}
             style={global.input} 
             cursorColor={globalColors.gray} 
             onChangeText={handleChange('title')}
@@ -183,7 +185,7 @@ export default function AddHabitScreen() {
           {(errors.title && touched.title) && (<Text style={{color: 'red'}}>{errors.title}</Text>)}
 
           <TextInput 
-            placeholder='Description' 
+            placeholder={i18n.t('description')} 
             style={global.input} 
             cursorColor={globalColors.gray}
             onChangeText={handleChange('description')}
@@ -192,19 +194,19 @@ export default function AddHabitScreen() {
           />
           {(errors.description && touched.description) && (<Text style={{color: 'red'}}>{errors.description}</Text>)}
 
-          <ReactText style={{marginBottom: 10}}>What days do you want to do it?</ReactText>
+          <ReactText style={{marginBottom: 10}}>{i18n.t('whatDays')}</ReactText>
 
           <View style={styles.checkBoxesContainer}>
-            <DayCheckBox day='Monday' selected={monday} onSelect={() => onSelectDay('monday')} />
-            <DayCheckBox day='Tuesday' selected={tuesday} onSelect={() => onSelectDay('tuesday')} />
-            <DayCheckBox day='Wednesday' selected={wednesday} onSelect={() => onSelectDay('wednesday')} />
-            <DayCheckBox day='Thursday' selected={thursday} onSelect={() => onSelectDay('thursday')} />
-            <DayCheckBox day='Friday' selected={friday} onSelect={() => onSelectDay('friday')} />
-            <DayCheckBox day='Saturday' selected={saturday} onSelect={() => onSelectDay('saturday')} />
-            <DayCheckBox day='Sunday' selected={sunday} onSelect={() => onSelectDay('sunday')} />
+            <DayCheckBox day={i18n.t('monday')} selected={monday} onSelect={() => onSelectDay('monday')} />
+            <DayCheckBox day={i18n.t('tuesday')} selected={tuesday} onSelect={() => onSelectDay('tuesday')} />
+            <DayCheckBox day={i18n.t('wednesday')} selected={wednesday} onSelect={() => onSelectDay('wednesday')} />
+            <DayCheckBox day={i18n.t('thursday')} selected={thursday} onSelect={() => onSelectDay('thursday')} />
+            <DayCheckBox day={i18n.t('friday')} selected={friday} onSelect={() => onSelectDay('friday')} />
+            <DayCheckBox day={i18n.t('saturday')} selected={saturday} onSelect={() => onSelectDay('saturday')} />
+            <DayCheckBox day={i18n.t('sunday')} selected={sunday} onSelect={() => onSelectDay('sunday')} />
           </View>
 
-          <CustomButton text={habit ? 'Save Habit' : 'Create Habit'} onPressed={handleSubmit} style={{marginTop: 8}} />
+          <CustomButton text={habit ? i18n.t('saveHabit') : i18n.t('createHabit')} onPressed={handleSubmit} style={{marginTop: 8}} />
         </View>
       )}
 

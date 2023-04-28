@@ -8,12 +8,6 @@ import dayjs from 'dayjs';
 import { AuthContext } from './AuthContext';
 import { UIContext } from './UIContext';
 
-/* 
-TODO: Agrandar tamaño de back button
-TODO: Social Login
-TODO: Valorar cambiar .then por async y await
-*/
-
 // * FUNCTION TO GET THE DAYS TO SHOW OF ONE HABIT
 
 const getDays = (daysToShow: {
@@ -76,7 +70,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
   const {currentUser} = getAuth();
 
   const {user} = useContext(AuthContext);
-  const {setLoading} = useContext(UIContext);
+  const {setLoading, i18n} = useContext(UIContext);
 
   // * STATES
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -93,7 +87,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
   // * ADD HABIT 
   const addHabit = (habit: Habit) => {
-    setLoading('Creating habit...');
+    setLoading(i18n.t('creatingHabit'));
     //Save the habit and return the key
     push(ref(db, 'users/' + currentUser?.uid + '/habits/'), habit)
       .then((snapshot) => {
@@ -145,7 +139,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
   const deleteHabit = (habit: Habit) => {
 
-    setLoading('Deleting habit...')
+    setLoading(i18n.t('deletingHabit'))
 
     const days = getDays(habit.daysToShow);
 
@@ -184,7 +178,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
   const editHabit = (habit: Habit) => {
 
-    setLoading('Editing habit...');
+    setLoading(i18n.t('editingHabit'));
 
     const {title, description, icon, daysToShow, id, total, streak} = habit;
 
@@ -392,7 +386,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
   const completeHabit = (habitId: string) => {
 
-    setLoading('Completing habit....')
+    setLoading(i18n.t('completingHabit'))
 
     let isHabitCompleted: boolean = false;
 

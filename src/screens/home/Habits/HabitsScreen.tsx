@@ -11,6 +11,7 @@ import { Habit } from '../../../interfaces/habit.interface';
 import ReactText from '../../../components/ReactText';
 import { HabitsContext } from '../../../context/HabitsContext';
 import Divider from '../../../components/Divider';
+import { UIContext } from '../../../context/UIContext';
 
 interface ActiveDay {
   day: string;
@@ -20,21 +21,21 @@ interface ActiveDay {
 export default function HabitsScreen() {
 
   const {navigate} = useNavigation<HabitsNavigationProps>();
-
   const {habits} = useContext(HabitsContext);
+  const {i18n} = useContext(UIContext);
 
   return (
-    <ScrollContainer title='Habits Setup' titleSize='md'>
+    <ScrollContainer title={i18n.t('habitsSetup')} titleSize='md'>
 
-      <CustomButton text='Add new Habit' onPressed={() => {navigate('add')}} outline={true} />
+      <CustomButton text={i18n.t('addNewHabit')} onPressed={() => {navigate('add')}} outline={true} />
 
       <View style={{marginVertical: 30}}>
-        <Title size='sm'>Your habits</Title>
+        <Title size='sm'>{i18n.t('yourHabits')}</Title>
 
         {
           habits.length < 1 ?
           <View style={{marginVertical: 40}}>
-            <Title size='sm' align='center'>There´s no habits! Create one</Title>
+            <Title size='sm' align='center'>{i18n.t('theresNoHabits')}</Title>
           </View>
           :
           <View style={{marginVertical: 20}}>
@@ -64,19 +65,20 @@ function HabitItem(habit: Habit) {
 
   const {navigate} = useNavigation<HabitsNavigationProps>();
   const {deleteHabit} = useContext(HabitsContext);
+  const {i18n} = useContext(UIContext);
 
   const onEdit = () => {
     navigate('add', habit);
   }
 
   const showDeleteAlert = () => {
-    Alert.alert('Are you sure?', 'The habit will be deleted permanently', [
+    Alert.alert(i18n.t('uSure'), i18n.t('habitWillDeleted'), [
       {
-        text: 'Cancel',
+        text: i18n.t('cancel'),
         style: 'cancel'
       },
       {
-        text: 'Delete',
+        text: i18n.t('delete'),
         onPress: () => onDelete(),
         style: 'destructive'
       },
@@ -107,7 +109,17 @@ function HabitItem(habit: Habit) {
           {
             activeDays.map((day, i) => (
               day.value &&
-              <ReactText key={day.day +  habit.id} style={styles.pill}>{day.day}</ReactText>
+              <ReactText key={day.day +  habit.id} style={styles.pill}>
+                {
+                  day.day === 'monday' ? i18n.t('monday') :
+                  day.day === 'monday' ? i18n.t('tuesday') :
+                  day.day === 'monday' ? i18n.t('wednesday') :
+                  day.day === 'monday' ? i18n.t('thursday') :
+                  day.day === 'monday' ? i18n.t('fridat') :
+                  day.day === 'monday' ? i18n.t('saturday') :
+                  day.day === 'monday' ? i18n.t('sunday') : i18n.t('monday')
+                }
+              </ReactText>
             ))
           }
           </View>

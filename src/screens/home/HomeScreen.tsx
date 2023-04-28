@@ -14,6 +14,7 @@ import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { HomeNavigationProps } from '../../navigation/HomeNavigation';
 import Title from '../../components/Title';
+import { UIContext } from '../../context/UIContext';
 
 export default function HomeScreen() {
 
@@ -21,6 +22,7 @@ export default function HomeScreen() {
 
   const {user} = useContext(AuthContext);
   const {todayHabits, habits} = useContext(HabitsContext);
+  const {i18n} = useContext(UIContext);
 
   const completedHabitsLength = todayHabits.filter(habit => habit.completed).length;
   const incompletedHabitsLength = todayHabits.filter(habit => !habit.completed).length;
@@ -36,29 +38,29 @@ export default function HomeScreen() {
   }, [habits]);
 
   return (
-    <ScrollContainer title={'Good Morning, ' + user?.displayName} titleSize='md'> 
+    <ScrollContainer title={i18n.t('hello') + user?.displayName} titleSize='md'> 
 
         <View style={{marginBottom: 15}}>
 
           {!user?.emailVerified && <ValidateEmailAlert />}
 
           {
-            // Verifica si existen hábitos para el día actual
+            //Checks if exists habits for the current day
             todayHabits.length < 1 ?
-            // Si no hay hábitos muestra un mensaje de advertencia con un botón para editar o añadir un hábitos
+            // If there´s no, show an alert
             <View style={{marginVertical: 40}}>
-              <Title size='sm' align='center'>There´s no habits for today!</Title>
-              <CustomButton text='Create or edit one' onPressed={() => navigate('habits')} style={{marginTop: 40}}/>
+              <Title size='sm' align='center'>{i18n.t('noHabits')}</Title>
+              <CustomButton text={i18n.t('createOrEdit')} onPressed={() => navigate('habits')} style={{marginTop: 40}}/>
             </View> :
 
-            // Si existen hábitos rederiza el tracker/registro diario
+            // If exists habits, render the tracker
             <View>
               <View style={{marginVertical: 20}}>
-                <Text style={{...global.boldTitle, marginBottom: 10}}>Today´s Habits - {incompletedHabitsLength} left</Text>
+                <Text style={{...global.boldTitle, marginBottom: 10}}>{i18n.t('todaysHabits')}{incompletedHabitsLength}{i18n.t('left')}</Text>
                 {
-                  //Verifica si hay hábitos incompletos, si no hay, muestra un mensaje
+                  //Checks if theres incompleted habits
                   incompletedHabitsLength < 1 &&
-                    <ReactText style={{marginVertical: 20}}>You have completed all your daily habits! Congratulations</ReactText>
+                    <ReactText style={{marginVertical: 20}}>{i18n.t('completedAll')}</ReactText>
                 }
 
                 {
@@ -72,12 +74,12 @@ export default function HomeScreen() {
               <Divider />
 
               <View style={{marginVertical: 20}}>
-                <Text style={{...global.boldTitle, marginBottom: 10}}>Completed Habits: {completedHabitsLength}</Text>
+                <Text style={{...global.boldTitle, marginBottom: 10}}>{i18n.t('completedHabits')}{completedHabitsLength}</Text>
 
                 {
-                  //Verifica si hay hábitos completos, si no hay, muestra un mensaje
+                  //Checks if theres completed habits
                   completedHabitsLength < 1 &&
-                    <ReactText style={{marginVertical: 20}}>You haven´t completed any habit today :(</ReactText>
+                    <ReactText style={{marginVertical: 20}}>{i18n.t('youHavent')}</ReactText>
                 }
 
                 {

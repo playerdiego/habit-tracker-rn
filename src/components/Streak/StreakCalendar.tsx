@@ -12,11 +12,13 @@ import { HabitsContext } from '../../context/HabitsContext';
 import { DateData, MarkedDates } from 'react-native-calendars/src/types';
 import dayjs from 'dayjs';
 import ReactText from '../ReactText';
+import { UIContext } from '../../context/UIContext';
 
 export default function StreakCalendar() {
 
   // * CONTEXT DATA
   const {history, habits, todayHabits} = useContext(HabitsContext);
+  const {i18n, locale} = useContext(UIContext);
 
   // * STATES
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
@@ -99,7 +101,33 @@ export default function StreakCalendar() {
 
   return (
     <View style={{marginVertical: 20}}>
-      <Title size='sm'>Calendar</Title>
+      <Title size='sm'>{i18n.t('calendar')}</Title>
+
+
+      <View style={{marginVertical: 10}}>
+
+        <View style={styles.indexItemContainer}>
+          <View style={{backgroundColor: globalColors.gray, ...styles.circle}}></View>
+          <Text style={global.boldTitle}>{i18n.t('zeroCompleted')}</Text>
+        </View>
+
+        <View style={styles.indexItemContainer}>
+          <View style={{backgroundColor: globalColors.red, ...styles.circle}}></View>
+          <Text style={global.boldTitle}>{i18n.t('lessHalfCompleted')}</Text>
+        </View>
+
+        <View style={styles.indexItemContainer}>
+          <View style={{backgroundColor: globalColors.yellow, ...styles.circle}}></View>
+          <Text style={global.boldTitle}>{i18n.t('atLeast50')}</Text>
+        </View>
+
+
+        <View style={styles.indexItemContainer}>
+          <View style={{backgroundColor: globalColors.green, ...styles.circle}}></View>
+          <Text style={global.boldTitle}>{i18n.t('atLeast80')}</Text>
+        </View>
+
+      </View>
 
       <Calendar
         theme={{
@@ -115,35 +143,10 @@ export default function StreakCalendar() {
         onDayPress={(date: DateData) => onSelectDay(date.dateString)}
       />
 
-      <View>
-
-        <View style={styles.indexItemContainer}>
-          <View style={{backgroundColor: globalColors.gray, ...styles.circle}}></View>
-          <Text style={global.boldTitle}>0 Habits completed</Text>
-        </View>
-
-        <View style={styles.indexItemContainer}>
-          <View style={{backgroundColor: globalColors.red, ...styles.circle}}></View>
-          <Text style={global.boldTitle}>Less than 50% of daily Habits</Text>
-        </View>
-
-        <View style={styles.indexItemContainer}>
-          <View style={{backgroundColor: globalColors.yellow, ...styles.circle}}></View>
-          <Text style={global.boldTitle}>At least 50% of daily Habits</Text>
-        </View>
-
-
-        <View style={styles.indexItemContainer}>
-          <View style={{backgroundColor: globalColors.green, ...styles.circle}}></View>
-          <Text style={global.boldTitle}>At least 80% of daily Habits</Text>
-        </View>
-
-      </View>
-
       {
         selectedDay ? 
           <DayData date={selectedDay.day} habits={selectedDay.data}  /> :
-          <ReactText style={{...global.boldTitle, fontSize: 16, marginTop: 20}}>Select a day with habits history</ReactText>
+          <ReactText style={{...global.boldTitle, fontSize: 16, marginTop: 20}}>{i18n.t('selectADay')}</ReactText>
       }
       
 
@@ -152,13 +155,16 @@ export default function StreakCalendar() {
 }
 
 function DayData({date, habits}: {date: string, habits: TodayHabit[]}) {
+
+  const {i18n, locale} = useContext(UIContext);
+
   return (
     <View style={{marginVertical: 20, marginLeft: 20}}>
-      <Text style={{...global.boldTitle, fontSize: 16}}>{dayjs(date).format('dddd DD-MM-YYYY')}</Text>
+      <Text style={{...global.boldTitle, fontSize: 16}}>{dayjs(date).format('DD/MM/YYYY')}</Text>
 
      <View style={styles.habitsGrid}>
       <View style={styles.habitsGridItem}>
-        <ReactText style={global.boldTitle}>Completed:</ReactText>
+        <ReactText style={global.boldTitle}>{i18n.t('completed')}</ReactText>
 
           {
             habits.map(habit => (
@@ -170,7 +176,7 @@ function DayData({date, habits}: {date: string, habits: TodayHabit[]}) {
           }
         </View>
         <View style={styles.habitsGridItem}>
-          <ReactText style={global.boldTitle}>Incompleted:</ReactText>
+          <ReactText style={global.boldTitle}>{i18n.t('incompleted')}</ReactText>
           {
             habits.map(habit => (
               !habit.completed &&

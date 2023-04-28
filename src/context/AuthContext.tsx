@@ -21,6 +21,10 @@ interface AuthContextProps {
   changePassword: (newPassword: string, password: string) => Promise<void>, 
 }
 
+/* 
+TODO:  Implementar login con google
+*/
+
 export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
@@ -31,20 +35,19 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
 
   const {navigate: navigateAccount} = useNavigation<AccountNavigationProps>();
 
-  const {setLoading} = useContext(UIContext);
+  const {setLoading, i18n, getErrorMessage} = useContext(UIContext);
 
   const [user, setUser] = useState<User | null>(null);
 
-
   const registerWithEmail = (name: string, email: string, password: string, profilePic?: ImagePicker.ImagePickerResult): UserCredential | any => {
 
-    setLoading('Creating account...')
+    setLoading(i18n.t('creatingAccount'))
 
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
 
         sendEmailVerification(userCredential.user)
-          .then(() => alert('Verification email sent, check your inbox'))
+          .then(() => alert(i18n.t('verificationSent')))
           .catch(error => {
             alert(error);
             console.error(error);
@@ -55,7 +58,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
         return userCredential;
       })
       .catch((error) => {
-        alert(error);
+        alert(getErrorMessage(error.code));
         return error;
       })
       .finally(() => {
@@ -68,7 +71,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
   
   const loginWithEmail = (email: string, password: string): Promise<UserCredential> | any => {
 
-    setLoading('Logging in...');
+    setLoading(i18n.t('loggingIn'));
     
     signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -76,8 +79,8 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
       return userCredential;
     })
     .catch((error) => {
-      alert(error);
-      return error;
+      alert(getErrorMessage(error.code));
+      console.error(error);
     })
     .finally(() => {
       setLoading(null);
@@ -86,13 +89,13 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
   }
   
   const logout = () => {
-    setLoading('Logging out...');
+    setLoading(i18n.t('loggingOut'));
     signOut(auth)
       .then(() => {
         setUser(null);
       })
       .catch((error) => {
-        alert(error);
+        alert(getErrorMessage(error.code));
         console.error(error);
       })
       .finally(() => {
@@ -102,14 +105,14 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
 
   const recoverAccount = (email: string) => {
 
-    setLoading('Sending recover email...');
+    setLoading(i18n.t('sendingRecover'));
 
     sendPasswordResetEmail(auth, email)
       .then(() => {
-        alert('Email sent, check your inbox');
+        alert(i18n.t('emailSent'));
       })
       .catch((error) => {
-        alert(error);
+        alert(getErrorMessage(error.code));
         console.error(error);
       })
       .finally(() => {
@@ -118,13 +121,13 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
   }
 
   const reSendValidationEmail = (email: string = auth.currentUser?.email!) => {
-    setLoading('Sending validation email...');
+    setLoading(i18n.t('sendingValidation'));
     sendEmailVerification(auth.currentUser!)
       .then(() => {
-        alert('Verification email sent, check your inbox ' + email);
+        alert(i18n.t('verificationSent') + ' ' + email);
       })
       .catch(error => {
-        alert(error);
+        alert(getErrorMessage(error.code));
         console.error(error);
       })
       .finally(() => {
@@ -134,7 +137,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
 
   const updateAccount = async (name: string, email: string, password: string, profilePic?: ImagePicker.ImagePickerResult,) => {
 
-    setLoading('Updating account info...')
+    setLoading(i18n.t('updatingAccount'))
 
     const credential = EmailAuthProvider.credential(auth.currentUser?.email!, password);
     
@@ -146,7 +149,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
         if(profilePic) {
           profilePicUrl = await uploadFile(profilePic, auth.currentUser!.uid)
             .catch(error => {
-              alert(error);
+              alert(getErrorMessage(error.code));
               console.error(error);
             });
         }
@@ -160,13 +163,13 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
         updateProfile(auth.currentUser!, finalUser)
           .then(() => {
             if(email !== auth.currentUser?.email) {
-              setLoading('Updating email...')
+              setLoading(i18n.t('updatingEmail'))
               updateEmail(auth.currentUser!, email)
                 .then(() => {
                   finalUser = {...finalUser, email}
                 })
                 .catch(error => {
-                  alert(error);
+                  alert(getErrorMessage(error.code));
                   console.error(error);
                 })
               reSendValidationEmail(email);
@@ -184,7 +187,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
 
       })
       .catch(error => {
-        console.log(error);
+        alert(getErrorMessage(error.code));
         alert(error);
       })
       .finally(() => {
@@ -208,7 +211,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
       .then(blobFile => uploadBytes(fileRef, blobFile))
       .then(result => getDownloadURL(result.ref))
       .catch(error => {
-        console.error(error);
+        alert(getErrorMessage(error.code));
         alert(error);
       })
     
@@ -216,7 +219,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
 
   const changePassword = (newPassword: string, password: string) => {
 
-    setLoading('Updating password...')
+    setLoading(i18n.t('updatingPassword'))
 
     const credential = EmailAuthProvider.credential(auth.currentUser?.email!, password);
     
@@ -231,7 +234,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
 
       })
       .catch(error => {
-        console.log(error);
+        alert(getErrorMessage(error.code));
         alert(error);
       })
       .finally(() => {
