@@ -54,7 +54,7 @@ export default function AddHabitScreen() {
   const onAddOrEditHabit = ({title, description}: FormData) => {
 
     const newHabit: Habit = {
-      title,
+      title: title.trim(),
       description,
       icon: iconSelected,
       daysToShow: days,
