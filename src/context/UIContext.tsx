@@ -22,9 +22,10 @@ export const UIProvider = ({children}: {children: React.ReactNode}) => {
     const [loading, setLoading] = useState<string | null>(null);
     const [locale, setLocale] = useState<string>(Localization.locale);
 
-    i18n.enableFallback = true;
     i18n.translations = {en, es}
     i18n.locale = locale;
+    i18n.enableFallback = true;
+    i18n.defaultLocale = "en";
 
     function getErrorMessage(code: string): string {
         switch (code) {
