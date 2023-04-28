@@ -5,6 +5,7 @@ import { AuthProvider } from './src/context/AuthContext';
 import HabitsProvider from './src/context/HabitsContext';
 import LoadingModal from './src/components/LoadingModal';
 import { UIProvider } from './src/context/UIContext';
+import { StatusBar } from 'react-native';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           </HabitsProvider>
         </AuthProvider>
       </UIProvider>
+      <StatusBar />
     </NavigationContainer>
   );
 }
