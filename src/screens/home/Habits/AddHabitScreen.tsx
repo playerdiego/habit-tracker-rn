@@ -136,9 +136,11 @@ export default function AddHabitScreen() {
     <ScrollContainer title={habit ? i18n.t('editHabit') : i18n.t('addHabit')} goBack={() => navigate('setup')}>
 
       <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'}}>
-        <View style={styles.iconContainer}>
-          <Icon name={iconSelected} size={40}></Icon>
-        </View>
+        <TouchableOpacity onPress={() => setShowModal(true)}>
+          <View style={styles.iconContainer}>
+            <Icon name={iconSelected} size={40}></Icon>
+          </View>
+        </TouchableOpacity>
 
         <CustomButton onPressed={() => {setShowModal(true)}} text={i18n.t('chooseIcon')} style={{height: 50, width: '60%'}} />
 

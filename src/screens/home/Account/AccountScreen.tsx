@@ -22,7 +22,7 @@ export default function AccountScreen() {
     Alert.alert(i18n.t('doYouLogout'), '', [
       {
         text: i18n.t('cancel'),
-        style: 'cancel'
+        style: 'cancel',
       },
       {
         text: i18n.t('logout'),

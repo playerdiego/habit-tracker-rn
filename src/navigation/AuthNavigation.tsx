@@ -10,12 +10,14 @@ import RegisterScreen from '../screens/auth/RegisterScreen';
 import RecoverScreen from '../screens/auth/RecoverScreen';
 import LauncherScreen from '../screens/auth/LauncherScreen';
 import { globalColors } from '../styles/global';
+import LoadingScreen from '../screens/auth/LoadingScreen';
 
 type AuthStackParamList = {
   login: undefined,
   register: undefined,
   recover: undefined,
   launcher: undefined,
+  loading: undefined,
 }
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();

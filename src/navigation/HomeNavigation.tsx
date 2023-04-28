@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BottomTabNavigationProp, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -8,6 +8,7 @@ import AccountNavigation from './AccountNavigation';
 import { globalColors } from '../styles/global';
 import HabitsNavigation from './HabitsNavigation';
 import { Text } from 'react-native';
+import { UIContext } from '../context/UIContext';
 
 type HomeTabParamList = {
   home: undefined,
@@ -20,6 +21,9 @@ const Tabs = createBottomTabNavigator<HomeTabParamList>();
 export type HomeNavigationProps = BottomTabNavigationProp<HomeTabParamList>;
 
 export default function HomeNavigation() {
+
+  const {i18n} = useContext(UIContext);
+
   return (
     <Tabs.Navigator
       initialRouteName='home'
@@ -32,7 +36,7 @@ export default function HomeNavigation() {
         component={HomeScreen}
         options={{
           headerShown: false,
-          title: 'Home',
+          title: i18n.t('home'),
           tabBarActiveTintColor: globalColors.primary,
           tabBarIcon: ({color, size}) => (
             <Icon name='home' color={color} size={size} />
@@ -46,7 +50,7 @@ export default function HomeNavigation() {
         component={HabitsNavigation} 
         options={{
           headerShown: false,
-          title: 'Habits Setup',
+          title: i18n.t('habits'),
           tabBarActiveTintColor: globalColors.primary,
           tabBarIcon: ({color, size}) => (
             <Icon name='th-list' color={color} size={size} />
@@ -60,7 +64,7 @@ export default function HomeNavigation() {
         component={StreakScreen} 
         options={{
           headerShown: false,
-          title: 'Streaks',
+          title: i18n.t('streaks'),
           tabBarActiveTintColor: globalColors.primary,
           tabBarIcon: ({color, size}) => (
             <Icon name='fire' color={color} size={size} />
@@ -73,7 +77,7 @@ export default function HomeNavigation() {
         component={AccountNavigation} 
         options={{
           headerShown: false,
-          title: 'Account',
+          title: i18n.t('account'),
           tabBarActiveTintColor: globalColors.primary,
           tabBarIcon: ({color, size}) => (
             <Icon name='user' color={color} size={size} />

@@ -1,5 +1,10 @@
 export const en = {
 
+    // HOME NAVIGATION
+    home: "Home",
+    habits: "Habits Setup",
+    streaks: "Streaks",
+
     madeBy: "Made by",
 
     // AUTH
@@ -45,6 +50,7 @@ export const en = {
     day: "day",
     days: "days",
     inARow: " in a row",
+    inARowPlural: " in a row",
     totals: "Totals",
 
     // CALENDAR
@@ -93,6 +99,7 @@ export const en = {
     changePassword: "Change Password",
 
     // CHANGE PASSWORD
+    passwordWillChange: "Your password will change",
     currentPassword: "Your current password",
     newPassword: "New password",
     currentPasswordRequired: "Your current password id required",
@@ -119,7 +126,7 @@ export const en = {
     // ALERTS - LOADING: HABITS
     creatingHabit: "Creating habit...",
     deletingHabit: "Deleting habit...",
-    editignHabit: "Editing habit...",
+    editingHabit: "Editing habit...",
     completingHabit: "Completing habit...",
 
     // ERRORS
@@ -184,6 +191,11 @@ export const en = {
 
 export const es = {
 
+    // HOME NAVIGATION
+    home: "Inicio",
+    habits: "Hábitos",
+    streaks: "Rachas",
+
     madeBy: "Creado por",
 
     // AUTH
@@ -228,7 +240,8 @@ export const es = {
     youCompleted: "Has completado: ",
     day: "día",
     days: "días",
-    inARow: " seguidos",
+    inARow: " seguido",
+    inARowPlural: " seguidos",
     totals: "Totales",
     
     // CALENDAR
@@ -288,6 +301,9 @@ export const es = {
     forYourSecurity: "Para tu seguridad, escribe tu contraseña",
     saveChanges: "Guardar cambios",
 
+    // CHANGE PASSWORD
+    passwordWillChange: "Tu contraseña cambiará",
+
     // ALERTAS - CARGANDO: AUTENTICACIÓN
     creatingAccount: "Creando cuenta...",
     verificationSent: "Correo electrónico de verificación enviado, revisa tu bandeja de entrada",
@@ -303,7 +319,7 @@ export const es = {
     // ALERTAS - CARGANDO: HÁBITOS
     creatingHabit: "Creando hábito...",
     deletingHabit: "Eliminando hábito...",
-    editignHabit: "Editando hábito...",
+    editingHabit: "Editando hábito...",
     completingHabit: "Completando hábito...",
 
     // ERRORS

@@ -13,6 +13,7 @@ import { firebaseConfig } from "../../firebase-config";
 
 interface AuthContextProps {
   user: User | null,
+  setUser: React.Dispatch<React.SetStateAction<User | null>>,
   registerWithEmail: (name: string, email: string, password: string, profilePic?: ImagePicker.ImagePickerResult) => UserCredential | any,
   loginWithEmail: (email: string, password: string) => UserCredential | any,
   logout: () => void,
@@ -163,6 +164,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
         
         updateProfile(auth.currentUser!, finalUser)
           .then(() => {
+            setUser(finalUser);
             if(email !== auth.currentUser?.email) {
               setLoading(i18n.t('updatingEmail'))
               updateEmail(auth.currentUser!, email)
@@ -175,8 +177,6 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
                 })
               reSendValidationEmail(email);
               setUser({...auth.currentUser!, email});
-            } else {
-              setUser(auth.currentUser);
             }
           })
           .finally(() => {
@@ -247,6 +247,7 @@ export const AuthProvider = ({ children }: {children: React.ReactNode}) => {
   return (
     <AuthContext.Provider value={{
       user,
+      setUser,
       registerWithEmail,
       loginWithEmail,
       logout,

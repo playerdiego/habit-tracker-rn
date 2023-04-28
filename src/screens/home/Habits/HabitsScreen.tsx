@@ -112,12 +112,12 @@ function HabitItem(habit: Habit) {
               <ReactText key={day.day +  habit.id} style={styles.pill}>
                 {
                   day.day === 'monday' ? i18n.t('monday') :
-                  day.day === 'monday' ? i18n.t('tuesday') :
-                  day.day === 'monday' ? i18n.t('wednesday') :
-                  day.day === 'monday' ? i18n.t('thursday') :
-                  day.day === 'monday' ? i18n.t('fridat') :
-                  day.day === 'monday' ? i18n.t('saturday') :
-                  day.day === 'monday' ? i18n.t('sunday') : i18n.t('monday')
+                  day.day === 'tuesday' ? i18n.t('tuesday') :
+                  day.day === 'wednesday' ? i18n.t('wednesday') :
+                  day.day === 'thursday' ? i18n.t('thursday') :
+                  day.day === 'friday' ? i18n.t('friday') :
+                  day.day === 'saturday' ? i18n.t('saturday') :
+                  day.day === 'sunday' ? i18n.t('sunday') : i18n.t('monday')
                 }
               </ReactText>
             ))

@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TextInput } from 'react-native';
+import { View, Text, ScrollView, TextInput, Alert } from 'react-native';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -23,7 +23,7 @@ export default function ChangePasswordScreen() {
 
     const validationSchema = Yup.object().shape({
         currentPassword: Yup.string().required(i18n.t('currentPasswordRequired')),
-        newPassword: Yup.string().required(i18n.t('newPasswordRequired')),
+        newPassword: Yup.string().required(i18n.t('newPasswordRequired')).min(6, i18n.t('passwordMin')),
         newPasswordCfm: Yup.string().required(i18n.t('passwordCfmRequired')).oneOf([Yup.ref('newPassword')], i18n.t('passwordsMatch')),
       });
 
@@ -43,6 +43,20 @@ export default function ChangePasswordScreen() {
         changePassword(newPassword, currentPassword);
     }
 
+    const showConfirmAlert = (formData: FormData) => {
+        Alert.alert(i18n.t('uSure'), i18n.t('passwordWillChange'), [
+            {   
+                text: i18n.t('cancel'),
+                style: 'cancel'
+            },
+            {
+                text: i18n.t('confirm'),
+                onPress: () => onChangePassword(formData),
+                style: 'destructive'
+            },
+        ], {cancelable: true});
+    }
+
     return (
         <SafeAreaView edges={['top']}>
             <ScrollView style={{height: '100%'}}>
@@ -55,7 +69,7 @@ export default function ChangePasswordScreen() {
                     
                     <Title>{i18n.t('changePassword')}</Title>
 
-                    <Formik initialValues={initialValues} onSubmit={onChangePassword} validationSchema={validationSchema}>
+                    <Formik initialValues={initialValues} onSubmit={showConfirmAlert} validationSchema={validationSchema}>
 
                         {({handleChange, handleBlur, handleSubmit, values, errors, touched, }) => (
                         <View style={{marginTop: 20}}>

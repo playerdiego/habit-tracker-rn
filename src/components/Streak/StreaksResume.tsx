@@ -27,7 +27,8 @@ export default function StreaksResume() {
               <Icon name={habit.icon} style={styles.icon}></Icon>
               <Text 
                 style={styles.streakText}>
-                  {i18n.t('youCompleted')}{habit.title + ' ' + habit.streak} {habit.streak === 1 ? i18n.t('day') : i18n.t('days')}{i18n.t('inARow')}
+                  {i18n.t('youCompleted')}{'"' + habit.title + '" ' + habit.streak} {habit.streak === 1 ? i18n.t('day') : i18n.t('days')}
+                  {habit.streak === 1 ? i18n.t('inARow') : i18n.t('inARowPlural')}
               </Text>
             </View>
           </View>

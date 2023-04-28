@@ -25,7 +25,8 @@ export default function EditAccountScreen() {
     const validationSchema = Yup.object().shape({
         name: Yup.string().required(i18n.t('nameRequired')),
         email: Yup.string().email(i18n.t('invalidEmail')).required(i18n.t('emailRequired')),
-      });
+        password: Yup.string().required(i18n.t('passwordRequired'))
+    });
 
     type FormData = {
         name: string,
@@ -46,7 +47,7 @@ export default function EditAccountScreen() {
     const [profilePic, setProfilePic] = useState<null | ImagePicker.ImagePickerResult>(null);
 
     const showConfirmEditAlert = ({name, email, password}: FormData) => {
-        Alert.alert(i18n.t('uSuer'), i18n.t('profileWillUpdated'), [
+        Alert.alert(i18n.t('uSure'), i18n.t('profileWillUpdated'), [
             {   
                 text: i18n.t('cancel'),
                 style: 'cancel'
@@ -101,6 +102,7 @@ export default function EditAccountScreen() {
                     onBlur={handleBlur('password')}
                     value={values.password}
                 />
+                {(errors.password && touched.password) && (<Text style={{color: 'red'}}>{errors.password}</Text>)}
 
                 <CustomButton text={i18n.t('saveChanges')} onPressed={handleSubmit} style={{marginTop: 8}} />
             </View>
