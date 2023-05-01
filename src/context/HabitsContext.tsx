@@ -451,10 +451,9 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
         value.forEach((historyItem: DataSnapshot) => {
           tempHistory.push({day: historyItem.key!, data: historyItem.val()})
         });
-
+        setHistory(tempHistory);
       });
 
-      setHistory(tempHistory);
   }
   
 
@@ -476,6 +475,14 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
         }
         setHabits(habitsResult);
       });
+
+      onValue(ref(db, 'users/' + currentUser?.uid + '/history/'), (snapshot: DataSnapshot) => {
+        const tempHistory: HistoryItem[] = [];
+        snapshot.forEach((historyItem: DataSnapshot) => {
+          tempHistory.push({day: historyItem.key!, data: historyItem.val()})
+        });
+        setHistory(tempHistory);
+      })
 
     //If the user logout, delete habits, and history of the state
     if(!user) {
