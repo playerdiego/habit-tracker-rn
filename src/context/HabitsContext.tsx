@@ -93,7 +93,6 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
     push(ref(db, 'users/' + currentUser?.uid + '/habits/'), habit)
       .then((snapshot) => {
         const {key} = snapshot;
-        setHabits([...habits, {...habit, id: key!}]);
 
         //Check if habit must be completed the same day as created
         const days = getDays(habit.daysToShow);
@@ -113,13 +112,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
               alert(error);
               setLoading(null);
               console.error(error);
-            })
-          setTodayHabits([...todayHabits, newTodayHabit]);
-  
-          //Adds habit to the current dat history
-  
-          const updatedHistory: HistoryItem[] = history.map(historyItem => historyItem.day === todayDate ? {day: todayDate, data: [...todayHabits, newTodayHabit]} : historyItem );
-          setHistory(updatedHistory);
+            });
   
         }
 
@@ -146,20 +139,14 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
       remove(ref(db, 'users/' + currentUser?.uid + '/habits/' + habit.id))
         .then(() => {
-          const updatedHabits: Habit[] = habits.filter(habitToFilter => habitToFilter.id !== habit.id);
-          setHabits(updatedHabits);
 
           //Check if the deleted habit is in the today history
           if(days.includes(today)) {
 
             //Delete the habit in todayHabits, update state and DB
             const updatedTodayHabits = todayHabits.filter(habitToFilter => habitToFilter.id !== habit.id);
-            setTodayHabits(updatedTodayHabits);
             set(todayRef, updatedTodayHabits);
 
-            // Update the history in the current day
-            const updatedHistory: HistoryItem[] = history.map(historyItem => historyItem.day === todayDate ? {day: todayDate, data: updatedTodayHabits} : historyItem );
-            setHistory(updatedHistory);
           }
         })
         .catch(error => {
@@ -186,64 +173,56 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
     //An array with the daysToShow
     const days = getDays(habit.daysToShow);
 
-    const updatedHabits: Habit[] = habits.map(habitToFilter => habitToFilter.id === id ? habit : habitToFilter);
+    update(ref(db, 'users/' + currentUser?.uid + '/habits/' + id), {
+      title,
+      description, 
+      icon,
+      daysToShow,
+      total,
+      streak
+    })
+    .then(() => {
+      //Checks if the habit daysToShow includes the current day
+      let updatedTodayHabits: TodayHabit[] = [];
+      if(days.includes(today)) {
 
-    setHabits(updatedHabits);
+        // Checks if the habit is already in todayHabits
+        const isHabitActive = todayHabits.find(todayHabit => todayHabit.id === habit.id);
 
-      update(ref(db, 'users/' + currentUser?.uid + '/habits/' + id), {
-        title,
-        description, 
-        icon,
-        daysToShow,
-        total,
-        streak
-      })
-      .then(() => {
-        //Checks if the habit daysToShow includes the current day
-        let updatedTodayHabits: TodayHabit[] = [];
-        if(days.includes(today)) {
+        //If it is, edit it
+        if (isHabitActive) {
 
-          // Checks if the habit is already in todayHabits
-          const isHabitActive = todayHabits.find(todayHabit => todayHabit.id === habit.id);
+          updatedTodayHabits = todayHabits.map(todayHabit => todayHabit.id === habit.id ? 
+            {...todayHabit, title, description, icon, daysToShow} : todayHabit);
 
-          //If it is, edit it
-          if (isHabitActive) {
-
-            updatedTodayHabits = todayHabits.map(todayHabit => todayHabit.id === habit.id ? 
-              {...todayHabit, title, description, icon, daysToShow} : todayHabit);
-
-          // If it is not, add it
-          } else {
-            updatedTodayHabits = [
-              ...todayHabits,
-              {title,
-              description,
-              icon,
-              completed: false,
-              daysToShow,
-              id}
-            ];
-          }
-          
-          //If is not in the current day, delete it
+        // If it is not, add it
         } else {
-          //Create a new array of todayHabits without the edited habit
-          updatedTodayHabits = todayHabits.filter(habitToDelete => (habitToDelete.id !== id) && habitToDelete);
+          updatedTodayHabits = [
+            ...todayHabits,
+            {title,
+            description,
+            icon,
+            completed: false,
+            daysToShow,
+            id}
+          ];
         }
+        
+        //If is not in the current day, delete it
+      } else {
+        //Create a new array of todayHabits without the edited habit
+        updatedTodayHabits = todayHabits.filter(habitToDelete => (habitToDelete.id !== id) && habitToDelete);
+      }
 
-        const updatedHistory: HistoryItem[] = history.map(historyItem => historyItem.day === todayDate ? {day: todayDate, data: updatedTodayHabits} : historyItem );
-
-        setHistory(updatedHistory);
-        set(todayRef, updatedTodayHabits);
-        setTodayHabits(updatedTodayHabits);
-      })
-      .catch(error => {
-        console.error(error);
-        alert(error);
-      })
-      .finally(() => {
-        setLoading(null);
-      })
+      set(todayRef, updatedTodayHabits);
+    })
+    .catch(error => {
+      console.error(error);
+      alert(error);
+    })
+    .finally(() => {
+      setLoading(null);
+    })
 
       
 
@@ -311,9 +290,6 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
               }
             });
             set(todayRef, tempTodayHabits).then();
-            setTodayHabits(tempTodayHabits);
-            const tempHistory = [...history, {day: todayDate, data: tempTodayHabits}];
-            setHistory(tempHistory);
 
             // Traverse every todayHabit
             tempTodayHabits.map(todayHabit => {
@@ -405,27 +381,6 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
     update(ref(db, 'users/' + currentUser?.uid + '/habits/' + habitId), {total, streak})
       .then(() => {
-        const updatedHabits: Habit[] = habits.map(habit => habit.id === habitId ? {...habit, total, streak} : habit);
-        setHabits(updatedHabits);
-    
-        
-        // Check if theres history in the current day
-        const todayHistory = history.find(historyItem => historyItem.day === todayDate);
-    
-        // If there´s, update the state of the updated habit
-        if(todayHistory) {
-          const updatedHistoryItem: TodayHabit[] = todayHistory!.data.map(habit => 
-              habit.id === habitId ? {...habit, completed: !habit.completed} : habit);
-      
-          const updatedHistory: HistoryItem[] = history.map(historyItem => 
-              historyItem.day === todayHistory?.day ? {day: todayHistory.day, data: updatedHistoryItem} : historyItem);
-    
-      
-          setHistory(updatedHistory);
-        }
-    
-        //Set the new values in the state and update DB
-        setTodayHabits(updatedTodayHabits);
         set(todayRef, updatedTodayHabits);
       })
       .catch(error => {
@@ -461,28 +416,30 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
   useEffect(() => {
     //Every time an user login, get his habits
-      getHistory();
-      getHabits();
+    getHistory();
+    getHabits();
 
-      // Each time a habit changes, update the state
-      onValue(ref(db, 'users/' + currentUser?.uid + '/habits/'), (snapshot: DataSnapshot) => {
-        let habitsResult: Habit[] = [];
-        // Traverse the result to format as an array and add the id (key)
-        for (const key in snapshot.val()) {
-          if (snapshot.val().hasOwnProperty(key)) {
-            habitsResult.push({...snapshot.val()[key], id: key});
-          }
+    // Each time a habit changes, update the state
+    onValue(ref(db, 'users/' + currentUser?.uid + '/habits/'), (snapshot: DataSnapshot) => {
+      let habitsResult: Habit[] = [];
+      // Traverse the result to format as an array and add the id (key)
+      for (const key in snapshot.val()) {
+        if (snapshot.val().hasOwnProperty(key)) {
+          habitsResult.push({...snapshot.val()[key], id: key});
         }
-        setHabits(habitsResult);
-      });
+      }
+      setHabits(habitsResult);
+    });
 
-      onValue(ref(db, 'users/' + currentUser?.uid + '/history/'), (snapshot: DataSnapshot) => {
-        const tempHistory: HistoryItem[] = [];
-        snapshot.forEach((historyItem: DataSnapshot) => {
-          tempHistory.push({day: historyItem.key!, data: historyItem.val()})
-        });
-        setHistory(tempHistory);
-      })
+    // Each time history changes, update the state
+    onValue(ref(db, 'users/' + currentUser?.uid + '/history/'), (snapshot: DataSnapshot) => {
+      const tempHistory: HistoryItem[] = [];
+      snapshot.forEach((historyItem: DataSnapshot) => {
+        tempHistory.push({day: historyItem.key!, data: historyItem.val()})
+      });
+      setHistory(tempHistory);
+      setTodayHabits(tempHistory.find(tempHistoryItem => tempHistoryItem.day === todayDate)?.data!);
+    });
 
     //If the user logout, delete habits, and history of the state
     if(!user) {

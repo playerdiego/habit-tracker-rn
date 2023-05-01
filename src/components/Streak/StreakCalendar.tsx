@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
-import {Calendar} from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 import { useFonts } from 'expo-font';
 import { Comfortaa_400Regular } from '@expo-google-fonts/comfortaa';
 
@@ -19,6 +19,57 @@ export default function StreakCalendar() {
   // * CONTEXT DATA
   const {history, habits, todayHabits} = useContext(HabitsContext);
   const {i18n, locale} = useContext(UIContext);
+
+  LocaleConfig.locales['es'] = {
+    monthNames: [
+      'Enero',
+      'Febrero',
+      'Marzo',
+      'Abril',
+      'Mayo',
+      'Junio',
+      'Julio',
+      'Agosto',
+      'Septiembre',
+      'Octubre',
+      'Noviembre',
+      'Diciembre'
+    ],
+    monthNamesShort: ['En.', 'Feb.', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Sept.', 'Oct.', 'Nov.', 'Dic.'],
+    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+    dayNamesShort: ['Do.', 'Lun.', 'Mar.', 'Mier.', 'Jue.', 'Vie.', 'Sab.'],
+    today: "Hoy"
+  };
+
+  LocaleConfig.locales['en'] = {
+    monthNames: [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+    ],
+    monthNamesShort: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'],
+    dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    dayNamesShort: ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thu.', 'Fri.', 'Sat.'],
+    today: "Today"
+  };
+
+  const localeCode = locale.split('-')[0];
+
+  if(localeCode === 'es' || localeCode === 'en') {
+    LocaleConfig.defaultLocale = localeCode;
+  } else {
+    LocaleConfig.defaultLocale = 'en';
+  }
+  
 
   // * STATES
   const [markedDates, setMarkedDates] = useState<MarkedDates>({});
@@ -89,7 +140,16 @@ export default function StreakCalendar() {
     // Sets the marked dates (data for the calendar)
     setMarkedDates(dates);
 
-  }, [history, habits, todayHabits]);
+  }, [todayHabits]);
+
+  useEffect(() => {
+    
+  
+    return () => {
+      
+    }
+  }, [])
+  
 
   
 

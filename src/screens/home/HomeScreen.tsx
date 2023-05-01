@@ -24,8 +24,8 @@ export default function HomeScreen() {
   const {todayHabits, habits} = useContext(HabitsContext);
   const {i18n} = useContext(UIContext);
 
-  const completedHabitsLength = todayHabits.filter(habit => habit.completed).length;
-  const incompletedHabitsLength = todayHabits.filter(habit => !habit.completed).length;
+  const completedHabitsLength = todayHabits?.filter(habit => habit.completed).length;
+  const incompletedHabitsLength = todayHabits?.filter(habit => !habit.completed).length;
 
   const [streaksExists, setStreaksExists] = useState(0);
 
@@ -46,7 +46,7 @@ export default function HomeScreen() {
 
           {
             //Checks if exists habits for the current day
-            todayHabits.length < 1 ?
+            todayHabits?.length < 1 ?
             // If there´s no, show an alert
             <View style={{marginVertical: 40}}>
               <Title size='sm' align='center'>{i18n.t('noHabits')}</Title>
@@ -64,7 +64,7 @@ export default function HomeScreen() {
                 }
 
                 {
-                  todayHabits.map((habit, i) => (
+                  todayHabits?.map((habit, i) => (
                     !habit.completed &&
                     <HabitCheckbox key={i} habit={habit}  />
                   ))
@@ -83,7 +83,7 @@ export default function HomeScreen() {
                 }
 
                 {
-                  todayHabits.map((habit, i) => (
+                  todayHabits?.map((habit, i) => (
                     habit.completed &&
                     <HabitCheckbox key={i} habit={habit}  />
                   ))

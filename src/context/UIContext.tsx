@@ -23,7 +23,7 @@ export const UIProvider = ({children}: {children: React.ReactNode}) => {
     const [locale, setLocale] = useState<string>(Localization.locale);
 
     i18n.translations = {en, es}
-    i18n.locale = 'es';
+    i18n.locale = locale;
     i18n.enableFallback = true;
     i18n.defaultLocale = "en";
 
