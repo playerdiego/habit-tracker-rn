@@ -438,7 +438,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
         tempHistory.push({day: historyItem.key!, data: historyItem.val()})
       });
       setHistory(tempHistory);
-      setTodayHabits(tempHistory.find(tempHistoryItem => tempHistoryItem.day === todayDate)?.data!);
+      setTodayHabits(tempHistory.find(tempHistoryItem => tempHistoryItem.day === todayDate)?.data || []);
     });
 
     //If the user logout, delete habits, and history of the state
