@@ -127,7 +127,7 @@ export const en = {
     creatingHabit: "Creating habit...",
     deletingHabit: "Deleting habit...",
     editingHabit: "Editing habit...",
-    completingHabit: "Completing habit...",
+    completingHabit: "Saving...",
 
     // ERRORS
     'auth/claims-too-large': 'The payload of the delivered claim exceeds the maximum size of 1,000 bytes.',
@@ -320,7 +320,7 @@ export const es = {
     creatingHabit: "Creando hábito...",
     deletingHabit: "Eliminando hábito...",
     editingHabit: "Editando hábito...",
-    completingHabit: "Completando hábito...",
+    completingHabit: "Guardando...",
 
     // ERRORS
 

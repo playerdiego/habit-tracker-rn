@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, set, ref, push, get, DataSnapshot, update, remove } from "firebase/database";
+import { getDatabase, set, ref, push, get, DataSnapshot, update, remove, onValue } from "firebase/database";
 import { getAuth } from 'firebase/auth';
 import dayjs from 'dayjs';
 
@@ -255,7 +255,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
     get(ref(db, 'users/' + currentUser?.uid + '/habits/'))
       .then((value: DataSnapshot) => {
 
-        const habitsResult: Habit[] = [];
+        let habitsResult: Habit[] = [];
         // Traverse the result to format as an array and add the id (key)
         for (const key in value.val()) {
           if (value.val().hasOwnProperty(key)) {
@@ -354,10 +354,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
                 .then(snapshot => {
                   //If there´s no history for that day, break the streak
                   if(!snapshot.exists()) {
-                    update(ref(db, 'users/' + currentUser?.uid + '/habits/' + todayHabit.id), {streak: 0})
-                      .then(() => {
-                        setHabits(habitsResult.map(habit => habit.id === todayHabit.id ? {...habit, streak: 0} : habit))
-                      });
+                    update(ref(db, 'users/' + currentUser?.uid + '/habits/' + todayHabit.id), {streak: 0});
                   } else {
                       //Then gets the habit to check
                       const historyHabitToCheck: TodayHabit = snapshot.val().find((historyHabitItem: TodayHabit) => todayHabit.id === historyHabitItem.id)!;
@@ -365,15 +362,15 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
                       // Gets the streak of that habit
                       const habitStreak: Habit = habitsResult.find(habit => habit.id === historyHabitToCheck.id)!;
 
+                      const streak = historyHabitToCheck.completed ? habitStreak.streak : 0;
+
                       //Checks if there´s streak and add 1, else sets streak to 0
                       update(ref(db, 'users/' + currentUser?.uid + '/habits/' + habitStreak.id), {
-                        streak: historyHabitToCheck.completed ? habitStreak.streak + 1 : 0
-                      }).then(() => {
-                        setHabits(habitsResult.map(habit => habit.id === habitStreak.id ? {...habitStreak, streak:historyHabitToCheck.completed ? habitStreak.streak + 1 : 0} : habit))
+                        streak
                       });
                   }
 
-                })
+                });
         
             });
 
@@ -387,7 +384,7 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
 
   const completeHabit = (habitId: string) => {
 
-    setLoading(i18n.t('completingHabit'))
+    setLoading(i18n.t('completingHabit'));
 
     let isHabitCompleted: boolean = false;
 
@@ -467,6 +464,18 @@ export default function HabitsProvider({ children }: {children: React.ReactNode}
     //Every time an user login, get his habits
       getHistory();
       getHabits();
+
+      // Each time a habit changes, update the state
+      onValue(ref(db, 'users/' + currentUser?.uid + '/habits/'), (snapshot: DataSnapshot) => {
+        let habitsResult: Habit[] = [];
+        // Traverse the result to format as an array and add the id (key)
+        for (const key in snapshot.val()) {
+          if (snapshot.val().hasOwnProperty(key)) {
+            habitsResult.push({...snapshot.val()[key], id: key});
+          }
+        }
+        setHabits(habitsResult);
+      });
 
     //If the user logout, delete habits, and history of the state
     if(!user) {
