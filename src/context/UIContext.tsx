@@ -140,7 +140,7 @@ export const UIProvider = ({children}: {children: React.ReactNode}) => {
           case 'auth/wrong-password':
             return i18n.t('auth/wrong-password');
           default:
-            return i18n.t('auth/unexpected');
+            return i18n.t('auth/unkown-error');
         }
       }
 
